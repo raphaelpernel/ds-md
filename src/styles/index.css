@@ -1,0 +1,129 @@
+/* DS.MD — Global styles entry point */
+
+/* Tailwind v4 */
+@import "tailwindcss";
+
+/* Font */
+@import './fonts.css';
+
+/* Base tokens (spacing, shape, elevation, typography) */
+@import './tokens/base.css';
+
+/* Brand primitives — load all, only the matching [data-brand] activates */
+@import './tokens/brands/neutral.css';
+@import './tokens/brands/client-a.css';
+@import './tokens/brands/client-b.css';
+
+/* Color semantics — only the matching [data-color-scheme] activates */
+@import './tokens/color-light.css';
+@import './tokens/color-dark.css';
+
+/* ─────────────────────────────────────────
+   TAILWIND v4 THEME — maps DS tokens → TW utilities
+   inline = use CSS vars at point-of-use (supports runtime theming)
+───────────────────────────────────────── */
+@theme inline {
+  /* Surface colors → bg-surface-*, text-surface-* */
+  --color-surface-page:            var(--color-surface-page);
+  --color-surface-primary:         var(--color-surface-primary);
+  --color-surface-secondary:       var(--color-surface-secondary);
+  --color-surface-inverse:         var(--color-surface-inverse);
+  --color-surface-overlay:         var(--color-surface-overlay);
+  --color-surface-brand:           var(--color-surface-brand);
+  --color-surface-brand-light:     var(--color-surface-brand-light);
+  --color-surface-brand-dark:      var(--color-surface-brand-dark);
+
+  /* Content colors → text-content-* */
+  --color-content-default:         var(--color-content-default);
+  --color-content-inversed:        var(--color-content-inversed);
+  --color-content-weak:            var(--color-content-weak);
+  --color-content-weak-inversed:   var(--color-content-weak-inversed);
+
+  /* Border colors → border-border-* (or ring-*) */
+  --color-border-default:          var(--color-border-default);
+  --color-border-weak:             var(--color-border-weak);
+  --color-border-brand:            var(--color-border-brand);
+  --color-border-danger:           var(--color-border-danger);
+
+  /* Interactive → bg-interactive-*, text-interactive-*, border-interactive-* */
+  --color-interactive-bg:                var(--color-interactive-bg);
+  --color-interactive-bg-subtle:         var(--color-interactive-bg-subtle);
+  --color-interactive-bg-hover:          var(--color-interactive-bg-hover);
+  --color-interactive-content:           var(--color-interactive-content);
+  --color-interactive-border:            var(--color-interactive-border);
+  --color-interactive-disabled-bg:       var(--color-interactive-disabled-bg);
+  --color-interactive-disabled-content:  var(--color-interactive-disabled-content);
+  --color-interactive-alpha-bg:          var(--color-interactive-alpha-bg);
+  --color-interactive-alpha-bg-hover:    var(--color-interactive-alpha-bg-hover);
+  --color-interactive-danger-bg:         var(--color-interactive-danger-bg);
+  --color-interactive-danger-bg-hover:   var(--color-interactive-danger-bg-hover);
+  --color-interactive-danger-content:    var(--color-interactive-danger-content);
+
+  /* Semantic colors */
+  --color-semantic-success-bg:       var(--color-semantic-success-bg);
+  --color-semantic-success-bg-light: var(--color-semantic-success-bg-light);
+  --color-semantic-success-content:  var(--color-semantic-success-content);
+  --color-semantic-danger-bg:        var(--color-semantic-danger-bg);
+  --color-semantic-danger-bg-light:  var(--color-semantic-danger-bg-light);
+  --color-semantic-danger-content:   var(--color-semantic-danger-content);
+  --color-semantic-warning-bg:       var(--color-semantic-warning-bg);
+  --color-semantic-warning-bg-light: var(--color-semantic-warning-bg-light);
+  --color-semantic-warning-content:  var(--color-semantic-warning-content);
+  --color-semantic-info-bg:          var(--color-semantic-info-bg);
+  --color-semantic-info-bg-light:    var(--color-semantic-info-bg-light);
+  --color-semantic-info-content:     var(--color-semantic-info-content);
+
+  /* Border-radius → rounded-* */
+  --radius-button: var(--shape-button);
+  --radius-input:  var(--shape-input);
+  --radius-card:   var(--shape-card);
+  --radius-sheet:  var(--shape-sheet);
+  --radius-tag:    var(--shape-tag);
+  --radius-pill:   var(--shape-pill);
+}
+
+/* ─────────────────────────────────────────
+   RESET & BASE
+───────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+  font-weight: var(--font-weight-body);
+  color: var(--color-content-default);
+  background-color: var(--color-surface-page);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+a {
+  color: var(--color-interactive-content);
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+/* Focus ring — accessible, uses brand color */
+:focus-visible {
+  outline: 2px solid var(--color-border-brand);
+  outline-offset: 2px;
+  border-radius: 2px;
+}

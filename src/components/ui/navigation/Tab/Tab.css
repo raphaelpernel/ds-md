@@ -1,0 +1,32 @@
+.tab { display: flex; border-bottom: 1.5px solid var(--color-border-default); }
+.tab__item {
+  display: inline-flex; align-items: center; gap: var(--spacing-8);
+  padding: var(--spacing-12) var(--spacing-16);
+  font-family: var(--font-family-label); font-size: var(--font-size-label-md); font-weight: var(--font-weight-label);
+  color: var(--color-content-weak); background: none; border: none; border-bottom: 2px solid transparent;
+  margin-bottom: -1.5px; cursor: pointer; transition: color 0.15s, border-color 0.15s, background-color 0.15s;
+}
+.tab__item:hover:not(:disabled) {
+  color: var(--color-interactive-content);
+  border-bottom-color: var(--color-interactive-border);
+  background-color: var(--color-interactive-bg-subtle);
+}
+.tab__item--active { color: var(--color-interactive-content); border-bottom-color: var(--color-interactive-border); }
+.tab__item--active:hover { background-color: var(--color-interactive-bg-subtle); }
+.tab__item:disabled { color: var(--color-interactive-disabled-content); cursor: not-allowed; }
+.tab__icon { display: inline-flex; flex-shrink: 0; }
+
+/* Pill variant */
+.tab--pill { border-bottom: none; background-color: var(--color-surface-secondary); border-radius: var(--shape-pill); padding: var(--spacing-4); gap: var(--spacing-4); }
+.tab--pill .tab__item { border-radius: var(--shape-pill); border-bottom: none; margin-bottom: 0; }
+.tab--pill .tab__item:hover:not(:disabled):not(.tab__item--active) {
+  background-color: var(--color-interactive-bg-subtle);
+  color: var(--color-interactive-content);
+  border-bottom-color: transparent;
+}
+.tab--pill .tab__item--active {
+  background-color: var(--color-interactive-bg);
+  color: var(--color-content-inversed);
+  box-shadow: none;
+}
+.tab--pill .tab__item--active:hover { background-color: var(--color-interactive-bg-hover); }

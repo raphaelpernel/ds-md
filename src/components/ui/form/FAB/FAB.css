@@ -1,0 +1,44 @@
+.fab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--shape-pill);
+  border: none;
+  background-color: var(--color-interactive-bg);
+  color: var(--color-content-inversed);
+  cursor: pointer;
+  box-shadow: var(--elevation-300);
+  flex-shrink: 0;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* ── Sizes ── */
+.fab--S { width: 56px; height: 56px; }
+.fab--M { width: 64px; height: 64px; }
+.fab--L { width: 72px; height: 72px; }
+
+/* ── Icon always 24×24 ── */
+.fab__icon { display: inline-flex; width: 24px; height: 24px; font-size: 24px; }
+
+/* ── State: Hover ── */
+.fab:hover:not(:disabled):not(.fab--alpha) {
+  background-color: var(--color-interactive-bg-hover);
+  box-shadow: var(--elevation-400);
+}
+
+/* ── State: Disabled ── */
+.fab:disabled {
+  background-color: var(--color-interactive-disabled-bg);
+  color: var(--color-interactive-disabled-content);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ── State: Alpha (over images / blurred surfaces) ── */
+.fab--alpha {
+  background-color: var(--color-interactive-alpha-bg);
+  backdrop-filter: blur(8px);
+}
+.fab--alpha:hover:not(:disabled) {
+  background-color: var(--color-interactive-alpha-bg-hover);
+}

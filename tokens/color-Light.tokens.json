@@ -1,0 +1,1768 @@
+{
+  "Surface": {
+    "Page": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#FFFFFF"
+      },
+      "$description": "Background color of the page root. Apply to the body or top-level layout wrapper. The lowest layer in the surface hierarchy.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:32:43",
+        "com.figma.scopes": [
+          "FRAME_FILL",
+          "SHAPE_FILL"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:1cac027799440df55ce459d0d3ba4ea6065f9e1c/-1:-1",
+          "targetVariableName": "Colors/White/100%",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Primary": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#FFFFFF"
+      },
+      "$description": "Default background for elevated surfaces: cards, modals, dialogs, and sidesheets. Sits one level above Surface/Page.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:33:60",
+        "com.figma.scopes": [
+          "FRAME_FILL",
+          "SHAPE_FILL"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:1cac027799440df55ce459d0d3ba4ea6065f9e1c/-1:-1",
+          "targetVariableName": "Colors/White/100%",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Secondary": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9764705896377563,
+          0.9686274528503418,
+          0.95686274766922
+        ],
+        "alpha": 1,
+        "hex": "#F9F7F4"
+      },
+      "$description": "Warm off-white background (Sand/50) for low-emphasis surfaces. Use for tags, pills, badges, segmented control inactive state, and inset sections that need warmth against Surface/Primary.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:33:61",
+        "com.figma.scopes": [
+          "FRAME_FILL",
+          "SHAPE_FILL"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:aae35f17572975d567d8af016332fc3d5ed485ab/-1:-1",
+          "targetVariableName": "Colors/Sand/50",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Inverse": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.07450980693101883,
+          0.08235294371843338,
+          0.14901961386203766
+        ],
+        "alpha": 1,
+        "hex": "#131526"
+      },
+      "$description": "Strongly contrasted surface for inverted sections (dark headers, footers, hero sections). Mirrors Surface/Primary across modes. Always pair with Content/Inversed.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:69:10",
+        "com.figma.scopes": [
+          "FRAME_FILL",
+          "SHAPE_FILL"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:ba625ac1a4e0f7bc902283f0770cb2e4726d43e5/-1:-1",
+          "targetVariableName": "Colors/Dark/100%",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Primary Hover": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.07450980693101883,
+          0.08235294371843338,
+          0.14901961386203766
+        ],
+        "alpha": 0.05000000074505806,
+        "hex": "#131526"
+      },
+      "$description": "Hover state background for interactive surfaces that use Surface/Primary as their base (list rows, table cells, menu items).",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:33:62",
+        "com.figma.scopes": [
+          "FRAME_FILL",
+          "SHAPE_FILL"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:e39f321b270cd3b66fd4f28f946d4c10f7b4a356/-1:-1",
+          "targetVariableName": "Colors/Dark/5%",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Secondary Hover": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8784313797950745,
+          0.8392156958580017,
+          0.7843137383460999
+        ],
+        "alpha": 1,
+        "hex": "#E0D6C8"
+      },
+      "$description": "Hover state background for interactive elements that use Surface/Secondary as their base (clickable tags, pills, badges). Uses Sand/200 for sufficient contrast against Sand/50.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:90:5329",
+        "com.figma.scopes": [
+          "FRAME_FILL",
+          "SHAPE_FILL"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:277f852efba89b4d1c6fe0944f4abb2f7f621b62/-1:-1",
+          "targetVariableName": "Colors/Sand/200",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Overlay": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.07450980693101883,
+          0.08235294371843338,
+          0.14901961386203766
+        ],
+        "alpha": 0.6000000238418579,
+        "hex": "#131526"
+      },
+      "$description": "Semi-transparent scrim applied behind modals, drawers, and bottom sheets to dim and isolate background content.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:33:63",
+        "com.figma.scopes": [
+          "FRAME_FILL",
+          "SHAPE_FILL"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:0383f3c43355994142dce1e3eee3f132b1d8349e/-1:-1",
+          "targetVariableName": "Colors/Dark/60%",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Brand": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.22129525244235992,
+          0.38109660148620605,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#3861FF"
+      },
+      "$description": "Solid brand-colored surface. Use for filled brand badges, highlighted sections, or brand-accented containers.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:69:5",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:4b4e9ec63166d43965d694906e4b7c24bcc37e2c/-1:-1",
+          "targetVariableName": "Colors/Blue/500",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Brand Light": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9333333373069763,
+          0.9490196108818054,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#EEF2FF"
+      },
+      "$description": "Tinted brand surface for low-emphasis elements. Use for brand-colored badges, tags, chips, and subtle highlights.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:69:6",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:80e939734e76a08c7e98ff61dffa699eb60d3de8/-1:-1",
+          "targetVariableName": "Colors/Blue/50",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Brand Dark": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.0784313753247261,
+          0.0941176488995552,
+          0.34117648005485535
+        ],
+        "alpha": 1,
+        "hex": "#141857"
+      },
+      "$description": "Tinted brand surface for low-emphasis elements. Use for brand-colored badges, tags, chips, and subtle highlights.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:154:2979",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:018ab918cfa47c61eb51c3a701585e1197bd75d0/-1:-1",
+          "targetVariableName": "Colors/Blue/950",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    }
+  },
+  "Content": {
+    "Default": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.07450980693101883,
+          0.08235294371843338,
+          0.14901961386203766
+        ],
+        "alpha": 1,
+        "hex": "#131526"
+      },
+      "$description": "Primary text and icon color. Use for all body copy, headings, and labels on light surfaces.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:32:44",
+        "com.figma.scopes": [
+          "ALL_FILLS"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:ba625ac1a4e0f7bc902283f0770cb2e4726d43e5/-1:-1",
+          "targetVariableName": "Colors/Dark/100%",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Inversed": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#FFFFFF"
+      },
+      "$description": "Text and icon color for content placed on Surface/Inverse or any dark/filled surface. Always pair with Surface/Inverse.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:33:69",
+        "com.figma.scopes": [
+          "ALL_FILLS"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:1cac027799440df55ce459d0d3ba4ea6065f9e1c/-1:-1",
+          "targetVariableName": "Colors/White/100%",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Weak": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.07450980693101883,
+          0.08235294371843338,
+          0.14901961386203766
+        ],
+        "alpha": 0.6000000238418579,
+        "hex": "#131526"
+      },
+      "$description": "Subdued text and icon color for secondary information on light surfaces. Use for metadata, captions, placeholders, and helper text.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:33:67",
+        "com.figma.scopes": [
+          "ALL_FILLS"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:0383f3c43355994142dce1e3eee3f132b1d8349e/-1:-1",
+          "targetVariableName": "Colors/Dark/60%",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Weak Inversed": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 0.6000000238418579,
+        "hex": "#FFFFFF"
+      },
+      "$description": "Subdued text and icon color for secondary information on dark or filled surfaces. Use for metadata and captions on Surface/Inverse.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:34:96",
+        "com.figma.scopes": [
+          "ALL_FILLS"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:fdd21e444e0ac77508befa623fd1e749d8a2d65a/-1:-1",
+          "targetVariableName": "Colors/White/60%",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    }
+  },
+  "Border": {
+    "Default": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.07450980693101883,
+          0.08235294371843338,
+          0.14901961386203766
+        ],
+        "alpha": 0.10000000149011612,
+        "hex": "#131526"
+      },
+      "$description": "Standard border color for components requiring a visible stroke (cards, inputs, containers, dividers between major sections).",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:33:45",
+        "com.figma.scopes": [
+          "STROKE"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:a68d954e2e7ce5e6b48c988c4b19686c1e6e4966/-1:-1",
+          "targetVariableName": "Colors/Dark/10%",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Weak": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.07450980693101883,
+          0.08235294371843338,
+          0.14901961386203766
+        ],
+        "alpha": 0.05000000074505806,
+        "hex": "#131526"
+      },
+      "$description": "Subtle separator color for low-emphasis structural lines. Use for dividers between list items or inner content sections.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:33:70",
+        "com.figma.scopes": [
+          "STROKE"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:e39f321b270cd3b66fd4f28f946d4c10f7b4a356/-1:-1",
+          "targetVariableName": "Colors/Dark/5%",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Brand": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.22129525244235992,
+          0.38109660148620605,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#3861FF"
+      },
+      "$description": "Brand-colored border indicating selected, focused, or active state. Use on inputs, tabs, cards, and any component requiring a brand-accented stroke.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:33:71",
+        "com.figma.scopes": [
+          "STROKE"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:1d26542632abfcb0dffb3528383195db09b0bdc0/-1:-1",
+          "targetVariableName": "Colors/Brand/500",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Danger": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9826614260673523,
+          0.17179709672927856,
+          0.21307019889354706
+        ],
+        "alpha": 1,
+        "hex": "#FB2C36"
+      },
+      "$description": "Error state border color. Use on inputs, fields, or components in a validation error state.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:69:7",
+        "com.figma.scopes": [
+          "STROKE"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:f436bc26a5fa45736824eea42702936e1a826242/-1:-1",
+          "targetVariableName": "Colors/Red/500",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    }
+  },
+  "Interactive": {
+    "BG": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.22129525244235992,
+          0.38109660148620605,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#3861FF"
+      },
+      "$description": "Primary brand background for interactive elements. Use as the default fill for primary buttons and main CTAs.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:33:47",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:1d26542632abfcb0dffb3528383195db09b0bdc0/-1:-1",
+          "targetVariableName": "Colors/Brand/500",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "BG Subtle": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9333333373069763,
+          0.9490196108818054,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#EEF2FF"
+      },
+      "$description": "Light brand background (Blue/50) for hover state of Ghost and Outline buttons.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:69:8",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:f904836c04cf42378ebb12024a24be0de376b9a1/-1:-1",
+          "targetVariableName": "Colors/Brand/50",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "BG Hover": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.0784313753247261,
+          0.14901961386203766,
+          0.8823529481887817
+        ],
+        "alpha": 1,
+        "hex": "#1426E1"
+      },
+      "$description": "Hover state background for primary brand interactive elements. Replaces Interactive/BG on hover.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:33:72",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:f936c5fd8622cf6512b9fb80345698c39c558e1b/-1:-1",
+          "targetVariableName": "Colors/Brand/700",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Content": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.22129525244235992,
+          0.38109660148620605,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#3861FF"
+      },
+      "$description": "Brand-colored text and icon. Use for ghost button labels, outline button labels, and inline links.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:33:74",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:1d26542632abfcb0dffb3528383195db09b0bdc0/-1:-1",
+          "targetVariableName": "Colors/Brand/500",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Border": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.22129525244235992,
+          0.38109660148620605,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#3861FF"
+      },
+      "$description": "Brand-colored border for outlined and ghost interactive elements.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:34:78",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:1d26542632abfcb0dffb3528383195db09b0bdc0/-1:-1",
+          "targetVariableName": "Colors/Brand/500",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Disabled BG": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8078431487083435,
+          0.8235294222831726,
+          0.8705882430076599
+        ],
+        "alpha": 1,
+        "hex": "#CED2DE"
+      },
+      "$description": "Background color for disabled interactive elements. Indicates a non-interactable state.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:33:77",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:fdce221df67d9e05b4d7b4a4809081df14356fc3/-1:-1",
+          "targetVariableName": "Colors/Neutral/300",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Disabled Content": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.5529412031173706,
+          0.5764706134796143,
+          0.6666666865348816
+        ],
+        "alpha": 1,
+        "hex": "#8D93AA"
+      },
+      "$description": "Text and icon color for disabled interactive elements (buttons, inputs).",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:33:68",
+        "com.figma.scopes": [
+          "ALL_FILLS"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:323a1c6db7102cf22f5ba877789c19ace5eef610/-1:-1",
+          "targetVariableName": "Colors/Neutral/400",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Alpha BG": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.07450980693101883,
+          0.08235294371843338,
+          0.14901961386203766
+        ],
+        "alpha": 0.6000000238418579,
+        "hex": "#131526"
+      },
+      "$description": "Semi-transparent background with blur support. Use for buttons overlaid on images or blurred surfaces.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:34:79",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:0383f3c43355994142dce1e3eee3f132b1d8349e/-1:-1",
+          "targetVariableName": "Colors/Dark/60%",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Alpha BG Hover": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.07450980693101883,
+          0.08235294371843338,
+          0.14901961386203766
+        ],
+        "alpha": 0.30000001192092896,
+        "hex": "#131526"
+      },
+      "$description": "Hover variant of Alpha BG. Slightly more opaque, for the hovered state of transparent/blur buttons.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:34:80",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:11bb667bc8a94e185efd920c77dbfd9de2c3c4b6/-1:-1",
+          "targetVariableName": "Colors/Dark/30%",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Danger BG": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.996841311454773,
+          0.9495853781700134,
+          0.9495856165885925
+        ],
+        "alpha": 1,
+        "hex": "#FEF2F2"
+      },
+      "$description": "Destructive action background (Red/50). Use as the fill for danger Ghost and Outline buttons, and error-state highlighted rows.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:51:54",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:33a68effe6fcba31a292dc65014b87dc45449c3b/-1:-1",
+          "targetVariableName": "Colors/Red/50",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Danger BG Hover": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9993008375167847,
+          0.885642945766449,
+          0.885676920413971
+        ],
+        "alpha": 1,
+        "hex": "#FFE2E2"
+      },
+      "$description": "Hover state for danger Ghost and Outline buttons (Red/100). Replaces Interactive/Danger BG on hover.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:33:76",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:e6603ba675bdcfc682c0fe9d1f361ae5ea578e02/-1:-1",
+          "targetVariableName": "Colors/Red/100",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Danger Content": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9826614260673523,
+          0.17179709672927856,
+          0.21307019889354706
+        ],
+        "alpha": 1,
+        "hex": "#FB2C36"
+      },
+      "$description": "Text and icon color for destructive actions. Use for danger button labels, error links, and critical action text.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:69:4",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:f436bc26a5fa45736824eea42702936e1a826242/-1:-1",
+          "targetVariableName": "Colors/Red/500",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    }
+  },
+  "Semantic": {
+    "Success": {
+      "BG": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0,
+            0.7871556282043457,
+            0.3156217634677887
+          ],
+          "alpha": 1,
+          "hex": "#00C950"
+        },
+        "$description": "Solid green background for success states. Use for filled success badges and toast icon fills.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:33:48",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:b8b2d9b986d9c829f96921939662922003a7e54f/-1:-1",
+            "targetVariableName": "Colors/Green/500",
+            "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "BG Light": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.941393256187439,
+            0.9922020435333252,
+            0.9570246338844299
+          ],
+          "alpha": 1,
+          "hex": "#F0FDF4"
+        },
+        "$description": "Tinted green background for success inline alerts, banners, and tags.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:33:49",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:ac6a77772a7d119d81390f8c448617818b0fbd6a/-1:-1",
+            "targetVariableName": "Colors/Green/50",
+            "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "Content": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0,
+            0.6513022780418396,
+            0.24199256300926208
+          ],
+          "alpha": 1,
+          "hex": "#00A63E"
+        },
+        "$description": "Text and icon color for success messages. Use on Success/BG Light surfaces.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:33:50",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:9312503d2968f3020d90dfee611c1816bc77318f/-1:-1",
+            "targetVariableName": "Colors/Green/600",
+            "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      }
+    },
+    "Danger": {
+      "BG": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9826614260673523,
+            0.17179709672927856,
+            0.21307019889354706
+          ],
+          "alpha": 1,
+          "hex": "#FB2C36"
+        },
+        "$description": "Solid red background for error states. Use for filled error badges and toast icon fills.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:33:51",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:f436bc26a5fa45736824eea42702936e1a826242/-1:-1",
+            "targetVariableName": "Colors/Red/500",
+            "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "BG Light": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.996841311454773,
+            0.9495853781700134,
+            0.9495856165885925
+          ],
+          "alpha": 1,
+          "hex": "#FEF2F2"
+        },
+        "$description": "Tinted red background for error inline alerts, banners, and tags.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:33:52",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:33a68effe6fcba31a292dc65014b87dc45449c3b/-1:-1",
+            "targetVariableName": "Colors/Red/50",
+            "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "Content": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9064575433731079,
+            0,
+            0.04221457988023758
+          ],
+          "alpha": 1,
+          "hex": "#E7000B"
+        },
+        "$description": "Text and icon color for error messages. Use on Danger/BG Light surfaces.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:33:53",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:233b3b18860ea2a7d59c4949e6aea92d16d35cf0/-1:-1",
+            "targetVariableName": "Colors/Red/600",
+            "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      }
+    },
+    "Warning": {
+      "BG": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9960784316062927,
+            0.6039215922355652,
+            0
+          ],
+          "alpha": 1,
+          "hex": "#FE9A00"
+        },
+        "$description": "Solid amber background for warning states. Use for filled warning badges and toast icon fills.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:33:54",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:ff4a10590a989bcdf9acc5e439a994c7f6d72e80/-1:-1",
+            "targetVariableName": "Colors/Yellow/500",
+            "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "BG Light": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.9803921580314636,
+            0.9176470637321472
+          ],
+          "alpha": 1,
+          "hex": "#FFFAEA"
+        },
+        "$description": "Tinted amber background for warning inline alerts, banners, and tags.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:33:55",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:2348633615225c2c19befcb288209f8a46d0b6e3/-1:-1",
+            "targetVariableName": "Colors/Yellow/50",
+            "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "Content": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.886274516582489,
+            0.45490196347236633,
+            0
+          ],
+          "alpha": 1,
+          "hex": "#E27400"
+        },
+        "$description": "Text and icon color for warning messages. Use on Warning/BG Light surfaces.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:33:56",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:9fcb87189968ec5ed47931ded8401f28861560b4/-1:-1",
+            "targetVariableName": "Colors/Yellow/600",
+            "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      }
+    },
+    "Info": {
+      "BG": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.22129525244235992,
+            0.38109660148620605,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#3861FF"
+        },
+        "$description": "Solid blue background for informational states. Use for filled info badges and toast icon fills.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:33:57",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:4b4e9ec63166d43965d694906e4b7c24bcc37e2c/-1:-1",
+            "targetVariableName": "Colors/Blue/500",
+            "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "BG Light": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9333333373069763,
+            0.9490196108818054,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#EEF2FF"
+        },
+        "$description": "Tinted blue background for informational inline alerts, banners, and tags.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:33:58",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:80e939734e76a08c7e98ff61dffa699eb60d3de8/-1:-1",
+            "targetVariableName": "Colors/Blue/50",
+            "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "Content": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.10588235408067703,
+            0.2235294133424759,
+            0.9607843160629272
+          ],
+          "alpha": 1,
+          "hex": "#1B39F5"
+        },
+        "$description": "Text and icon color for informational messages. Use on Info/BG Light surfaces.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:33:59",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:0e38a7e152be134cad1a42a5d5e07b247a5c2ab9/-1:-1",
+            "targetVariableName": "Colors/Blue/600",
+            "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      }
+    }
+  },
+  "Category": {
+    "Promo": {
+      "BG": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9826614260673523,
+            0.17179709672927856,
+            0.21307019889354706
+          ],
+          "alpha": 1,
+          "hex": "#FB2C36"
+        },
+        "$description": "Solid background for Promo category labels and badges. Value set per client.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:34:81",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:f436bc26a5fa45736824eea42702936e1a826242/-1:-1",
+            "targetVariableName": "Colors/Red/500",
+            "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "BG Light": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9993008375167847,
+            0.885642945766449,
+            0.885676920413971
+          ],
+          "alpha": 1,
+          "hex": "#FFE2E2"
+        },
+        "$description": "Tinted background for Promo category chips, tags, and inline indicators. Value set per client.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:34:82",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:e6603ba675bdcfc682c0fe9d1f361ae5ea578e02/-1:-1",
+            "targetVariableName": "Colors/Red/100",
+            "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "Content": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9826614260673523,
+            0.17179709672927856,
+            0.21307019889354706
+          ],
+          "alpha": 1,
+          "hex": "#FB2C36"
+        },
+        "$description": "Text and icon color for Promo category labels. Use on Promo/BG Light surfaces.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:34:83",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:f436bc26a5fa45736824eea42702936e1a826242/-1:-1",
+            "targetVariableName": "Colors/Red/500",
+            "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      }
+    },
+    "New": {
+      "BG": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#FFFFFF"
+        },
+        "$description": "Solid background for New category labels and badges. Value set per client.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:34:84",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "BG Light": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#FFFFFF"
+        },
+        "$description": "Tinted background for New category chips, tags, and inline indicators. Value set per client.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:34:85",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "Content": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#FFFFFF"
+        },
+        "$description": "Text and icon color for New category labels. Use on New/BG Light surfaces.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:34:86",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      }
+    },
+    "Healthy": {
+      "BG": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#FFFFFF"
+        },
+        "$description": "Solid background for Healthy category labels and badges. Value set per client.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:34:87",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "BG Light": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#FFFFFF"
+        },
+        "$description": "Tinted background for Healthy category chips, tags, and inline indicators. Value set per client.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:34:88",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "Content": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#FFFFFF"
+        },
+        "$description": "Text and icon color for Healthy category labels. Use on Healthy/BG Light surfaces.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:34:89",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      }
+    },
+    "Express": {
+      "BG": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#FFFFFF"
+        },
+        "$description": "Solid background for Express category labels and badges. Value set per client.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:34:90",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "BG Light": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#FFFFFF"
+        },
+        "$description": "Tinted background for Express category chips, tags, and inline indicators. Value set per client.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:34:91",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "Content": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#FFFFFF"
+        },
+        "$description": "Text and icon color for Express category labels. Use on Express/BG Light surfaces.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:34:92",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      }
+    },
+    "Low Cost": {
+      "BG": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#FFFFFF"
+        },
+        "$description": "Solid background for Low Cost category labels and badges. Value set per client.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:34:93",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "BG Light": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#FFFFFF"
+        },
+        "$description": "Tinted background for Low Cost category chips, tags, and inline indicators. Value set per client.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:34:94",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "Content": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#FFFFFF"
+        },
+        "$description": "Text and icon color for Low Cost category labels. Use on Low Cost/BG Light surfaces.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:34:95",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      }
+    }
+  },
+  "Spacing": {
+    "2": {
+      "$type": "number",
+      "$value": 2,
+      "$description": "4px — Extra-small spacing. Use for tight gaps between inline elements or icon padding.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:345:1583",
+        "com.figma.scopes": [
+          "GAP"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:2ceb86a758e2707b4626b63d07c6c2a9386ab1b3/-1:-1",
+          "targetVariableName": "Spacing/2",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "4": {
+      "$type": "number",
+      "$value": 4,
+      "$description": "4px — Extra-small spacing. Use for tight gaps between inline elements or icon padding.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:35:144",
+        "com.figma.scopes": [
+          "GAP"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:7765c5d459a91e20d4e7c4bb4098bcfe4b838787/-1:-1",
+          "targetVariableName": "Spacing/4",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "8": {
+      "$type": "number",
+      "$value": 8,
+      "$description": "8px — Small spacing. Use for compact padding within components (chips, badges, small inputs).",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:35:145",
+        "com.figma.scopes": [
+          "GAP"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:f34bd258e37a01ba2078cde517a5ec7371a7d288/-1:-1",
+          "targetVariableName": "Spacing/8",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "12": {
+      "$type": "number",
+      "$value": 12,
+      "$description": "12px — Small-medium spacing. Use for padding in compact components or vertical rhythm between related items.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:35:147",
+        "com.figma.scopes": [
+          "GAP"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:79758a8f8db98e2a98033db06bbdcb494ce57962/-1:-1",
+          "targetVariableName": "Spacing/12",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "16": {
+      "$type": "number",
+      "$value": 16,
+      "$description": "16px — Base spacing. Default padding for most components (cards, inputs, buttons).",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:35:148",
+        "com.figma.scopes": [
+          "GAP"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:75c5c44dcb5d0d6806642b32762905b191cf8565/-1:-1",
+          "targetVariableName": "Spacing/16",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "20": {
+      "$type": "number",
+      "$value": 20,
+      "$description": "20px — Medium spacing. Use for internal padding in larger components or gap between grouped elements.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:35:149",
+        "com.figma.scopes": [
+          "GAP"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:d4bf5e93171986f1dd2018f363474bd2c5e2d30a/-1:-1",
+          "targetVariableName": "Spacing/20",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "24": {
+      "$type": "number",
+      "$value": 24,
+      "$description": "24px — Large spacing. Use for section padding or gap between distinct component groups.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:35:150",
+        "com.figma.scopes": [
+          "GAP"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:89ea79315acb1b0e632ca744861b49dc86620a62/-1:-1",
+          "targetVariableName": "Spacing/24",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "32": {
+      "$type": "number",
+      "$value": 32,
+      "$description": "32px — Extra-large spacing. Use for major layout padding or vertical space between page sections.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:35:146",
+        "com.figma.scopes": [
+          "GAP"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:1b30a4a30ff288373b7ffed764f06753351a69dc/-1:-1",
+          "targetVariableName": "Spacing/32",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "40": {
+      "$type": "number",
+      "$value": 40,
+      "$description": "40px — 2XL spacing. Use for generous layout padding on desktop views.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:35:151",
+        "com.figma.scopes": [
+          "GAP"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:5b262ddf6bdb42e0f9a9c7c671c530cee1bbba8d/-1:-1",
+          "targetVariableName": "Spacing/40",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "48": {
+      "$type": "number",
+      "$value": 48,
+      "$description": "48px — 3XL spacing. Use for hero sections, large module spacing, or page-level vertical rhythm.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:35:152",
+        "com.figma.scopes": [
+          "GAP"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:0630eb8ba245bb5c1091884da9a5a0febe377eba/-1:-1",
+          "targetVariableName": "Spacing/48",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    }
+  },
+  "Shape": {
+    "Button": {
+      "$type": "number",
+      "$value": 999,
+      "$description": "Border radius for buttons and primary interactive controls.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:34:97",
+        "com.figma.scopes": [
+          "CORNER_RADIUS"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:ff47ed29bfbd2a2929313bae04f71600c74a1aa7/-1:-1",
+          "targetVariableName": "Radius/Full",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Input": {
+      "$type": "number",
+      "$value": 8,
+      "$description": "Border radius for text inputs, selects, and form fields.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:34:101",
+        "com.figma.scopes": [
+          "CORNER_RADIUS"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:f6fa1dbfbbdde2d2f764c4b1ae038a73c92b48ad/-1:-1",
+          "targetVariableName": "Radius/MD",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Card": {
+      "$type": "number",
+      "$value": 12,
+      "$description": "Border radius for cards, panels, and content containers.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:34:104",
+        "com.figma.scopes": [
+          "CORNER_RADIUS"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:306086a6288bfd46264fe7c2e95807ee2d88a585/-1:-1",
+          "targetVariableName": "Radius/LG",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Sheet": {
+      "$type": "number",
+      "$value": 24,
+      "$description": "Border radius for bottom sheets and drawers (typically applied to top corners only).",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:34:107",
+        "com.figma.scopes": [
+          "CORNER_RADIUS"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:5b21b4fde0b087760bdb663c554458e6a437e248/-1:-1",
+          "targetVariableName": "Radius/2XL",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Tag": {
+      "$type": "number",
+      "$value": 999,
+      "$description": "Border radius for tags, chips, and small label components.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:34:111",
+        "com.figma.scopes": [
+          "CORNER_RADIUS"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:ff47ed29bfbd2a2929313bae04f71600c74a1aa7/-1:-1",
+          "targetVariableName": "Radius/Full",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Square": {
+      "$type": "number",
+      "$value": 0,
+      "$description": "Border radius for square icon containers, avatars, and thumbnail frames.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:34:112",
+        "com.figma.scopes": [
+          "CORNER_RADIUS"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:be31ebedafc3dc7011b104562142ece360986a68/-1:-1",
+          "targetVariableName": "Radius/0",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Pill": {
+      "$type": "number",
+      "$value": 999,
+      "$description": "Full pill border radius. Use for pill-shaped badges, toggles, and fully rounded buttons.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:34:113",
+        "com.figma.scopes": [
+          "CORNER_RADIUS"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:ff47ed29bfbd2a2929313bae04f71600c74a1aa7/-1:-1",
+          "targetVariableName": "Radius/Full",
+          "targetVariableSetId": "VariableCollectionId:b4c856707ac2fa86d81738e69e0d4ff6d6642b21/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Light"
+  }
+}

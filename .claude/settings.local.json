@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm audit *)",
+      "Bash(npm install *)",
+      "Bash(npm info *)",
+      "Bash(node -e \"const v=JSON.parse\\(require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\)\\); console.log\\(v.slice\\(-5\\).join\\('\\\\n'\\)\\)\")",
+      "Bash(node -e \"const d=JSON.parse\\(require\\('fs'\\).readFileSync\\(0,'utf8'\\)\\); console.log\\(d.version\\)\")",
+      "Bash(node -e \"process.stdin.resume\\(\\);let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const v=JSON.parse\\(d\\);console.log\\(v.filter\\(x=>x.startsWith\\('0.2'\\)\\).slice\\(-10\\).join\\('\\\\n'\\)\\)}\\)\")",
+      "Bash(npm run *)",
+      "mcp__cb1d0994-e083-46b2-803b-de72cf93afc0__get_design_context",
+      "mcp__cb1d0994-e083-46b2-803b-de72cf93afc0__get_screenshot",
+      "mcp__cb1d0994-e083-46b2-803b-de72cf93afc0__use_figma",
+      "Bash(npm uninstall *)",
+      "Skill(browse)",
+      "Skill(browse:*)",
+      "Bash('C:\\\\Users\\\\rapha/.claude/skills/gstack/browse/dist/browse' goto *)",
+      "Bash('C:\\\\Users\\\\rapha/.claude/skills/gstack/browse/dist/browse' text *)",
+      "Bash('C:\\\\Users\\\\rapha/.claude/skills/gstack/browse/dist/browse' download *)",
+      "Read(//tmp/**)"
+    ]
+  }
+}

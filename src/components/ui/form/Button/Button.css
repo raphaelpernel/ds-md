@@ -1,0 +1,132 @@
+/* DS.MD — Button
+   No hardcoded values. All tokens via CSS custom properties. */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-8);
+  border-radius: var(--shape-button);
+  font-family: var(--font-family-label);
+  font-weight: var(--font-weight-label);
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+  position: relative;
+}
+
+/* ── Sizes — explicit height matches Figma L=48/M=40/S=32 ── */
+.btn--L {
+  height: var(--spacing-48);
+  padding: 0 var(--spacing-20);
+  font-size: var(--font-size-label-lg);
+  line-height: var(--line-height-label-lg);
+}
+.btn--M {
+  height: var(--spacing-40);
+  padding: 0 var(--spacing-16);
+  font-size: var(--font-size-label-md);
+  line-height: var(--line-height-label-md);
+}
+.btn--S {
+  height: var(--spacing-32);
+  padding: 0 var(--spacing-12);
+  font-size: var(--font-size-label-md);
+  line-height: var(--line-height-label-md);
+}
+
+/* ── Icon Only — square, same height as size ── */
+.btn--icon-only.btn--L { width: var(--spacing-48); padding: 0; }
+.btn--icon-only.btn--M { width: var(--spacing-40); padding: 0; }
+.btn--icon-only.btn--S { width: var(--spacing-32); padding: 0; }
+
+/* ── Type: Primary ── */
+.btn--primary {
+  background-color: var(--color-interactive-bg);
+  color: var(--color-content-inversed);
+  border-color: transparent;
+}
+.btn--primary:hover:not(:disabled) {
+  background-color: var(--color-interactive-bg-hover);
+}
+
+/* ── Type: Secondary (Outline) ── */
+.btn--secondary {
+  background-color: transparent;
+  color: var(--color-interactive-content);
+  border-color: var(--color-interactive-border);
+}
+.btn--secondary:hover:not(:disabled) {
+  background-color: var(--color-interactive-bg-subtle);
+}
+
+/* ── Type: Tertiary (Ghost) ── */
+.btn--tertiary {
+  background-color: transparent;
+  color: var(--color-interactive-content);
+  border-color: transparent;
+}
+.btn--tertiary:hover:not(:disabled) {
+  background-color: var(--color-interactive-bg-subtle);
+}
+
+/* ── Type: Danger ── */
+.btn--danger {
+  background-color: var(--color-interactive-danger-bg);
+  color: var(--color-interactive-danger-content);
+  border-color: transparent;
+}
+.btn--danger:hover:not(:disabled) {
+  background-color: var(--color-interactive-danger-bg-hover);
+}
+
+/* ── Type: Alpha (on images/blurred surfaces) ── */
+.btn--alpha {
+  background-color: var(--color-interactive-alpha-bg);
+  color: var(--color-content-inversed);
+  border-color: transparent;
+  backdrop-filter: blur(8px);
+}
+.btn--alpha:hover:not(:disabled) {
+  background-color: var(--color-interactive-alpha-bg-hover);
+}
+
+/* ── State: Disabled ── */
+.btn:disabled,
+.btn--disabled {
+  background-color: var(--color-interactive-disabled-bg);
+  color: var(--color-interactive-disabled-content);
+  border-color: transparent;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── State: Loading ── */
+.btn--loading {
+  cursor: wait;
+  pointer-events: none;
+}
+.btn--loading .btn__label {
+  opacity: 0;
+}
+.btn__spinner {
+  position: absolute;
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: btn-spin 0.6s linear infinite;
+}
+@keyframes btn-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Icon slots ── */
+.btn__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  font-size: 1em;
+}

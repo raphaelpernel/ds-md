@@ -1,0 +1,7 @@
+@keyframes loading-spin { to { transform: rotate(360deg); } }
+.loading { display: inline-flex; align-items: center; gap: var(--spacing-8); }
+.loading__spinner { display: block; border-radius: 50%; border: 2px solid var(--color-border-default); border-top-color: var(--color-interactive-bg); animation: loading-spin 0.7s linear infinite; flex-shrink: 0; }
+.loading--S .loading__spinner { width: 16px; height: 16px; }
+.loading--M .loading__spinner { width: 24px; height: 24px; }
+.loading--L .loading__spinner { width: 40px; height: 40px; border-width: 3px; }
+.loading__label { font-family: var(--font-family-body); font-size: var(--font-size-body-md); color: var(--color-content-weak); }

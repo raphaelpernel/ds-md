@@ -1,0 +1,23 @@
+.toggle { display: inline-flex; align-items: center; gap: var(--spacing-8); cursor: pointer; }
+.toggle__input { position: absolute; opacity: 0; width: 0; height: 0; }
+.toggle__track {
+  position: relative; display: flex; align-items: center; flex-shrink: 0;
+  background-color: var(--color-border-default); border-radius: var(--shape-pill);
+  transition: background-color 0.2s ease;
+}
+.toggle--M .toggle__track { width: 44px; height: 24px; padding: 2px; }
+.toggle--S .toggle__track { width: 36px; height: 20px; padding: 2px; }
+.toggle__thumb {
+  background-color: var(--color-surface-primary); border-radius: 50%;
+  transition: transform 0.2s ease; flex-shrink: 0;
+}
+.toggle--M .toggle__thumb { width: 20px; height: 20px; }
+.toggle--S .toggle__thumb { width: 16px; height: 16px; }
+.toggle__input:checked + .toggle__track { background-color: var(--color-interactive-bg); }
+.toggle--M .toggle__input:checked + .toggle__track .toggle__thumb { transform: translateX(20px); }
+.toggle--S .toggle__input:checked + .toggle__track .toggle__thumb { transform: translateX(16px); }
+.toggle__input:disabled + .toggle__track { background-color: var(--color-interactive-disabled-bg); cursor: not-allowed; }
+.toggle__input:disabled:checked + .toggle__track { background-color: var(--color-interactive-disabled-bg); }
+.toggle__label { font-family: var(--font-family-label); font-size: var(--font-size-label-md); font-weight: var(--font-weight-body); color: var(--color-content-default); }
+.toggle__input:disabled ~ .toggle__label { color: var(--color-interactive-disabled-content); }
+.toggle:has(.toggle__input:disabled) { cursor: not-allowed; }

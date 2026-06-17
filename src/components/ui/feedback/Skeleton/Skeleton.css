@@ -1,0 +1,14 @@
+@keyframes skeleton-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton {
+  display: block;
+  background: linear-gradient(90deg, var(--color-surface-secondary) 25%, var(--color-surface-secondary-hover) 50%, var(--color-surface-secondary) 75%);
+  background-size: 800px 100%;
+  animation: skeleton-shimmer 1.5s infinite;
+}
+.skeleton--rect   { border-radius: var(--shape-input); min-height: 16px; }
+.skeleton--text   { border-radius: var(--shape-pill); height: 14px; }
+.skeleton--circle { border-radius: 50%; }
+.skeleton-lines   { display: flex; flex-direction: column; gap: var(--spacing-8); }

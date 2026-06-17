@@ -1,0 +1,111 @@
+/* DS.MD — ChipTag
+   No hardcoded values. All tokens via CSS custom properties.
+   Figma: https://www.figma.com/design/ES4RxHAafQbIwWLTzHnyFF/DS.MD?node-id=380-430 */
+
+.chip-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  font-family: var(--font-family-label);
+  font-size: var(--font-size-label-badge);
+  line-height: var(--line-height-label-badge);
+  font-weight: var(--font-weight-label);
+  border-radius: var(--shape-pill);
+  border: 1px solid transparent;
+  white-space: nowrap;
+  cursor: default;
+  user-select: none;
+  transition: background-color 0.1s ease, border-color 0.1s ease, color 0.1s ease;
+}
+
+/* ── Sizes — height: L=40 / M=32 / S=24 ── */
+.chip-tag--L { padding: var(--spacing-12) var(--spacing-16); }
+.chip-tag--M { padding: var(--spacing-8)  var(--spacing-12); }
+.chip-tag--S { padding: var(--spacing-4)  var(--spacing-12); }
+
+/* ── Type: Filled — Interactive/BG fill, inversed text ── */
+.chip-tag--filled {
+  background-color: var(--color-interactive-bg);
+  color: var(--color-content-inversed);
+}
+button.chip-tag--filled:hover:not(:disabled) {
+  background-color: var(--color-interactive-bg-hover);
+}
+
+/* ── Type: Toned — subtle brand fill, brand text; hover deepens to filled ── */
+.chip-tag--toned {
+  background-color: var(--color-interactive-bg-subtle);
+  color: var(--color-interactive-content);
+}
+button.chip-tag--toned:hover:not(:disabled) {
+  background-color: var(--color-interactive-bg);
+  color: var(--color-content-inversed);
+}
+
+/* ── Type: Neutral Filled — secondary surface, default text ── */
+.chip-tag--neutral-filled {
+  background-color: var(--color-surface-secondary);
+  color: var(--color-content-default);
+}
+button.chip-tag--neutral-filled:hover:not(:disabled) {
+  background-color: var(--color-surface-secondary-hover);
+}
+
+/* ── Type: Neutral Outline — no fill, default border, default text ── */
+.chip-tag--neutral-outline {
+  background-color: transparent;
+  color: var(--color-content-default);
+  border-color: var(--color-border-default);
+}
+button.chip-tag--neutral-outline:hover:not(:disabled) {
+  background-color: var(--color-surface-secondary);
+}
+
+/* ── Type: Alpha — semi-transparent dark fill, backdrop blur ── */
+.chip-tag--alpha {
+  background-color: var(--color-interactive-alpha-bg);
+  color: var(--color-content-inversed);
+  backdrop-filter: blur(8px);
+}
+button.chip-tag--alpha:hover:not(:disabled) {
+  background-color: var(--color-interactive-alpha-bg-hover);
+}
+
+/* ── State: Selected (filter chips — neutral types only) ── */
+.chip-tag--selected.chip-tag--neutral-filled,
+.chip-tag--selected.chip-tag--neutral-outline {
+  background-color: var(--color-interactive-bg-subtle);
+  border-color: var(--color-interactive-border);
+  color: var(--color-interactive-content);
+}
+
+/* ── State: Disabled ── */
+button.chip-tag:disabled,
+.chip-tag--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Icon slot ── */
+.chip-tag__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+/* ── Remove button ── */
+.chip-tag__remove {
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: currentColor;
+  font-size: 11px;
+  opacity: 0.7;
+  margin-left: var(--spacing-2);
+}
+.chip-tag__remove:hover {
+  opacity: 1;
+}

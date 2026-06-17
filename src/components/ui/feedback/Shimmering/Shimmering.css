@@ -1,0 +1,15 @@
+@keyframes shimmering-wave {
+  0%   { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+.shimmering {
+  display: block;
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-secondary)      0%,
+    var(--color-surface-secondary-hover) 40%,
+    var(--color-surface-secondary)       80%
+  );
+  background-size: 1200px 100%;
+  animation: shimmering-wave 1.8s ease-in-out infinite;
+}

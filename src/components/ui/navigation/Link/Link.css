@@ -1,0 +1,6 @@
+.link { display: inline-flex; align-items: center; gap: var(--spacing-4); color: var(--color-interactive-content); font-family: var(--font-family-body); font-weight: var(--font-weight-body); text-decoration: underline; cursor: pointer; }
+.link:hover { color: var(--color-interactive-bg-hover); }
+.link--LG { font-size: var(--font-size-body-lg); line-height: var(--line-height-body-lg); }
+.link--MD { font-size: var(--font-size-body-md); line-height: var(--line-height-body-md); }
+.link--SM { font-size: var(--font-size-body-sm); line-height: var(--line-height-body-sm); }
+.link__icon { display: flex; flex-shrink: 0; }

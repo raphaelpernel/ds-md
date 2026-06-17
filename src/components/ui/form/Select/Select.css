@@ -1,0 +1,16 @@
+.select { display: flex; flex-direction: column; gap: var(--spacing-4); }
+.select__label { font-family: var(--font-family-label); font-size: var(--font-size-label-md); font-weight: var(--font-weight-label); color: var(--color-content-default); }
+.select__wrapper { position: relative; display: flex; align-items: center; }
+.select__field {
+  width: 100%; appearance: none; padding: var(--spacing-12) var(--spacing-40) var(--spacing-12) var(--spacing-16);
+  font-family: var(--font-family-body); font-size: var(--font-size-body-md);
+  color: var(--color-content-default); background-color: var(--color-surface-primary);
+  border: 1.5px solid var(--color-border-default); border-radius: var(--shape-input); outline: none; cursor: pointer;
+  transition: border-color 0.15s;
+}
+.select__field:focus { border-color: var(--color-border-brand); }
+.select--error .select__field { border-color: var(--color-border-danger); }
+.select--disabled .select__field { background-color: var(--color-interactive-disabled-bg); color: var(--color-interactive-disabled-content); cursor: not-allowed; border-color: transparent; }
+.select__arrow { position: absolute; right: var(--spacing-12); pointer-events: none; color: var(--color-content-weak); font-size: 14px; }
+.select__helper { font-size: var(--font-size-body-sm); color: var(--color-content-weak); }
+.select__helper--error { color: var(--color-semantic-danger-content); }

@@ -1,0 +1,38 @@
+{
+  "name": "ds-md",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "tokens": "node sd.config.js",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "next": "^16.2.9",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "overrides": {
+    "esbuild": "^0.28.1"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "^10.4.5",
+    "@storybook/addon-themes": "^10.4.5",
+    "@storybook/nextjs": "^10.4.5",
+    "@storybook/react": "^10.4.5",
+    "@tailwindcss/postcss": "^4.3.1",
+    "@types/node": "^25.9.3",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "class-variance-authority": "^0.7.1",
+    "postcss": "^8.5.15",
+    "storybook": "^10.4.5",
+    "style-dictionary": "^5.4.4",
+    "tailwindcss": "^4.3.1",
+    "typescript": "^5.6.3"
+  }
+}
