@@ -9,9 +9,14 @@ const drawer = cva('drawer', {
       left:   'drawer--left',
       bottom: 'drawer--bottom',
     },
+    mobilePlacement: {
+      right:  'drawer--mobile-right',
+      left:   'drawer--mobile-left',
+      bottom: 'drawer--mobile-bottom',
+    },
     open: { true: 'drawer--open', false: '' },
   },
-  defaultVariants: { placement: 'right', open: false },
+  defaultVariants: { placement: 'right', mobilePlacement: 'bottom', open: false },
 })
 
 const drawerOverlay = cva('drawer-overlay', {
@@ -31,7 +36,7 @@ export interface DrawerProps extends Omit<VariantProps<typeof drawer>, 'open'> {
   footer?: ReactNode
 }
 
-export function Drawer({ open, onClose, title, children, footer, placement }: DrawerProps) {
+export function Drawer({ open, onClose, title, children, footer, placement, mobilePlacement }: DrawerProps) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
     if (open) document.addEventListener('keydown', onKey)
@@ -42,7 +47,7 @@ export function Drawer({ open, onClose, title, children, footer, placement }: Dr
     <>
       <div className={drawerOverlay({ open })} onClick={onClose} aria-hidden="true" />
       <div
-        className={drawer({ placement, open })}
+        className={drawer({ placement, mobilePlacement, open })}
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'drawer-title' : undefined}

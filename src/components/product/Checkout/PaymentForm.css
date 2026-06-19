@@ -1,0 +1,97 @@
+.payment-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+}
+
+.payment-form__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-heading-sm);
+  font-weight: var(--font-weight-heading);
+  color: var(--color-content-default);
+}
+
+.payment-form__secure-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  font-size: var(--font-size-body-sm);
+  color: var(--color-semantic-success-content);
+  background-color: var(--color-semantic-success-bg-light);
+  border-radius: var(--shape-input);
+  padding: var(--spacing-8) var(--spacing-12);
+}
+
+.payment-form__fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-12);
+}
+
+.payment-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.payment-form__field--full {
+  grid-column: 1 / -1;
+}
+
+.payment-form__label {
+  font-size: var(--font-size-label-md);
+  font-weight: var(--font-weight-label);
+  color: var(--color-content-default);
+}
+
+.payment-form__input {
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--shape-input);
+  padding: 0 var(--spacing-12);
+  height: var(--spacing-40);
+  font-size: var(--font-size-body-md);
+  font-family: var(--font-family-body);
+  color: var(--color-content-default);
+  background-color: var(--color-surface-primary);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.payment-form__input:focus {
+  border-color: #0070CC;
+}
+
+.payment-form__input::placeholder {
+  color: var(--color-content-weak);
+}
+
+.payment-form__cta {
+  background-color: var(--partner-bg);
+  color: var(--partner-content);
+  border: none;
+  border-radius: var(--shape-button);
+  height: var(--spacing-48);
+  font-size: var(--font-size-label-lg);
+  font-weight: var(--font-weight-label);
+  font-family: var(--font-family-label);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  width: 100%;
+}
+
+.payment-form__cta:hover:not(:disabled) {
+  background-color: var(--partner-bg-hover);
+}
+
+.payment-form__cta:disabled {
+  background-color: var(--color-interactive-disabled-bg);
+  color: var(--color-interactive-disabled-content);
+  cursor: not-allowed;
+}
+
+.payment-form__disclaimer {
+  font-size: var(--font-size-body-xs);
+  color: var(--color-content-weak);
+  line-height: var(--line-height-body-xs);
+  text-align: center;
+}

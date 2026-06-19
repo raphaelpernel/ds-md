@@ -1,0 +1,28 @@
+/**
+ * DS.MD — Partner: Carrefour
+ *
+ * Overrides les tokens interactifs du DS pour que tous les composants
+ * existants (Button primary, Tab pill, Radio…) deviennent bleus Carrefour
+ * automatiquement dans tout contexte [data-partner="carrefour"].
+ *
+ * Usage : <div data-partner="carrefour">
+ *   <Button variant="primary">Commander</Button>  ← devient bleu Carrefour
+ * </div>
+ */
+
+[data-partner="carrefour"] {
+  /* Overrides des tokens interactifs DS — rend tous les composants "bleus" */
+  --color-interactive-bg:        #0070CC;
+  --color-interactive-bg-subtle: #EBF4FF;
+  --color-interactive-bg-hover:  #005AA3;
+  --color-interactive-content:   #0070CC;
+  --color-interactive-border:    #0070CC;
+
+  /* Tokens partenaire conservés pour usages spécifiques (wordmark, logos) */
+  --partner-bg:          #0070CC;
+  --partner-bg-hover:    #005AA3;
+  --partner-bg-light:    #EBF4FF;
+  --partner-content:     #FFFFFF;
+  --partner-content-alt: #0070CC;
+  --partner-border:      #0070CC;
+}

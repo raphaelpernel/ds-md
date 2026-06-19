@@ -1,0 +1,97 @@
+.store-card {
+  width: 100%;
+  text-align: left;
+  background-color: var(--color-surface-primary);
+  border: 1.5px solid var(--color-border-default);
+  border-radius: var(--shape-card);
+  padding: var(--spacing-16);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.store-card:hover {
+  border-color: #0070CC;
+  background-color: var(--partner-bg-light);
+}
+
+.store-card--selected {
+  border-color: #0070CC;
+  background-color: var(--partner-bg-light);
+}
+
+.store-card__main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-12);
+}
+
+.store-card__left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.store-card__name {
+  font-size: var(--font-size-body-md);
+  font-weight: var(--font-weight-body-bold);
+  color: var(--color-content-default);
+}
+
+.store-card__address {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-content-weak);
+  line-height: var(--line-height-body-sm);
+}
+
+.store-card__hours {
+  font-size: var(--font-size-body-xs);
+  color: var(--color-content-weak);
+}
+
+.store-card__badges {
+  display: flex;
+  gap: var(--spacing-4);
+  flex-wrap: wrap;
+  margin-top: var(--spacing-4);
+}
+
+.store-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-size-body-xs);
+  color: var(--color-content-default);
+  background-color: var(--color-surface-secondary);
+  border-radius: var(--shape-tag);
+  padding: 2px var(--spacing-8);
+}
+
+.store-card__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-8);
+  flex-shrink: 0;
+}
+
+.store-card__distance {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-body-bold);
+  color: var(--color-content-default);
+}
+
+.store-card__radio {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border-default);
+  transition: border-color 0.15s ease;
+}
+
+.store-card__radio--checked {
+  border-color: #0070CC;
+  border-width: 6px;
+}

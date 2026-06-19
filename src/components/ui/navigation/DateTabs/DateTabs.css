@@ -1,0 +1,79 @@
+/* DS.MD — DateTabs
+   Navigation par date scrollable horizontalement.
+   Adapté aux sélecteurs de créneaux (drive, livraison, rdv, etc.).
+   L'état actif utilise --color-interactive-bg pour le cercle — hérite
+   automatiquement du contexte partenaire (corail, bleu, etc.). */
+
+.date-tabs {
+  display: flex;
+  gap: var(--spacing-4);
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: var(--spacing-4) 0;
+}
+
+.date-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.date-tabs__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  border: none;
+  cursor: pointer;
+  background: none;
+  border-radius: var(--shape-card);
+  padding: var(--spacing-8) var(--spacing-12);
+  min-width: 44px;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease;
+  font-family: var(--font-family-body);
+}
+
+.date-tabs__item:hover:not(:disabled):not(.date-tabs__item--active) {
+  background-color: var(--color-interactive-bg-subtle);
+}
+
+.date-tabs__num {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-content-default);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.date-tabs__day {
+  font-size: 11px;
+  color: var(--color-content-weak);
+  text-transform: lowercase;
+}
+
+.date-tabs__month {
+  font-size: 11px;
+  color: var(--color-content-weak);
+}
+
+/* ── Active state — filled circle via --color-interactive-bg ── */
+.date-tabs__item--active .date-tabs__num {
+  background-color: var(--color-interactive-bg);
+  color: var(--color-content-inversed);
+}
+
+.date-tabs__item--active .date-tabs__day,
+.date-tabs__item--active .date-tabs__month {
+  color: var(--color-interactive-content);
+}
+
+/* ── Disabled ── */
+.date-tabs__item--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

@@ -1,9 +1,12 @@
 /* DS.MD — Global styles entry point */
 
+/* Google Fonts — must be first, before any CSS rules */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
+
 /* Tailwind v4 */
 @import "tailwindcss";
 
-/* Font */
+/* Font faces (local) */
 @import './fonts.css';
 
 /* Base tokens (spacing, shape, elevation, typography) */
@@ -17,6 +20,9 @@
 /* Color semantics — only the matching [data-color-scheme] activates */
 @import './tokens/color-light.css';
 @import './tokens/color-dark.css';
+
+/* Partner tokens — scoped via [data-partner] attribute */
+@import './tokens/partners/carrefour.css';
 
 /* ─────────────────────────────────────────
    TAILWIND v4 THEME — maps DS tokens → TW utilities

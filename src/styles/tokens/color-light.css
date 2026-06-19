@@ -12,6 +12,8 @@
  */
 
 [data-color-scheme="light"] {
+  /* Counterpart to dark — ensures html background is always explicitly set */
+  background-color: var(--color-surface-page);
 
   /* ─────────────────────────────────────────
      SURFACE

@@ -1,0 +1,27 @@
+/* DS.MD — Stepper
+   Composant quantité : ⊖ N ⊕
+   Variantes de taille pilotées par le Button sous-jacent (S/M).
+   Les boutons héritent automatiquement de la couleur interactive du contexte
+   (corail Marmiton, bleu Carrefour, etc.) via --color-interactive-*. */
+
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-8);
+}
+
+/* Rend le Button sous-jacent circulaire au lieu de rectangulaire */
+.stepper__btn.btn {
+  border-radius: 50%;
+  padding: 0;
+}
+
+.stepper__value {
+  font-family: var(--font-family-label);
+  font-size: var(--font-size-label-md);
+  font-weight: var(--font-weight-label);
+  color: var(--color-content-default);
+  min-width: 20px;
+  text-align: center;
+  line-height: 1;
+}

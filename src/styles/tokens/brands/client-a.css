@@ -1,37 +1,109 @@
 /**
- * DS.MD — Brand: Client A
- * Override brand primitives and category tokens here.
+ * DS.MD — Brand: Marmiton (Client A)
  *
- * Usage:  <html data-brand="client-a">
+ * Palette extraite de marmiton.org :
+ *   Corail primary : #FF6F61  (--corail)
+ *   Mid corail     : #FFB7AF  (--mid-corail)
+ *   Light corail   : #FFE4E1  (--light-corail)
+ *   Dark brown     : #3F3735  (--dark-brown)
+ *   Mid brown      : #998B89  (--mid-brown)
+ *   Light grey     : #F4F4F4  (--light-grey)
+ *   Typographie    : "Open Sans"
+ *
+ * Usage : <html data-brand="client-a">
  */
 
 [data-brand="client-a"] {
-  /* Brand scale — replace with client's actual palette */
-  --brand-50:  #F5F5F5;
-  --brand-100: #E5E5E5;
-  --brand-300: #A3A3A3;
-  --brand-500: #737373; /* TODO: replace with client brand color */
-  --brand-700: #404040;
-  --brand-950: #171717;
+  /* ─────────────────────────────────────────
+     BRAND SCALE — Palette corail Marmiton
+  ───────────────────────────────────────── */
+  --brand-50:  #FFF5F4;
+  --brand-100: #FFE4E1;
+  --brand-300: #FFB7AF;
+  --brand-500: #FF6F61;
+  --brand-700: #C94B3E;
+  --brand-950: #3F3735;
 
-  /* Category */
+  /* ─────────────────────────────────────────
+     TYPOGRAPHY — Police Open Sans
+  ───────────────────────────────────────── */
+  --font-family-heading: 'Open Sans', sans-serif;
+  --font-family-body:    'Open Sans', sans-serif;
+  --font-family-label:   'Open Sans', sans-serif;
+  --font-family-price:   'Open Sans', sans-serif;
+
+  /* ─────────────────────────────────────────
+     CATEGORY — Univers culinaire Marmiton
+  ───────────────────────────────────────── */
+
+  /* Promo — rouge sémantique (inchangé) */
   --color-category-promo-bg:       #FB2C36;
   --color-category-promo-bg-light: #FFE2E2;
   --color-category-promo-content:  #FB2C36;
 
-  --color-category-new-bg:       #FFFFFF;
-  --color-category-new-bg-light: #FFFFFF;
-  --color-category-new-content:  #FFFFFF;
+  /* New — bleu Marmiton (#0288D1) */
+  --color-category-new-bg:         #0288D1;
+  --color-category-new-bg-light:   #E1F4FD;
+  --color-category-new-content:    #0288D1;
 
-  --color-category-healthy-bg:       #FFFFFF;
-  --color-category-healthy-bg-light: #FFFFFF;
-  --color-category-healthy-content:  #FFFFFF;
+  /* Healthy — vert Marmiton (#12B76A) */
+  --color-category-healthy-bg:       #12B76A;
+  --color-category-healthy-bg-light: #D1FAE5;
+  --color-category-healthy-content:  #12B76A;
 
-  --color-category-express-bg:       #FFFFFF;
-  --color-category-express-bg-light: #FFFFFF;
-  --color-category-express-content:  #FFFFFF;
+  /* Express — corail brand */
+  --color-category-express-bg:       #FF6F61;
+  --color-category-express-bg-light: #FFE4E1;
+  --color-category-express-content:  #FF6F61;
 
-  --color-category-low-cost-bg:       #FFFFFF;
-  --color-category-low-cost-bg-light: #FFFFFF;
-  --color-category-low-cost-content:  #FFFFFF;
+  /* Low Cost — brun moyen Marmiton (#998B89) */
+  --color-category-low-cost-bg:       #998B89;
+  --color-category-low-cost-bg-light: #EDE8E7;
+  --color-category-low-cost-content:  #998B89;
+}
+
+/* ─────────────────────────────────────────
+   NEUTRAL OVERRIDES — Brun chaud (light mode)
+   Sélecteur combiné (2 attributs) pour écraser
+   les valeurs navy hardcodées de color-light.css
+   importé après les brands.
+───────────────────────────────────────── */
+[data-brand="client-a"][data-color-scheme="light"] {
+  --color-surface-secondary:          #F4F4F4;
+  --color-surface-inverse:            #3F3735;
+  --color-surface-primary-hover:      rgba(63, 55, 53, 0.05);
+  --color-surface-secondary-hover:    #E8E8E8;
+  --color-surface-overlay:            rgba(63, 55, 53, 0.60);
+
+  --color-content-default:            #3F3735;
+  --color-content-weak:               rgba(63, 55, 53, 0.60);
+
+  --color-border-default:             rgba(63, 55, 53, 0.10);
+  --color-border-weak:                rgba(63, 55, 53, 0.05);
+
+  /*
+   * Marmiton: hover → mid-corail (#FFB7AF), plus clair (pas plus foncé).
+   * Source: header .button:hover { background-color: var(--mid-corail) }
+   */
+  --color-interactive-bg-hover:       #FFB7AF;
+
+  --color-interactive-alpha-bg:       rgba(63, 55, 53, 0.60);
+  --color-interactive-alpha-bg-hover: rgba(63, 55, 53, 0.30);
+}
+
+/* ─────────────────────────────────────────
+   NEUTRAL OVERRIDES — Brun chaud (dark mode)
+───────────────────────────────────────── */
+[data-brand="client-a"][data-color-scheme="dark"] {
+  --color-surface-page:               #3F3735;
+  --color-surface-primary:            #3F3735;
+  --color-surface-secondary:          #4D4240;
+  --color-surface-secondary-hover:    #5C504E;
+  --color-surface-inverse:            #FFFFFF;
+  --color-surface-overlay:            rgba(63, 55, 53, 0.60);
+
+  --color-content-inversed:           #3F3735;
+
+  --color-interactive-alpha-bg:       rgba(63, 55, 53, 0.60);
+  --color-interactive-alpha-bg-hover: rgba(63, 55, 53, 0.30);
 }

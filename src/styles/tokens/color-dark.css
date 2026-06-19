@@ -7,6 +7,8 @@
  */
 
 [data-color-scheme="dark"] {
+  /* Fill the html element itself so Storybook canvas gets the dark background */
+  background-color: var(--color-surface-page);
 
   /* ─────────────────────────────────────────
      SURFACE

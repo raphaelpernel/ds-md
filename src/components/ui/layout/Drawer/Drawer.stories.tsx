@@ -4,8 +4,11 @@ import { Drawer } from './Drawer'
 import { Button } from '../../form/Button/Button'
 const meta: Meta<typeof Drawer> = {
   title: 'DS.MD/Layout/Drawer', component: Drawer, tags: ['autodocs'],
-  args: { title: 'Drawer title', placement: 'right', open: false },
-  argTypes: { placement: { control: 'radio', options: ['right', 'left', 'bottom'] } },
+  args: { title: 'Drawer title', placement: 'right', mobilePlacement: 'bottom', open: false },
+  argTypes: {
+    placement:       { control: 'radio', options: ['right', 'left', 'bottom'] },
+    mobilePlacement: { control: 'radio', options: ['right', 'left', 'bottom'] },
+  },
   parameters: {
     design: {
       type: 'figma',

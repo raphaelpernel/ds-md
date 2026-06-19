@@ -1,0 +1,48 @@
+import type { Store } from '../types/store'
+
+export const MOCK_STORES: Store[] = [
+  {
+    id: 's-paris-15',
+    name: 'Carrefour Market Paris 15',
+    address: '12 rue du Commerce',
+    city: 'Paris',
+    postalCode: '75015',
+    distance: 0.4,
+    openingHours: 'Lun–Sam 7h–21h30 · Dim 9h–13h',
+    drive: false,
+    delivery: true,
+  },
+  {
+    id: 's-issy',
+    name: 'Carrefour Issy-les-Moulineaux',
+    address: '45 avenue de la République',
+    city: 'Issy-les-Moulineaux',
+    postalCode: '92130',
+    distance: 2.1,
+    openingHours: 'Lun–Sam 8h30–21h · Dim 9h–19h',
+    drive: true,
+    delivery: true,
+  },
+  {
+    id: 's-boulogne',
+    name: 'Carrefour Boulogne-Billancourt',
+    address: '8 place Jules Guesde',
+    city: 'Boulogne-Billancourt',
+    postalCode: '92100',
+    distance: 3.7,
+    openingHours: 'Lun–Sam 8h–21h · Dim fermé',
+    drive: true,
+    delivery: false,
+  },
+  {
+    id: 's-velizy',
+    name: 'Carrefour Vélizy 2',
+    address: 'Centre Commercial Vélizy 2',
+    city: 'Vélizy-Villacoublay',
+    postalCode: '78140',
+    distance: 12.3,
+    openingHours: 'Lun–Dim 9h–21h',
+    drive: true,
+    delivery: true,
+  },
+]

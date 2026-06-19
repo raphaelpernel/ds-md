@@ -1,0 +1,121 @@
+.timeslot-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+}
+
+.timeslot-picker__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-heading-sm);
+  font-weight: var(--font-weight-heading);
+  color: var(--color-content-default);
+}
+
+.timeslot-picker__days {
+  display: flex;
+  gap: var(--spacing-4);
+  border-bottom: 1px solid var(--color-border-default);
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 0;
+}
+
+.timeslot-picker__days::-webkit-scrollbar {
+  display: none;
+}
+
+.timeslot-picker__day-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: var(--spacing-8) var(--spacing-12);
+  font-size: var(--font-size-body-sm);
+  font-family: var(--font-family-body);
+  color: var(--color-content-weak);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  margin-bottom: -1px;
+}
+
+.timeslot-picker__day-tab--active {
+  color: #0070CC;
+  border-bottom-color: #0070CC;
+  font-weight: var(--font-weight-body-bold);
+}
+
+.timeslot-picker__day-tab:hover:not(.timeslot-picker__day-tab--active) {
+  color: var(--color-content-default);
+}
+
+.timeslot-picker__slots {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-8);
+}
+
+.timeslot-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-4);
+  padding: var(--spacing-12);
+  border: 1.5px solid var(--color-border-default);
+  border-radius: var(--shape-input);
+  background-color: var(--color-surface-primary);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+  text-align: left;
+}
+
+.timeslot-slot:hover:not(:disabled) {
+  border-color: #0070CC;
+  background-color: var(--partner-bg-light);
+}
+
+.timeslot-slot--selected {
+  border-color: var(--partner-bg) !important;
+  background-color: var(--partner-bg-light) !important;
+}
+
+.timeslot-slot--disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.timeslot-slot__time {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-body-bold);
+  color: var(--color-content-default);
+}
+
+.timeslot-slot--selected .timeslot-slot__time {
+  color: #004899;
+}
+
+.timeslot-slot__price {
+  font-size: var(--font-size-body-xs);
+  color: var(--color-content-weak);
+}
+
+.timeslot-slot__price--free {
+  color: var(--color-semantic-success-content);
+  font-weight: var(--font-weight-body-bold);
+}
+
+.timeslot-slot__unavailable {
+  font-size: var(--font-size-body-xs);
+  color: var(--color-semantic-danger-content);
+}
+
+.timeslot-picker__confirm {
+  background-color: var(--partner-bg-light);
+  border: 1px solid var(--partner-border);
+  border-radius: var(--shape-input);
+  padding: var(--spacing-12);
+}
+
+.timeslot-picker__confirm-text {
+  font-size: var(--font-size-body-sm);
+  color: var(--partner-content-alt);
+}

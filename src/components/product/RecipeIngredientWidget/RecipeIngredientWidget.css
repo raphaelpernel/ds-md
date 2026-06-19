@@ -1,0 +1,18 @@
+.riw {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+}
+
+.riw__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-16) var(--spacing-12);
+  padding: var(--spacing-4) 0;
+}
+
+@media (max-width: 400px) {
+  .riw__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
