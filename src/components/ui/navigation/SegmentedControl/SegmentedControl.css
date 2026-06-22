@@ -1,0 +1,69 @@
+/* ───────────────────────────────────────────
+   SegmentedControl
+   Pill container with an animated white thumb
+─────────────────────────────────────────── */
+
+.segmented {
+  --segmented-padding: var(--spacing-4);
+
+  position: relative;
+  /* inline-grid: chaque colonne = 1fr → toutes égales à la plus large,
+     conteneur hug content sans largeur fixe                           */
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  background-color: var(--color-surface-secondary);
+  border-radius: var(--shape-pill);
+  padding: var(--segmented-padding);
+}
+
+.segmented--full {
+  display: grid;
+  width: 100%;
+}
+
+/* ── Sliding thumb ── */
+.segmented__thumb {
+  position: absolute;
+  top: var(--segmented-padding);
+  bottom: var(--segmented-padding);
+  left: var(--segmented-padding);
+  border-radius: var(--shape-pill);
+  background-color: var(--color-surface-primary);
+  box-shadow: var(--elevation-100);
+  pointer-events: none;
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Options ── */
+.segmented__option {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-8);
+  padding: var(--spacing-8) var(--spacing-16);
+  border: none;
+  background: transparent;
+  border-radius: var(--shape-pill);
+  font-family: var(--font-family-label);
+  font-size: var(--font-size-label-md);
+  font-weight: var(--font-weight-label);
+  line-height: var(--line-height-label-md);
+  color: var(--color-content-weak);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.segmented__option:focus-visible {
+  outline: 2px solid var(--color-interactive-border);
+  outline-offset: -2px;
+}
+
+.segmented__option--active {
+  color: var(--color-interactive-content);
+  cursor: default;
+}

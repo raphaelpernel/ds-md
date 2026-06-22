@@ -5,6 +5,24 @@
   flex-direction: column;
 }
 
+.cart-footer__detail {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-8) var(--spacing-16);
+  border-bottom: 1px solid var(--color-border-weak);
+}
+
+.cart-footer__detail-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-body-bold);
+  color: var(--color-interactive-content);
+  text-decoration: underline;
+  padding: 0;
+}
+
 .cart-footer__main {
   display: flex;
   align-items: center;

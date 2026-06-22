@@ -10,9 +10,10 @@ interface CartItemProps {
   onIncrement: () => void
   onDecrement: () => void
   onRemove: () => void
+  onReplace?: () => void
 }
 
-export function CartItem({ item, onIncrement, onDecrement, onRemove }: CartItemProps) {
+export function CartItem({ item, onIncrement, onDecrement, onRemove, onReplace }: CartItemProps) {
   const { product, quantity } = item
   const totalPrice = (product.price * quantity).toFixed(2).replace('.', ',')
 
@@ -27,6 +28,9 @@ export function CartItem({ item, onIncrement, onDecrement, onRemove }: CartItemP
         <p className="cart-item__brand">
           {product.brand} · {product.unit}
         </p>
+        <button className="cart-item__replace" onClick={onReplace} aria-label={`Remplacer ${product.name}`}>
+          Remplacer
+        </button>
       </div>
 
       <div className="cart-item__right">

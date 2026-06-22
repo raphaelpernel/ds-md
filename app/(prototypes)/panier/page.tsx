@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Drawer } from '../../../src/components/ui/layout/Drawer/Drawer'
 import { Cart } from '../../../src/components/product/Cart/Cart'
 import { CartFooter } from '../../../src/components/product/Cart/CartFooter'
 import { CarrefourLoginModal } from '../../../src/components/product/CarrefourLogin/CarrefourLoginModal'
@@ -13,42 +12,32 @@ import '../../../src/styles/index.css'
 export default function PanierPage() {
   const router = useRouter()
   const { itemCount, total, sections, state } = useCart()
-  const [drawerOpen, setDrawerOpen] = useState(true)
   const [loginOpen, setLoginOpen] = useState(false)
 
   const recipeCount = sections.filter((s) => s.recipeId !== null).length
 
   return (
-    <main className="proto-page">
-      <header className="proto-header">
-        <Link href="/recette" className="proto-back">← Retour recette</Link>
-        <span className="proto-header__title">Panier ({itemCount})</span>
+    <main className="panier-page">
+      <header className="panier-header">
+        <Link href="/recette" className="panier-back">← Retour recette</Link>
+        <span className="panier-header__title">Mon panier ({itemCount})</span>
+        <span className="panier-header__spacer" />
       </header>
 
-      <div className="proto-panier-trigger">
-        <button className="proto-open-btn" onClick={() => setDrawerOpen(true)} data-partner="carrefour">
-          Voir mon panier · {itemCount} article{itemCount !== 1 ? 's' : ''}
-        </button>
+      <div className="panier-body">
+        <Cart />
       </div>
 
-      <Drawer
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        title=""
-        placement="right"
-        footer={
-          <CartFooter
-            total={total}
-            itemCount={itemCount}
-            recipeCount={recipeCount}
-            storeName={state.storeName}
-            onCheckout={() => setLoginOpen(true)}
-            onChangeStore={() => router.push('/magasin')}
-          />
-        }
-      >
-        <Cart />
-      </Drawer>
+      <div className="panier-footer">
+        <CartFooter
+          total={total}
+          itemCount={itemCount}
+          recipeCount={recipeCount}
+          storeName={state.storeName}
+          onCheckout={() => setLoginOpen(true)}
+          onChangeStore={() => router.push('/magasin')}
+        />
+      </div>
 
       <CarrefourLoginModal
         open={loginOpen}
@@ -60,13 +49,59 @@ export default function PanierPage() {
       />
 
       <style>{`
-        .proto-page { min-height: 100vh; background-color: var(--color-surface-page); }
-        .proto-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--color-border-default); background: var(--color-surface-primary); }
-        .proto-back { font-size: 14px; color: var(--color-interactive-content); text-decoration: none; }
-        .proto-header__title { font-weight: 700; font-size: 16px; color: var(--color-content-default); }
-        .proto-panier-trigger { display: flex; align-items: center; justify-content: center; padding: 40px 16px; }
-        .proto-open-btn { background-color: var(--partner-bg); color: var(--partner-content); border: none; border-radius: var(--shape-button); height: 48px; padding: 0 24px; font-size: 16px; font-weight: 700; cursor: pointer; transition: background-color 0.15s; }
-        .proto-open-btn:hover { background-color: var(--partner-bg-hover); }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        .panier-page {
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          background-color: var(--color-surface-page);
+          font-family: var(--font-family-body);
+          color: var(--color-content-default);
+          max-width: 480px;
+          margin: 0 auto;
+        }
+
+        .panier-header {
+          position: sticky;
+          top: 0;
+          z-index: 20;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 12px 16px;
+          height: 52px;
+          border-bottom: 1px solid var(--color-border-default);
+          background: var(--color-surface-primary);
+        }
+
+        .panier-back {
+          font-size: 14px;
+          color: var(--color-interactive-content);
+          text-decoration: none;
+          white-space: nowrap;
+        }
+
+        .panier-header__title {
+          font-weight: 700;
+          font-size: 16px;
+          color: var(--color-content-default);
+        }
+
+        .panier-header__spacer {
+          width: 80px;
+        }
+
+        .panier-body {
+          flex: 1;
+          overflow-y: auto;
+        }
+
+        .panier-footer {
+          position: sticky;
+          bottom: 0;
+          z-index: 10;
+        }
       `}</style>
     </main>
   )

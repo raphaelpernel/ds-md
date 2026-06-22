@@ -85,11 +85,10 @@ export function getCartSections(items: CartItem[]): CartSection[] {
     }
     map.get(key)!.items.push(item)
   }
-  // Non-recipe items first, then recipes
   const sections = Array.from(map.values())
   return [
-    ...sections.filter((s) => s.recipeId === null),
     ...sections.filter((s) => s.recipeId !== null),
+    ...sections.filter((s) => s.recipeId === null),
   ]
 }
 

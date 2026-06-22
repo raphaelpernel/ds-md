@@ -31,7 +31,7 @@ export function RecipeOrderBanner({
           par personne
         </p>
         <button className="recipe-order-banner__cta" onClick={onOrder}>
-          <CarrefourLogo small />
+          <CarrefourLogo small white />
           Ajouter au panier
           {itemCount > 0 && (
             <span className="recipe-order-banner__count">{itemCount}</span>
@@ -42,20 +42,16 @@ export function RecipeOrderBanner({
   )
 }
 
-function CarrefourLogo({ small = false }: { small?: boolean }) {
-  const size = small ? 16 : 24
+function CarrefourLogo({ small = false, white = false }: { small?: boolean; white?: boolean }) {
+  const size = small ? 16 : 40
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" aria-label="Carrefour" role="img">
-      <circle cx="12" cy="12" r="12" fill="#004899" />
-      <path
-        d="M8 7 L12 12 L8 17 M16 7 L12 12 L16 17"
-        stroke="white"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-    </svg>
+    <img
+      src="/logos/logo-carrefour.svg"
+      alt="Carrefour"
+      width={size}
+      height={size}
+      style={{ objectFit: 'contain', display: 'block', filter: white ? 'brightness(0) invert(1)' : undefined }}
+    />
   )
 }
 

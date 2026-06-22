@@ -10,6 +10,7 @@ export { Select } from './ui/form/Select/Select'
 
 // ── Navigation ──
 export { Tab } from './ui/navigation/Tab/Tab'
+export { SegmentedControl } from './ui/navigation/SegmentedControl/SegmentedControl'
 export { Breadcrumb } from './ui/navigation/Breadcrumb/Breadcrumb'
 export { Menu } from './ui/navigation/Menu/Menu'
 export { Link } from './ui/navigation/Link/Link'
