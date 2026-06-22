@@ -55,6 +55,18 @@
   text-align: right;
 }
 
+.cart-item__replace {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--color-interactive-content);
+  text-decoration: underline;
+  padding: 0;
+  margin-top: 3px;
+  font-family: var(--font-family-body);
+}
+
 /* Override taille du bouton remove — tertiary icon-only S est 32px, on veut plus discret */
 .cart-item__remove.btn {
   width: 24px;

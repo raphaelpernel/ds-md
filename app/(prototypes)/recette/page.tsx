@@ -1,9 +1,14 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { RecipeIngredientWidget } from '../../../src/components/product/RecipeIngredientWidget/RecipeIngredientWidget'
 import { Button } from '../../../src/components/ui/form/Button/Button'
+import { Drawer } from '../../../src/components/ui/layout/Drawer/Drawer'
+import { Cart } from '../../../src/components/product/Cart/Cart'
+import { CartFooter } from '../../../src/components/product/Cart/CartFooter'
+import { CarrefourLoginModal } from '../../../src/components/product/CarrefourLogin/CarrefourLoginModal'
 import { useCart } from '../../../src/context/CartContext'
 import { getRecipeById } from '../../../src/data/mock/recipes'
 import { getProductsByRecipe } from '../../../src/data/mock/products'
@@ -13,14 +18,20 @@ const RECIPE = getRecipeById('r-tarte-abricots')!
 const PRODUCTS = getProductsByRecipe('r-tarte-abricots')
 
 export default function RecettePage() {
-  const { addItem, itemCount } = useCart()
+  const router = useRouter()
+  const { addItem, itemCount, total, sections, state } = useCart()
   const [liked, setLiked] = useState(false)
   const [servings, setServings] = useState(RECIPE.servings)
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [loginOpen, setLoginOpen] = useState(false)
+
+  const recipeCount = sections.filter((s) => s.recipeId !== null).length
 
   const handleOrder = () => {
     PRODUCTS.filter((p) => p.available).forEach((p) =>
       addItem(p, RECIPE.id, RECIPE.name)
     )
+    setDrawerOpen(true)
   }
 
   return (
@@ -35,10 +46,14 @@ export default function RecettePage() {
         <span className="mr-header__logo">
           <span className="mr-header__brand">marmiton</span>
         </span>
-        <Link href="/panier" className="mr-header__cart" aria-label="Panier">
+        <button
+          className="mr-header__cart"
+          onClick={() => setDrawerOpen(true)}
+          aria-label="Panier"
+        >
           🛒
           {itemCount > 0 && <span className="mr-header__cart-count">{itemCount}</span>}
-        </Link>
+        </button>
       </header>
 
       {/* ── Hero image plein format ── */}
@@ -137,6 +152,38 @@ export default function RecettePage() {
         </section>
       </div>
 
+      <Drawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        placement="right"
+        mobilePlacement="bottom"
+        footer={
+          <CartFooter
+            total={total}
+            itemCount={itemCount}
+            recipeCount={recipeCount}
+            storeName={state.storeName}
+            onCheckout={() => setLoginOpen(true)}
+            onChangeStore={() => router.push('/magasin')}
+            onViewDetail={() => {
+              setDrawerOpen(false)
+              router.push('/panier')
+            }}
+          />
+        }
+      >
+        <Cart />
+      </Drawer>
+
+      <CarrefourLoginModal
+        open={loginOpen}
+        onClose={() => setLoginOpen(false)}
+        onSuccess={() => {
+          setLoginOpen(false)
+          router.push('/magasin')
+        }}
+      />
+
       <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -173,7 +220,8 @@ export default function RecettePage() {
         }
         .mr-header__cart {
           position: relative; font-size: 22px;
-          text-decoration: none; width: 36px;
+          background: none; border: none; cursor: pointer;
+          width: 36px; padding: 0;
           display: flex; justify-content: flex-end; align-items: center;
         }
         .mr-header__cart-count {

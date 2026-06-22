@@ -8,6 +8,7 @@ interface CartFooterProps {
   storeName?: string | null
   onCheckout: () => void
   onChangeStore?: () => void
+  onViewDetail?: () => void
 }
 
 export function CartFooter({
@@ -17,10 +18,19 @@ export function CartFooter({
   storeName,
   onCheckout,
   onChangeStore,
+  onViewDetail,
 }: CartFooterProps) {
   return (
     /* data-partner="carrefour" → Button primary hérite automatiquement de la couleur bleue */
     <div className="cart-footer" data-partner="carrefour">
+      {onViewDetail && (
+        <div className="cart-footer__detail">
+          <button className="cart-footer__detail-btn" onClick={onViewDetail}>
+            Voir le détail →
+          </button>
+        </div>
+      )}
+
       <div className="cart-footer__main">
         <div className="cart-footer__left">
           <p className="cart-footer__price">
@@ -35,7 +45,7 @@ export function CartFooter({
         <Button
           variant="primary"
           size="L"
-          lIcon={<CarrefourIcon />}
+          lIcon={<CarrefourIcon white />}
           onClick={onCheckout}
           disabled={itemCount === 0}
         >
@@ -56,20 +66,17 @@ export function CartFooter({
   )
 }
 
-function CarrefourIcon({ small = false }: { small?: boolean }) {
-  const size = small ? 16 : 20
+function CarrefourIcon({ small = false, white = false }: { small?: boolean; white?: boolean }) {
+  const size = small ? 40 : 16
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <circle cx="12" cy="12" r="12" fill="#004899" />
-      <path
-        d="M8 7 L12 12 L8 17 M16 7 L12 12 L16 17"
-        stroke="white"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-    </svg>
+    <img
+      src="/logos/logo-carrefour.svg"
+      alt=""
+      aria-hidden="true"
+      width={size}
+      height={size}
+      style={{ objectFit: 'contain', display: 'block', filter: white ? 'brightness(0) invert(1)' : undefined }}
+    />
   )
 }
 

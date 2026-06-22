@@ -4,7 +4,7 @@ export const MOCK_RECIPES: Recipe[] = [
   {
     id: 'r-tarte-abricots',
     name: 'Tarte crumble aux abricots',
-    imageUrl: 'https://placehold.co/400x280/FFB347/fff?text=Tarte+abricots',
+    imageUrl: '/img/tarteabricot.jpg',
     servings: 6,
     duration: 45,
     estimatedPricePerServing: 3.25,

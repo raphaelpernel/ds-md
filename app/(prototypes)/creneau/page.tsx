@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '../../../src/components/ui/form/Button/Button'
-import { Tab } from '../../../src/components/ui/navigation/Tab/Tab'
+import { SegmentedControl } from '../../../src/components/ui/navigation/SegmentedControl/SegmentedControl'
 import { Radio } from '../../../src/components/ui/form/Radio/Radio'
 import { Breadcrumb } from '../../../src/components/ui/navigation/Breadcrumb/Breadcrumb'
 import { DateTabs } from '../../../src/components/ui/navigation/DateTabs/DateTabs'
@@ -67,13 +67,13 @@ export default function CreneauPage() {
         </div>
       )}
 
-      {/* Drive / Livraison toggle — Tab pill variant */}
+      {/* Drive / Livraison toggle */}
       <div className="cr-mode-wrap">
-        <Tab
-          variant="pill"
-          items={MODE_TABS}
+        <SegmentedControl
+          options={MODE_TABS}
           value={mode}
           onChange={(v) => setMode(v as Mode)}
+          fullWidth
         />
       </div>
 
@@ -174,9 +174,6 @@ export default function CreneauPage() {
         .cr-store-sub { font-size: 12px; color: var(--color-content-weak); margin-top: 2px; }
 
         .cr-mode-wrap { padding: 12px 16px; }
-        /* Tab pill prend toute la largeur dans le contexte créneau */
-        .cr-mode-wrap .tab { width: 100%; }
-        .cr-mode-wrap .tab__item { flex: 1; justify-content: center; }
 
         .cr-days-wrap {
           padding: 4px 16px 8px;

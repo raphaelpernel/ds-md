@@ -431,3 +431,10 @@ export const PrimaryDefault: Story = {
 - **Ne jamais supposer** qu'un token existe — le vérifier par `getLocalVariablesAsync()`.
 - **Une question à la fois** si plusieurs clarifications sont nécessaires.
 - **Toujours vérifier inline** (dans le même script) après un rebinding — ne pas se fier à une relecture dans un appel séparé.
+- **Mettre à jour `.claude/design-system-tokens.md`** après chaque opération qui modifie le design system :
+  - Nouvelle variable ou modification d'une variable existante (Semantics, Typography) → mettre à jour les sections 2, 3, 4 ou 5 selon le type
+  - Nouveau text style ou modification → mettre à jour la section 5.2
+  - Nouveau effect style ou modification → mettre à jour la section 6
+  - Nouveau composant UI dans `src/components/ui/` → ajouter une ligne en section 7 Component Registry
+  - Modification des variants/props d'un composant existant (stories ou `.tsx`) → mettre à jour la ligne correspondante en section 7
+  - Pour les tokens Figma : re-extraire via `use_figma` avec le script de lecture de variables (cf. workflow §6), puis mettre à jour la date de synchronisation en en-tête

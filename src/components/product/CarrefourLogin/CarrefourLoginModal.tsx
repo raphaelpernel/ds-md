@@ -123,17 +123,14 @@ export function CarrefourLoginModal({ open, onClose, onSuccess }: CarrefourLogin
 function CarrefourWordmark() {
   return (
     <div className="carrefour-wordmark">
-      <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="12" cy="12" r="12" fill="#004899" />
-        <path
-          d="M8 7 L12 12 L8 17 M16 7 L12 12 L16 17"
-          stroke="white"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          fill="none"
-        />
-      </svg>
+      <img
+        src="/logos/logo-carrefour.svg"
+        alt=""
+        aria-hidden="true"
+        width={40}
+        height={40}
+        style={{ objectFit: 'contain', display: 'block' }}
+      />
       <span className="carrefour-wordmark__text">Carrefour</span>
     </div>
   )
