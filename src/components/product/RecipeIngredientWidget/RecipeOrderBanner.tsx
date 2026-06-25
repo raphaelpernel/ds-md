@@ -19,8 +19,10 @@ export function RecipeOrderBanner({
         <div className="recipe-order-banner__logo">
           <CarrefourLogo />
         </div>
-        <p className="recipe-order-banner__title">Commander les ingrédients</p>
-        <p className="recipe-order-banner__subtitle">Livraison ou drive Carrefour</p>
+        <div className="recipe-order-banner__header-text">
+          <p className="recipe-order-banner__title">Commander les ingrédients</p>
+          <p className="recipe-order-banner__subtitle">Livraison ou drive Carrefour</p>
+        </div>
       </div>
       <div className="recipe-order-banner__footer">
         <p className="recipe-order-banner__price">

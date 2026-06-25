@@ -5,7 +5,8 @@ const meta: Meta<typeof Badge> = {
   args: { label: 'Badge', variant: 'default', size: 'M' },
   argTypes: {
     variant: { control: 'select', options: ['default', 'brand', 'success', 'danger', 'warning', 'info'] },
-    size: { control: 'radio', options: ['M', 'S'] },
+    size:    { control: 'radio', options: ['M', 'S'] },
+    icon:    { control: false },
   },
   parameters: {
     design: {

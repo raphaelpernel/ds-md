@@ -1,0 +1,210 @@
+/* DS.MD — ProductCard
+   No hardcoded values. All tokens via CSS custom properties. */
+
+/* ── Base card (vertical) ── */
+.product-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  padding: var(--spacing-12);
+  background-color: var(--color-surface-primary);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--shape-card);
+  width: 140px;
+  flex-shrink: 0;
+}
+
+/* ── Media — image container ── */
+.product-card__media {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--shape-input);
+  background-color: var(--color-surface-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.product-card__emoji {
+  font-size: 48px;
+  line-height: 1;
+}
+
+/* ── Body (vertical) ── */
+.product-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  flex: 1;
+}
+
+/* ── Content ── */
+.product-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  flex: 1;
+  min-width: 0;
+}
+
+.product-card__name {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-body-bold);
+  line-height: var(--line-height-body-xs);
+  color: var(--color-content-default);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-card__meta {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-body-xs);
+  color: var(--color-content-weak);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.product-card__replace {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-body-xs);
+  color: var(--color-interactive-content);
+  text-decoration: underline;
+  padding: 0;
+  text-align: left;
+  width: fit-content;
+}
+
+/* ── Footer — price + action ── */
+.product-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-8);
+  margin-top: auto;
+}
+
+/* ── Price ── */
+.product-card__price {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.product-card__price-strike {
+  font-family: var(--font-family-price);
+  font-size: var(--font-size-price-strike);
+  font-weight: var(--font-weight-price-strike);
+  line-height: var(--line-height-price-strike);
+  color: var(--color-content-weak);
+  text-decoration: line-through;
+}
+
+.product-card__price-current {
+  font-family: var(--font-family-price);
+  font-size: var(--font-size-price-sm);
+  font-weight: var(--font-weight-price);
+  line-height: var(--line-height-price-sm);
+  color: var(--color-content-default);
+}
+
+/* ── Category tag overlay (ChipTag) ── */
+.product-card__tag {
+  position: absolute;
+  top: var(--spacing-8);
+  left: var(--spacing-8);
+  z-index: 1;
+}
+
+/* ── Horizontal variant (Figma — 2 lignes) ── */
+.product-card--horizontal {
+  flex-direction: column;
+  width: 100%;
+  max-width: none;
+  gap: var(--spacing-8);
+  align-items: stretch;
+}
+
+.product-card--horizontal .product-card__main {
+  display: flex;
+  gap: var(--spacing-12);
+  align-items: flex-start;
+}
+
+.product-card--horizontal .product-card__media {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  aspect-ratio: unset;
+}
+
+.product-card--horizontal .product-card__emoji {
+  font-size: 28px;
+}
+
+.product-card--horizontal .product-card__details {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-8);
+}
+
+.product-card--horizontal .product-card__name {
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body-sm);
+  -webkit-line-clamp: 2;
+}
+
+.product-card--horizontal .product-card__footer {
+  align-items: center;
+  margin-top: 0;
+}
+
+.product-card--horizontal .product-card__price {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-4);
+}
+
+.product-card--horizontal .product-card__price-current {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-body-bold);
+  line-height: var(--line-height-body-sm);
+}
+
+/* ── Cart context ── */
+.product-card--cart {
+  border: none;
+  border-radius: 0;
+  padding: var(--spacing-16);
+  width: 100%;
+}
+
+.product-card--cart + .product-card--cart {
+  border-top: 1px solid var(--color-border-weak);
+}
+
+.product-card__remove-wrap {
+  opacity: 0.7;
+  flex-shrink: 0;
+  margin: calc(var(--spacing-4) * -1);
+}
+
+.product-card__remove-wrap:hover {
+  opacity: 1;
+}

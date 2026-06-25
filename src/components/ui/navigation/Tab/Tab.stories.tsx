@@ -1,18 +1,13 @@
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
+import { House, BookOpen, User } from '@phosphor-icons/react'
 import { Tab } from './Tab'
-
-const PlaceholderIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M19.5 2.625H4.5C4.00272 2.625 3.52581 2.82254 3.17417 3.17417C2.82254 3.52581 2.625 4.00272 2.625 4.5V19.5C2.625 19.9973 2.82254 20.4742 3.17417 20.8258C3.52581 21.1775 4.00272 21.375 4.5 21.375H19.5C19.9973 21.375 20.4742 21.1775 20.8258 20.8258C21.1775 20.4742 21.375 19.9973 21.375 19.5V4.5C21.375 4.00272 21.1775 3.52581 20.8258 3.17417C20.4742 2.82254 19.9973 2.625 19.5 2.625ZM19.125 17.5312L6.46875 4.875H19.125V17.5312ZM4.875 6.46875L17.5312 19.125H4.875V6.46875Z" fill="currentColor"/>
-  </svg>
-)
 
 const ITEMS = [{ value: 'a', label: 'Tab 1' }, { value: 'b', label: 'Tab 2' }, { value: 'c', label: 'Tab 3', disabled: true }]
 const ITEMS_WITH_ICONS = [
-  { value: 'a', label: 'Tab 1', icon: <PlaceholderIcon /> },
-  { value: 'b', label: 'Tab 2', icon: <PlaceholderIcon /> },
-  { value: 'c', label: 'Tab 3', icon: <PlaceholderIcon />, disabled: true },
+  { value: 'a', label: 'Home',    icon: <House size={16} /> },
+  { value: 'b', label: 'Recipes', icon: <BookOpen size={16} /> },
+  { value: 'c', label: 'Profile', icon: <User size={16} />, disabled: true },
 ]
 const meta: Meta<typeof Tab> = {
   title: 'DS.MD/Navigation/Tab', component: Tab, tags: ['autodocs'],

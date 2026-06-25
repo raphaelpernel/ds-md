@@ -17,7 +17,7 @@
   position: relative;
 }
 
-/* ── Sizes — explicit height matches Figma L=48/M=40/S=32 ── */
+/* ── Sizes — explicit height matches Figma L=48/M=40/S=32/XS=24 ── */
 .btn--L {
   height: var(--spacing-48);
   padding: 0 var(--spacing-20);
@@ -36,11 +36,18 @@
   font-size: var(--font-size-label-md);
   line-height: var(--line-height-label-md);
 }
+.btn--XS {
+  height: var(--spacing-24);
+  padding: 0 var(--spacing-8);
+  font-size: var(--font-size-label-sm);
+  line-height: var(--line-height-label-sm);
+}
 
 /* ── Icon Only — square, same height as size ── */
-.btn--icon-only.btn--L { width: var(--spacing-48); padding: 0; }
-.btn--icon-only.btn--M { width: var(--spacing-40); padding: 0; }
-.btn--icon-only.btn--S { width: var(--spacing-32); padding: 0; }
+.btn--icon-only.btn--L  { width: var(--spacing-48); padding: 0; }
+.btn--icon-only.btn--M  { width: var(--spacing-40); padding: 0; }
+.btn--icon-only.btn--S  { width: var(--spacing-32); padding: 0; }
+.btn--icon-only.btn--XS { width: var(--spacing-24); padding: 0; }
 
 /* ── Type: Primary ── */
 .btn--primary {

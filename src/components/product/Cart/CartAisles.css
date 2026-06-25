@@ -1,76 +1,102 @@
 .cart-aisles {
+
   display: flex;
+
   flex-direction: column;
-  gap: var(--spacing-8);
+
+  gap: var(--spacing-12);
+
 }
 
-.cart-aisles__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+
 
 .cart-aisles__title {
-  font-size: var(--font-size-body-md);
+
+  font-size: var(--font-size-body-sm);
+
   font-weight: var(--font-weight-body-bold);
+
   color: var(--color-content-default);
+
 }
 
-.cart-aisles__view-all {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: var(--font-size-body-xs);
-  color: var(--color-interactive-content);
-  text-decoration: underline;
-  padding: 0;
-  font-family: var(--font-family-body);
-}
 
-.cart-aisles__list {
-  display: flex;
+
+.cart-aisles__grid {
+
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
   gap: var(--spacing-8);
-  overflow-x: auto;
-  padding-bottom: var(--spacing-4);
-  scrollbar-width: none;
+
 }
 
-.cart-aisles__list::-webkit-scrollbar {
-  display: none;
-}
+
 
 .cart-aisles__item {
+
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
-  gap: var(--spacing-4);
-  background: none;
-  border: 1px solid var(--color-border-default);
+
+  justify-content: center;
+
+  gap: var(--spacing-8);
+
+  background-color: var(--color-surface-secondary);
+
+  border: 1px solid transparent;
+
   border-radius: var(--shape-card);
-  padding: var(--spacing-8);
-  min-width: 60px;
-  max-width: 84px;
-  width: auto;
-  flex-shrink: 0;
+
+  padding: var(--spacing-12) var(--spacing-8);
+
+  min-height: 88px;
+
   cursor: pointer;
+
   transition: background-color 0.15s ease, border-color 0.15s ease;
+
 }
 
-.cart-aisles__item:hover {
+
+
+.cart-aisles__item:hover,
+
+.cart-aisles__item--selected {
+
   background-color: var(--color-surface-brand-light);
+
   border-color: var(--color-border-brand);
+
 }
+
+
 
 .cart-aisles__emoji {
-  font-size: 24px;
+
+  font-size: 28px;
+
   line-height: 1;
+
 }
 
+
+
 .cart-aisles__label {
+
   font-size: var(--font-size-body-xs);
+
   color: var(--color-content-default);
+
   text-align: center;
-  white-space: normal;
+
+  line-height: var(--line-height-body-xs);
+
   word-break: break-word;
-  max-width: 68px;
+
 }
+

@@ -109,3 +109,55 @@ button.chip-tag:disabled,
 .chip-tag__remove:hover {
   opacity: 1;
 }
+
+/* ── Category tags — product / merchandising (tokens Category/*) ── */
+
+.chip-tag--category-promo.chip-tag--appearance-solid {
+  background-color: var(--color-category-promo-bg);
+  color: var(--color-content-inversed);
+}
+
+.chip-tag--category-promo.chip-tag--appearance-toned {
+  background-color: var(--color-category-promo-bg-light);
+  color: var(--color-category-promo-content);
+}
+
+.chip-tag--category-new.chip-tag--appearance-solid {
+  background-color: var(--color-category-new-bg);
+  color: var(--color-content-inversed);
+}
+
+.chip-tag--category-new.chip-tag--appearance-toned {
+  background-color: var(--color-category-new-bg-light);
+  color: var(--color-category-new-content);
+}
+
+.chip-tag--category-healthy.chip-tag--appearance-solid {
+  background-color: var(--color-category-healthy-bg);
+  color: var(--color-content-inversed);
+}
+
+.chip-tag--category-healthy.chip-tag--appearance-toned {
+  background-color: var(--color-category-healthy-bg-light);
+  color: var(--color-category-healthy-content);
+}
+
+.chip-tag--category-express.chip-tag--appearance-solid {
+  background-color: var(--color-category-express-bg);
+  color: var(--color-content-inversed);
+}
+
+.chip-tag--category-express.chip-tag--appearance-toned {
+  background-color: var(--color-category-express-bg-light);
+  color: var(--color-category-express-content);
+}
+
+.chip-tag--category-low-cost.chip-tag--appearance-solid {
+  background-color: var(--color-category-low-cost-bg);
+  color: var(--color-content-inversed);
+}
+
+.chip-tag--category-low-cost.chip-tag--appearance-toned {
+  background-color: var(--color-category-low-cost-bg-light);
+  color: var(--color-category-low-cost-content);
+}

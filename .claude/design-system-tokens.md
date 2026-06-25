@@ -317,10 +317,16 @@ Scope Figma : `CORNER_RADIUS` — alias vers les Primitives Radius.
 |---|---|---|---|
 | `Avatar` | `import { Avatar } from '@/components'` | `size`: XS\|S\|M\|L\|XL · `shape`: circle\|square · `initials` ou `src`+`alt` | [Figma](https://www.figma.com/design/ES4RxHAafQbIwWLTzHnyFF/DS.MD?node-id=335-638) |
 | `Badge` | `import { Badge } from '@/components'` | `variant`: default\|brand\|success\|danger\|warning\|info · `size`: M\|S · `dot`: boolean | [Figma](https://www.figma.com/design/ES4RxHAafQbIwWLTzHnyFF/DS.MD?node-id=333-618) |
-| `ChipTag` | `import { ChipTag } from '@/components'` | `type`: filled\|toned\|neutral-filled\|neutral-outline\|alpha · `size`: L\|M\|S · `selected` · `onRemove` · `onClick` | [Figma](https://www.figma.com/design/ES4RxHAafQbIwWLTzHnyFF/DS.MD?node-id=380-430) |
+| `ChipTag` | `import { ChipTag } from '@/components'` | `type`: filled\|toned\|neutral-filled\|neutral-outline\|alpha · `category`: promo\|new\|healthy\|express\|low-cost · `appearance`: solid\|toned · `size`: L\|M\|S · `selected` · `onRemove` · `onClick` | [Figma](https://www.figma.com/design/ES4RxHAafQbIwWLTzHnyFF/DS.MD?node-id=380-430) |
 | `ListItem` | `import { ListItem } from '@/components'` | `label` · `description` · `onClick` (rend interactif) · `disabled` | [Figma](https://www.figma.com/design/ES4RxHAafQbIwWLTzHnyFF/DS.MD?node-id=374-1309) |
 
+**Notes Badge :**
+- Usage réservé aux **compteurs numériques** (ex. nombre d'articles panier) et **indicateurs de statut** (point coloré). Pas pour les étiquettes produit.
+
 **Notes ChipTag :**
+- `type` — styles génériques (filtres, recettes, overlays alpha)
+- `category` — tags produit / merchandising (`promo`, `new`, `healthy`, `express`, `low-cost`). Remplace `type` quand défini. Tokens `Category/*`.
+- `appearance` — avec `category` : `solid` (fond plein, sur image) ou `toned` (fond clair, sur surface)
 - `filled` — filtre actif/sélectionné
 - `toned` — usage contextuel libre
 - `neutral-filled` — tag statique sur fond clair
@@ -359,6 +365,24 @@ Scope Figma : `CORNER_RADIUS` — alias vers les Primitives Radius.
 - `tertiary` — action tertiaire (ghost)
 - `danger` — actions destructives uniquement
 - `alpha` — sur image/fond coloré (semi-transparent avec blur)
+
+### 7.3b Product
+
+| Composant | Import | Variants / Props clés | Figma |
+|---|---|---|---|
+| `ProductCard` | `import { ProductCard } from '@/components'` | `context`: catalog\|cart · `orientation`: vertical\|horizontal · `product`: Product · `onAdd`: callback (catalog) · `quantity` / `onQuantityChange` / `onRemove` / `onReplace` (cart) | [Figma](https://www.figma.com/design/ES4RxHAafQbIwWLTzHnyFF/DS.MD?node-id=461-211) |
+| `PromoSection` | `import { PromoSection } from '@/components'` | `products`: Product[] · `onAdd`: callback · `onViewAll`: callback | — |
+
+**Notes ProductCard :**
+- `vertical` — carte portrait : image pleine largeur en haut, contenu + prix en bas. Largeur fixe 140px, idéale pour les grilles.
+- `horizontal` — carte liste (Figma) : 2 lignes — ligne 1 image (56px) + détails, ligne 2 prix + stepper/ajouter. Largeur 100%, idéale pour listes scrollables et promos.
+- `context="cart"` — variante panier : layout horizontal implicite, prix total (`price × quantity`), CTA remove (tertiary iconOnly, opacity 0.7) et remplacer. Props contrôlées (`quantity`, `onQuantityChange`, `onRemove`). Utilisé dans `CartSection`.
+- `promo` — tag promo via `ChipTag category="promo"` (plus de badge custom). Prix barré si `product.promo` défini.
+
+**Notes PromoSection :**
+- Section "Promos du moment" pour le panier. Scroll horizontal masqué (`scrollbar-width: none`).
+- Utilise `ProductCard` en mode `vertical` (min 160px, max 200px) en interne.
+- `onViewAll` optionnel — si absent, le CTA "Voir tout" n'est pas affiché.
 
 ### 7.4 Layout
 

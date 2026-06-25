@@ -1,0 +1,54 @@
+.cart-complete-basket {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-20);
+  padding-top: var(--spacing-8);
+  border-top: 1px solid var(--color-border-default);
+}
+
+.cart-complete-basket__loading {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-content-weak);
+  text-align: center;
+  padding: var(--spacing-8) 0;
+}
+
+.cart-complete-basket__ai-results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+}
+
+.cart-complete-basket__ai-title {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-body-bold);
+  color: var(--color-content-default);
+}
+
+.cart-complete-basket__ai-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  width: 100%;
+}
+
+/* Modal plein panneau au-dessus du drawer panier */
+.cart-aisle-modal {
+  z-index: 210;
+  align-items: stretch;
+  justify-content: center;
+  padding: 0;
+}
+
+.cart-aisle-modal .modal {
+  width: 100%;
+  max-width: 480px;
+  max-height: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+
+.cart-aisle-modal .modal__body {
+  padding: var(--spacing-16);
+  overflow-y: auto;
+}

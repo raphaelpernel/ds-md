@@ -160,3 +160,11 @@ export function useCart(): CartContextValue {
   if (!ctx) throw new Error('useCart must be used within <CartProvider>')
   return ctx
 }
+
+export function useCartOptional(): CartContextValue | null {
+  return useContext(CartContext)
+}
+
+export function getProductQuantity(items: CartItem[], productId: string): number {
+  return items.find((i) => i.product.id === productId)?.quantity ?? 0
+}

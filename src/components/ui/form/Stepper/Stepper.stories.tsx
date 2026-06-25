@@ -7,10 +7,11 @@ const meta: Meta<typeof Stepper> = {
   component: Stepper,
   tags: ['autodocs'],
   argTypes: {
-    size: { control: 'radio', options: ['S', 'M'] },
-    min: { control: 'number' },
-    max: { control: 'number' },
+    size:     { control: 'radio', options: ['XS', 'S', 'M'] },
+    min:      { control: 'number' },
+    max:      { control: 'number' },
     disabled: { control: 'boolean' },
+    suffix:   { control: 'text' },
   },
   args: {
     value: 1,
@@ -33,8 +34,18 @@ export const Default: Story = {
   render: (args) => <Controlled {...args} />,
 }
 
+export const SizeXS: Story = {
+  render: (args) => <Controlled {...args} size="XS" value={2} />,
+  name: 'Taille XS (24px)',
+}
+
 export const SizeM: Story = {
   render: (args) => <Controlled {...args} size="M" value={3} />,
+}
+
+export const WithSuffix: Story = {
+  render: (args) => <Controlled {...args} size="S" value={6} suffix="personnes" min={1} />,
+  name: 'Avec suffixe (ex: personnes)',
 }
 
 export const AtMin: Story = {

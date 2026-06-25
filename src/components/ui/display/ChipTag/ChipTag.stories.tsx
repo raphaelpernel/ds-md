@@ -18,11 +18,22 @@ const meta: Meta<typeof ChipTag> = {
         '**alpha** — Sur image uniquement',
       ].join('<br/>'),
     },
+    category: {
+      control: 'select',
+      options: [undefined, 'promo', 'new', 'healthy', 'express', 'low-cost'],
+      description: 'Tag produit / merchandising — remplace `type` quand défini',
+    },
+    appearance: {
+      control: 'radio',
+      options: ['solid', 'toned'],
+      description: 'Solid (sur image) ou toned (sur fond clair) — avec `category` uniquement',
+    },
     size: {
       control: 'radio',
       options: ['L', 'M', 'S'],
     },
     label:    { control: 'text' },
+    icon:     { control: false },
     selected: { table: { disable: true } },
     disabled: { table: { disable: true } },
     onRemove: { table: { disable: true } },
@@ -110,6 +121,36 @@ export const RecipeTags: Story = {
       <ChipTag type="neutral-filled" size="S" label="Végétarien" />
       <ChipTag type="neutral-filled" size="S" label="Sans gluten" />
       <ChipTag type="neutral-filled" size="S" label="20 min" />
+    </div>
+  ),
+}
+
+/* ── Tags produit / merchandising (category) ── */
+
+export const CategoryPromoSolid: Story = {
+  name: 'Category — Promo (solid)',
+  args: { category: 'promo', appearance: 'solid', size: 'S', label: '-30%' },
+}
+
+export const CategoryPromoToned: Story = {
+  name: 'Category — Promo (toned)',
+  args: { category: 'promo', appearance: 'toned', size: 'S', label: 'Promo' },
+}
+
+export const AllCategories: Story = {
+  name: 'Category — Toutes les catégories',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-16)' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-8)' }}>
+        {(['promo', 'new', 'healthy', 'express', 'low-cost'] as const).map((category) => (
+          <ChipTag key={category} category={category} appearance="solid" size="S" label={category} />
+        ))}
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-8)' }}>
+        {(['promo', 'new', 'healthy', 'express', 'low-cost'] as const).map((category) => (
+          <ChipTag key={category} category={category} appearance="toned" size="S" label={category} />
+        ))}
+      </div>
     </div>
   ),
 }

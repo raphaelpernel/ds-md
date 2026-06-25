@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { Plus, ArrowRight } from '@phosphor-icons/react'
 import { Button } from './Button'
 
 const meta: Meta<typeof Button> = {
@@ -19,11 +20,14 @@ const meta: Meta<typeof Button> = {
     },
     size: {
       control: 'radio',
-      options: ['L', 'M', 'S'],
+      options: ['L', 'M', 'S', 'XS'],
     },
-    label: { control: 'text' },
-    loading: { control: 'boolean' },
+    label:    { control: 'text' },
+    loading:  { control: 'boolean' },
     disabled: { control: 'boolean' },
+    lIcon:    { control: false },
+    rIcon:    { control: false },
+    iconOnly: { control: false },
   },
   args: {
     label: 'Button',
@@ -52,9 +56,17 @@ export const Disabled: Story = { args: { variant: 'primary', disabled: true } }
 
 // ── Size stories ──
 
-export const SizeLarge: Story = { args: { size: 'L' } }
-export const SizeMedium: Story = { args: { size: 'M' } }
-export const SizeSmall: Story = { args: { size: 'S' } }
+export const SizeLarge:   Story = { args: { size: 'L' } }
+export const SizeMedium:  Story = { args: { size: 'M' } }
+export const SizeSmall:   Story = { args: { size: 'S' } }
+export const SizeXSmall:  Story = { args: { size: 'XS' } }
+
+// ── Icon stories ──
+
+export const WithLeftIcon: Story  = { args: { lIcon: <Plus size={16} /> } }
+export const WithRightIcon: Story = { args: { rIcon: <ArrowRight size={16} /> } }
+export const WithBothIcons: Story = { args: { lIcon: <Plus size={16} />, rIcon: <ArrowRight size={16} /> } }
+export const IconOnly: Story      = { args: { iconOnly: <Plus size={16} />, label: 'Action' } }
 
 // ── All variants grid ──
 
@@ -64,7 +76,7 @@ export const AllVariants: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
       {(['primary', 'secondary', 'tertiary', 'danger'] as const).map((variant) => (
         <div key={variant} style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-16)', flexWrap: 'wrap' }}>
-          {(['L', 'M', 'S'] as const).map((size) => (
+          {(['L', 'M', 'S', 'XS'] as const).map((size) => (
             <Button key={size} variant={variant} size={size} label={`${variant} ${size}`} />
           ))}
           <Button variant={variant} size="L" label="Loading" loading />
