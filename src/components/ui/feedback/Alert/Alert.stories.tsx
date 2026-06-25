@@ -3,7 +3,10 @@ import { Alert } from './Alert'
 const meta: Meta<typeof Alert> = {
   title: 'DS.MD/Feedback/Alert', component: Alert, tags: ['autodocs'],
   args: { title: 'Alert title', children: 'Descriptive text about the alert message.', variant: 'info' },
-  argTypes: { variant: { control: 'radio', options: ['success', 'danger', 'warning', 'info'] } },
+  argTypes: {
+    variant: { control: 'radio', options: ['success', 'danger', 'warning', 'info'] },
+    icon:    { control: false },
+  },
   parameters: {
     design: {
       type: 'figma',

@@ -3,8 +3,12 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { RecipeIngredientWidget } from '../../../src/components/product/RecipeIngredientWidget/RecipeIngredientWidget'
+import { RecipeIngredientWidget, ViewToggle } from '../../../src/components/product/RecipeIngredientWidget/RecipeIngredientWidget'
+import type { ViewMode } from '../../../src/components/product/RecipeIngredientWidget/RecipeIngredientWidget'
+import { RecipeOrderBanner } from '../../../src/components/product/RecipeIngredientWidget/RecipeOrderBanner'
+import { ShoppingCart } from '@phosphor-icons/react'
 import { Button } from '../../../src/components/ui/form/Button/Button'
+import { Stepper } from '../../../src/components/ui/form/Stepper/Stepper'
 import { Drawer } from '../../../src/components/ui/layout/Drawer/Drawer'
 import { Cart } from '../../../src/components/product/Cart/Cart'
 import { CartFooter } from '../../../src/components/product/Cart/CartFooter'
@@ -22,6 +26,7 @@ export default function RecettePage() {
   const { addItem, itemCount, total, sections, state } = useCart()
   const [liked, setLiked] = useState(false)
   const [servings, setServings] = useState(RECIPE.servings)
+  const [ingredientView, setIngredientView] = useState<ViewMode>('grid')
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [loginOpen, setLoginOpen] = useState(false)
 
@@ -44,17 +49,53 @@ export default function RecettePage() {
           </svg>
         </Link>
         <span className="mr-header__logo">
-          <span className="mr-header__brand">marmiton</span>
+          <img
+            src="/logos/logo-marmiton.svg"
+            alt="Marmiton"
+            className="mr-header__brand"
+            width={120}
+            height={19}
+          />
         </span>
-        <button
-          className="mr-header__cart"
-          onClick={() => setDrawerOpen(true)}
-          aria-label="Panier"
-        >
-          🛒
-          {itemCount > 0 && <span className="mr-header__cart-count">{itemCount}</span>}
-        </button>
+        <div className="mr-header__cart">
+          <Button
+            variant="secondary"
+            size="M"
+            label={
+              itemCount > 0
+                ? `Panier, ${itemCount} article${itemCount > 1 ? 's' : ''}`
+                : 'Panier'
+            }
+            iconOnly={<ShoppingCart size={16} weight="bold" aria-hidden="true" />}
+            onClick={() => setDrawerOpen(true)}
+          />
+          {itemCount > 0 && (
+            <span className="mr-header__cart-count" aria-hidden="true">
+              {itemCount}
+            </span>
+          )}
+        </div>
       </header>
+
+      {/* ── Zone pré-hero : fil d'Ariane + titre + rating ── */}
+      <div className="mr-pre-hero">
+        <nav className="mr-breadcrumb" aria-label="Fil d'Ariane">
+          <span>Accueil</span>
+          <span className="mr-breadcrumb__sep">›</span>
+          <span>Recettes</span>
+          <span className="mr-breadcrumb__sep">›</span>
+          <span>Plats principaux</span>
+        </nav>
+
+        <h1 className="mr-title">{RECIPE.name}</h1>
+
+        <div className="mr-meta-row">
+          <span className="mr-stars">★★★★½</span>
+          <span className="mr-rating-score">4,7/5</span>
+          <span className="mr-dot">·</span>
+          <span className="mr-comments">247 commentaires</span>
+        </div>
+      </div>
 
       {/* ── Hero image plein format ── */}
       <div className="mr-hero">
@@ -63,37 +104,46 @@ export default function RecettePage() {
 
       {/* ── Contenu ── */}
       <div className="mr-content">
-        {/* Titre */}
-        <h1 className="mr-title">{RECIPE.name}</h1>
-
-        {/* Rating + commentaires */}
-        <div className="mr-meta-row">
-          <span className="mr-stars">★★★★☆</span>
-          <span className="mr-rating-score">4,2/5</span>
-          <span className="mr-dot">·</span>
-          <span className="mr-comments">💬 12 avis</span>
-        </div>
-
         {/* Badges */}
         <div className="mr-badges">
-          <span className="mr-badge">⏱ {RECIPE.duration} min</span>
-          <span className="mr-badge">👤 Facile</span>
-          <span className="mr-badge">💰 Bon marché</span>
+          <span className="mr-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            {RECIPE.duration} min
+          </span>
+          <span className="mr-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Très Facile
+          </span>
+          <span className="mr-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Bon Marché
+          </span>
         </div>
 
-        {/* Actions */}
+        {/* Actions icon-only */}
         <div className="mr-actions">
           <Button
             variant={liked ? 'primary' : 'secondary'}
             size="S"
-            lIcon={<span aria-hidden="true">{liked ? '❤️' : '🤍'}</span>}
+            label="J'aime"
+            iconOnly={
+              <svg width="18" height="18" viewBox="0 0 24 24" fill={liked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            }
             onClick={() => setLiked((v) => !v)}
-          >
-            J&rsquo;aime
-          </Button>
-          <Button variant="secondary" size="S" lIcon={<span aria-hidden="true">📤</span>}>
-            Partager
-          </Button>
+          />
+          <Button
+            variant="secondary"
+            size="S"
+            label="Partager"
+            iconOnly={
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+            }
+          />
         </div>
 
         <hr className="mr-divider" />
@@ -104,28 +154,29 @@ export default function RecettePage() {
             <h2 className="mr-section-title">🥄 Ingrédients</h2>
           </div>
 
-          <div className="mr-servings">
-            <button
-              className="mr-servings-btn"
-              onClick={() => setServings((s) => Math.max(1, s - 1))}
-              aria-label="Réduire les portions"
-            >
-              −
-            </button>
-            <span className="mr-servings-label">{servings} personnes</span>
-            <button
-              className="mr-servings-btn"
-              onClick={() => setServings((s) => s + 1)}
-              aria-label="Augmenter les portions"
-            >
-              +
-            </button>
+          <div className="mr-servings-row">
+            <Stepper
+              value={servings}
+              onChange={setServings}
+              min={1}
+              size="S"
+              suffix="personnes"
+              label="Nombre de personnes"
+            />
+            <ViewToggle view={ingredientView} onChange={setIngredientView} />
           </div>
+
+          <RecipeOrderBanner
+            estimatedPrice={RECIPE.estimatedPricePerServing}
+            servings={servings}
+            onOrder={handleOrder}
+            itemCount={itemCount}
+          />
 
           <RecipeIngredientWidget
             recipe={RECIPE}
             products={PRODUCTS}
-            onOrder={handleOrder}
+            view={ingredientView}
           />
         </section>
 
@@ -213,15 +264,13 @@ export default function RecettePage() {
         }
         .mr-header__logo { flex: 1; text-align: center; }
         .mr-header__brand {
-          font-size: 18px; font-weight: 800;
-          font-family: var(--font-family-heading);
-          color: var(--color-interactive-content);
-          letter-spacing: -0.5px;
+          display: block;
+          height: 19px;
+          width: auto;
+          margin: 0 auto;
         }
         .mr-header__cart {
-          position: relative; font-size: 22px;
-          background: none; border: none; cursor: pointer;
-          width: 36px; padding: 0;
+          position: relative;
           display: flex; justify-content: flex-end; align-items: center;
         }
         .mr-header__cart-count {
@@ -232,6 +281,20 @@ export default function RecettePage() {
           display: flex; align-items: center; justify-content: center;
         }
 
+        /* Pré-hero : fil d'Ariane + titre + rating */
+        .mr-pre-hero {
+          background: #fff;
+          padding: 12px 16px 14px;
+          display: flex; flex-direction: column; gap: 8px;
+        }
+
+        /* Fil d'Ariane */
+        .mr-breadcrumb {
+          display: flex; align-items: center; gap: 4px; flex-wrap: wrap;
+          font-size: 12px; color: var(--color-content-weak);
+        }
+        .mr-breadcrumb__sep { color: #ccc; }
+
         /* Hero */
         .mr-hero { width: 100%; aspect-ratio: 4/3; max-height: 280px; overflow: hidden; }
         .mr-hero__img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -239,8 +302,8 @@ export default function RecettePage() {
         /* Content */
         .mr-content {
           background: #fff;
-          padding: 20px 16px;
-          display: flex; flex-direction: column; gap: 16px;
+          padding: 16px 16px 20px;
+          display: flex; flex-direction: column; gap: 14px;
         }
 
         .mr-title {
@@ -255,29 +318,19 @@ export default function RecettePage() {
         .mr-stars { color: #FF6F61; font-size: 15px; letter-spacing: 1px; }
         .mr-rating-score { font-size: 13px; color: var(--color-content-weak); }
         .mr-dot { color: #ccc; }
-        .mr-comments { font-size: 13px; color: var(--color-content-weak); }
+        .mr-comments { font-size: 13px; color: var(--color-interactive-content); text-decoration: underline; cursor: pointer; }
 
         /* Badges */
         .mr-badges { display: flex; gap: 8px; flex-wrap: wrap; }
         .mr-badge {
+          display: flex; align-items: center; gap: 5px;
           font-size: 13px; color: var(--color-content-default);
           background: #f5f5f5; border-radius: 20px;
-          padding: 4px 10px;
+          padding: 5px 10px;
         }
 
         /* Actions */
         .mr-actions { display: flex; gap: 8px; }
-        .mr-action-btn {
-          display: flex; align-items: center; gap: 5px;
-          background: none;
-          border: 1.5px solid var(--color-border-default);
-          border-radius: 20px; padding: 6px 14px;
-          font-size: 13px; font-family: var(--font-family-label);
-          color: var(--color-content-default); cursor: pointer;
-          transition: background 0.15s, border-color 0.15s;
-        }
-        .mr-action-btn:hover { background: #f5f5f5; }
-        .mr-action-btn--active { border-color: var(--color-interactive-content); color: var(--color-interactive-content); }
 
         /* Divider */
         .mr-divider { border: none; border-top: 1px solid var(--color-border-default); }
@@ -291,26 +344,11 @@ export default function RecettePage() {
           display: flex; align-items: center; gap: 8px;
         }
 
-        /* Servings */
-        .mr-servings {
-          display: inline-flex; align-items: center;
-          border: 1.5px solid var(--color-border-default);
-          border-radius: 24px; overflow: hidden;
+        /* Servings row */
+        .mr-servings-row {
+          display: flex; align-items: center;
+          justify-content: space-between;
           margin-bottom: 16px;
-        }
-        .mr-servings-btn {
-          background: none; border: none;
-          padding: 6px 14px; font-size: 18px; font-weight: 700;
-          cursor: pointer; color: var(--color-interactive-content);
-          transition: background 0.15s;
-        }
-        .mr-servings-btn:hover { background: #f5f5f5; }
-        .mr-servings-label {
-          font-size: 14px; font-weight: 600;
-          color: var(--color-content-default);
-          padding: 0 4px;
-          border-left: 1.5px solid var(--color-border-default);
-          border-right: 1.5px solid var(--color-border-default);
         }
 
         /* Steps */

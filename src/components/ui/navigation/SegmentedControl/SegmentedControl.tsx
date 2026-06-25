@@ -10,6 +10,12 @@ export interface SegmentedControlProps {
   value: string
   onChange?: (value: string) => void
   fullWidth?: boolean
+  /** Label lu par les lecteurs d'écran pour identifier le groupe de choix */
+  label?: string
+  /** Désactive tout le composant */
+  disabled?: boolean
+  /** Désactive des options individuelles par leur valeur */
+  disabledValues?: string[]
 }
 
 export function SegmentedControl({
@@ -17,13 +23,24 @@ export function SegmentedControl({
   value,
   onChange,
   fullWidth = false,
+  label,
+  disabled = false,
+  disabledValues = [],
 }: SegmentedControlProps) {
   const activeIndex = options.findIndex((o) => o.value === value)
 
   return (
     <div
-      className={`segmented${fullWidth ? ' segmented--full' : ''}`}
+      className={[
+        'segmented',
+        fullWidth ? 'segmented--full' : '',
+        disabled ? 'segmented--disabled' : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
       role="radiogroup"
+      aria-label={label}
+      aria-disabled={disabled || undefined}
     >
       {/* Sliding thumb */}
       <span
@@ -37,13 +54,22 @@ export function SegmentedControl({
 
       {options.map((option) => {
         const isActive = option.value === value
+        const isDisabled = disabled || disabledValues.includes(option.value)
         return (
           <button
             key={option.value}
             role="radio"
             aria-checked={isActive}
-            className={`segmented__option${isActive ? ' segmented__option--active' : ''}`}
-            onClick={() => onChange?.(option.value)}
+            aria-disabled={isDisabled || undefined}
+            className={[
+              'segmented__option',
+              isActive ? 'segmented__option--active' : '',
+              isDisabled ? 'segmented__option--disabled' : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+            onClick={() => !isDisabled && onChange?.(option.value)}
+            tabIndex={isDisabled ? -1 : undefined}
           >
             {option.label}
           </button>

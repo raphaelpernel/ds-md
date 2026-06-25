@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { Plus } from '@phosphor-icons/react'
 import { FAB } from './FAB'
 
 const meta: Meta<typeof FAB> = {
@@ -6,7 +7,10 @@ const meta: Meta<typeof FAB> = {
   component: FAB,
   tags: ['autodocs'],
   args: { size: 'M', alpha: false, disabled: false },
-  argTypes: { size: { control: 'radio', options: ['S', 'M', 'L'] } },
+  argTypes: {
+    size: { control: 'radio', options: ['S', 'M', 'L'] },
+    icon: { control: false },
+  },
   parameters: {
     design: {
       type: 'figma',
@@ -18,6 +22,7 @@ export default meta
 type Story = StoryObj<typeof FAB>
 
 export const Default: Story = {}
+export const WithIcon: Story = { args: { icon: <Plus size={24} /> } }
 export const Small: Story = { args: { size: 'S' } }
 export const Large: Story = { args: { size: 'L' } }
 export const Alpha: Story = { args: { alpha: true } }

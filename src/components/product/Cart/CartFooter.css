@@ -34,19 +34,25 @@
 .cart-footer__left {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--spacing-2);
 }
 
 .cart-footer__price {
-  font-size: 22px;
-  font-weight: 700;
+  font-size: var(--font-size-price-lg);
+  font-weight: var(--font-weight-body-bold);
   color: var(--color-content-default);
-  line-height: 1;
+  line-height: var(--line-height-price-lg);
 }
 
 .cart-footer__meta {
-  font-size: 12px;
+  font-size: var(--font-size-body-xs);
   color: var(--color-content-weak);
+}
+
+.cart-footer__empty-hint {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-content-weak);
+  font-style: italic;
 }
 
 .cart-footer__store {

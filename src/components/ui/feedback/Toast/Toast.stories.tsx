@@ -3,7 +3,10 @@ import { Toast } from './Toast'
 const meta: Meta<typeof Toast> = {
   title: 'DS.MD/Feedback/Toast', component: Toast, tags: ['autodocs'],
   args: { title: 'Toast message', description: 'Additional context here.', variant: 'default' },
-  argTypes: { variant: { control: 'radio', options: ['default', 'success', 'danger', 'warning', 'info'] } },
+  argTypes: {
+    variant: { control: 'radio', options: ['default', 'success', 'danger', 'warning', 'info'] },
+    icon:    { control: false },
+  },
   parameters: {
     design: {
       type: 'figma',

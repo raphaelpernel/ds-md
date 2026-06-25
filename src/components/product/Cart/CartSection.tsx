@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { CartItem } from './CartItem'
+import { CaretDown, CaretRight } from '@phosphor-icons/react'
+import { ProductCard } from '../ProductCard/ProductCard'
 import type { CartSection as CartSectionType } from '../../../data/types/cart'
 import { useCart } from '../../../context/CartContext'
 import './CartSection.css'
@@ -38,18 +39,19 @@ export function CartSection({ section, defaultOpen = true }: CartSectionProps) {
           </p>
         </div>
         <span className="cart-section__chevron" aria-hidden="true">
-          {open ? '▾' : '▸'}
+          {open ? <CaretDown size={16} /> : <CaretRight size={16} />}
         </span>
       </button>
 
       {open && (
         <div className="cart-section__items">
           {section.items.map((item) => (
-            <CartItem
+            <ProductCard
               key={item.product.id}
-              item={item}
-              onIncrement={() => updateQty(item.product.id, item.quantity + 1)}
-              onDecrement={() => updateQty(item.product.id, item.quantity - 1)}
+              context="cart"
+              product={item.product}
+              quantity={item.quantity}
+              onQuantityChange={(qty) => updateQty(item.product.id, qty)}
               onRemove={() => removeItem(item.product.id)}
             />
           ))}

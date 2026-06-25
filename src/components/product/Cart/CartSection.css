@@ -55,7 +55,8 @@
 }
 
 .cart-section__chevron {
-  font-size: 14px;
+  display: flex;
+  align-items: center;
   color: var(--color-content-weak);
   flex-shrink: 0;
 }
@@ -63,8 +64,4 @@
 .cart-section__items {
   display: flex;
   flex-direction: column;
-}
-
-.cart-section__items > .cart-item + .cart-item {
-  border-top: 1px solid var(--color-border-weak);
 }

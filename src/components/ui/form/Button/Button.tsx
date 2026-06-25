@@ -12,9 +12,10 @@ const button = cva('btn', {
       alpha:     'btn--alpha',
     },
     size: {
-      L: 'btn--L',
-      M: 'btn--M',
-      S: 'btn--S',
+      L:  'btn--L',
+      M:  'btn--M',
+      S:  'btn--S',
+      XS: 'btn--XS',
     },
   },
   defaultVariants: {

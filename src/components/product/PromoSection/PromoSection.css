@@ -1,0 +1,47 @@
+/* DS.MD — PromoSection
+   Cart section — "Promos du moment"
+   No hardcoded values. All tokens via CSS custom properties. */
+
+.promo-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+}
+
+/* ── Header ── */
+.promo-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-8);
+}
+
+.promo-section__title {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body-md);
+  font-weight: var(--font-weight-body-bold);
+  line-height: var(--line-height-body-md);
+  color: var(--color-content-default);
+  margin: 0;
+}
+
+/* ── Scrollable list ── */
+.promo-section__list {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-12);
+  overflow-x: auto;
+  padding-bottom: var(--spacing-4);
+  scrollbar-width: none;
+}
+
+.promo-section__list::-webkit-scrollbar {
+  display: none;
+}
+
+.promo-section__list > .product-card {
+  flex-shrink: 0;
+  width: 160px;
+  min-width: 160px;
+  max-width: 200px;
+}

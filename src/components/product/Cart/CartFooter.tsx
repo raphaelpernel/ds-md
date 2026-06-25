@@ -9,6 +9,14 @@ interface CartFooterProps {
   onCheckout: () => void
   onChangeStore?: () => void
   onViewDetail?: () => void
+  /** Affiche un message contextuel quand le panier est vide */
+  isEmpty?: boolean
+  /**
+   * Identifiant partenaire transmis en `data-partner` pour le theming.
+   * Contrôle la couleur du bouton CTA via CSS.
+   * @example "carrefour" | "marmiton"
+   */
+  partner?: string
 }
 
 export function CartFooter({
@@ -19,27 +27,37 @@ export function CartFooter({
   onCheckout,
   onChangeStore,
   onViewDetail,
+  isEmpty = false,
+  partner,
 }: CartFooterProps) {
   return (
-    /* data-partner="carrefour" → Button primary hérite automatiquement de la couleur bleue */
-    <div className="cart-footer" data-partner="carrefour">
+    <div className="cart-footer" data-partner={partner}>
       {onViewDetail && (
         <div className="cart-footer__detail">
           <button className="cart-footer__detail-btn" onClick={onViewDetail}>
-            Voir le détail →
+            Voir le détail
+            <ArrowRightIcon />
           </button>
         </div>
       )}
 
       <div className="cart-footer__main">
         <div className="cart-footer__left">
-          <p className="cart-footer__price">
-            {total.toFixed(2).replace('.', ',')} €
-          </p>
-          <p className="cart-footer__meta">
-            {itemCount} produit{itemCount > 1 ? 's' : ''}
-            {recipeCount > 0 && ` · ${recipeCount} recette${recipeCount > 1 ? 's' : ''}`}
-          </p>
+          {isEmpty ? (
+            <p className="cart-footer__empty-hint">
+              Ajoutez des articles pour commander
+            </p>
+          ) : (
+            <>
+              <p className="cart-footer__price">
+                {total.toFixed(2).replace('.', ',')} €
+              </p>
+              <p className="cart-footer__meta">
+                {itemCount} produit{itemCount > 1 ? 's' : ''}
+                {recipeCount > 0 && ` · ${recipeCount} recette${recipeCount > 1 ? 's' : ''}`}
+              </p>
+            </>
+          )}
         </div>
 
         <Button
@@ -47,7 +65,7 @@ export function CartFooter({
           size="L"
           lIcon={<CarrefourIcon white />}
           onClick={onCheckout}
-          disabled={itemCount === 0}
+          disabled={isEmpty || itemCount === 0}
         >
           Commander
         </Button>
@@ -77,6 +95,22 @@ function CarrefourIcon({ small = false, white = false }: { small?: boolean; whit
       height={size}
       style={{ objectFit: 'contain', display: 'block', filter: white ? 'brightness(0) invert(1)' : undefined }}
     />
+  )
+}
+
+function ArrowRightIcon() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+      style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 4 }}
+    >
+      <path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   )
 }
 

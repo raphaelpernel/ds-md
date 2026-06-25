@@ -33,3 +33,9 @@ export { ChipTag } from './ui/display/ChipTag/ChipTag'
 
 // ── Layout ──
 export { Drawer } from './ui/layout/Drawer/Drawer'
+
+// ── Product ──
+export { ProductCard } from './product/ProductCard/ProductCard'
+export type { ProductCardProps } from './product/ProductCard/ProductCard'
+export { PromoSection } from './product/PromoSection/PromoSection'
+export type { PromoSectionProps } from './product/PromoSection/PromoSection'

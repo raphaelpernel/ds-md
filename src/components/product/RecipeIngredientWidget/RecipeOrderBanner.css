@@ -6,12 +6,19 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-12);
+  margin-bottom: var(--spacing-16);
 }
 
 .recipe-order-banner__header {
   display: flex;
   align-items: center;
   gap: var(--spacing-8);
+}
+
+.recipe-order-banner__header-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
 }
 
 .recipe-order-banner__logo {
@@ -33,10 +40,8 @@
 
 .recipe-order-banner__footer {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   gap: var(--spacing-12);
-  flex-wrap: wrap;
 }
 
 .recipe-order-banner__price {
@@ -51,9 +56,11 @@
 }
 
 .recipe-order-banner__cta {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--spacing-8);
+  width: 100%;
   background-color: var(--partner-bg);
   color: var(--partner-content);
   border: none;
@@ -65,7 +72,6 @@
   font-family: var(--font-family-label);
   cursor: pointer;
   transition: background-color 0.15s ease;
-  white-space: nowrap;
 }
 
 .recipe-order-banner__cta:hover {

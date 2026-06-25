@@ -11,6 +11,7 @@
 - **Lire avant d'écrire.** Avant toute création ou modification, lire les variables existantes, leurs descriptions, et les composants déjà construits pour assurer la cohérence.
 - **Une page par composant dans Figma.** Chaque nouveau composant vit dans sa propre page dédiée.
 - **In-place uniquement.** Ne jamais recréer un nœud pour le modifier — éditer en place par ID.
+- **Icônes : toujours Phosphor.** Pour toute icône en code, utiliser `@phosphor-icons/react` (déjà installé). Ne pas créer de SVG inline ni importer depuis une autre librairie, sauf cas explicitement validé (ex. logo partenaire).
 
 ---
 
@@ -51,7 +52,7 @@ Si l'une des informations suivantes manque, la demander **avant** de créer quoi
 
 - Quels sont les **variants** attendus (axes de variation : Type, State, Size…) ?
 - Quels **states** sont nécessaires (Default, Hover, Disabled, Loading, Error, Focus…) ?
-- Y a-t-il des **icônes** à intégrer ? Depuis quelle bibliothèque ?
+- Y a-t-il des **icônes** à intégrer ? En code : Phosphor (`@phosphor-icons/react`). En Figma : Mealz Icons Set.
 - Le composant est-il **standalone** ou composé d'autres composants DS existants ?
 - Y a-t-il des **edge cases** connus (label vide, contenu tronqué, overflow…) ?
 - Quelle est la **taille par défaut** si plusieurs sizes sont prévues ?

@@ -67,3 +67,15 @@
   color: var(--color-interactive-content);
   cursor: default;
 }
+
+/* ── Disabled states ── */
+.segmented--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.segmented__option--disabled {
+  color: var(--color-interactive-disabled-content);
+  cursor: not-allowed;
+  pointer-events: none;
+}

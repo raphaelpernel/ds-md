@@ -1,3 +1,8 @@
+export interface ProductPromo {
+  percent: number
+  originalPrice: number
+}
+
 export interface Product {
   id: string
   name: string
@@ -8,4 +13,5 @@ export interface Product {
   unit: string
   available: boolean
   recipeId?: string
+  promo?: ProductPromo
 }
