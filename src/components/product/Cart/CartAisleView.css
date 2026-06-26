@@ -29,18 +29,18 @@
   color: var(--color-content-weak);
 }
 
-.cart-aisle-view__sub-list {
+.cart-aisle-view__filters {
   display: flex;
-  flex-direction: column;
-  border-top: 1px dashed var(--color-border-default);
-}
-
-.cart-aisle-view__sub-list .list-item {
-  border-bottom: 1px dashed var(--color-border-default);
+  flex-wrap: wrap;
+  gap: var(--spacing-8);
 }
 
 .cart-aisle-view__products {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-8);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-12);
+}
+
+.cart-aisle-view__products .product-card {
+  width: 100%;
 }

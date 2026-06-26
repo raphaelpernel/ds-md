@@ -1,5 +1,6 @@
 import { type InputHTMLAttributes } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
+import { Check, Minus } from '@phosphor-icons/react'
 import './Checkbox.css'
 
 const checkbox = cva('checkbox', {
@@ -25,7 +26,8 @@ export function Checkbox({ label, indeterminate = false, state, id, className, .
     <label className={checkbox({ state, class: className })} htmlFor={cbId}>
       <input type="checkbox" id={cbId} className="checkbox__input" data-indeterminate={indeterminate} {...props} />
       <span className="checkbox__box" aria-hidden="true">
-        {indeterminate ? <span className="checkbox__dash" /> : <span className="checkbox__check" />}
+        <span className="checkbox__dash"><Minus size={12} weight="bold" /></span>
+        <span className="checkbox__check"><Check size={12} weight="bold" /></span>
       </span>
       {label && <span className="checkbox__label">{label}</span>}
     </label>

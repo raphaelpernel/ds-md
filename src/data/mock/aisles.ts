@@ -74,3 +74,9 @@ export function getSubAisle(aisleId: string, subAisleId: string) {
   const aisle = getAisleById(aisleId)
   return aisle?.subAisles?.find((s) => s.id === subAisleId)
 }
+
+export function getAllProductIds(aisle: Aisle): string[] {
+  const own = aisle.productIds ?? []
+  const fromSub = aisle.subAisles?.flatMap((s) => s.productIds) ?? []
+  return [...new Set([...own, ...fromSub])]
+}

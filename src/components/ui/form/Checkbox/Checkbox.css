@@ -11,9 +11,10 @@
 }
 .checkbox__input:disabled + .checkbox__box { background-color: var(--color-interactive-disabled-bg); border-color: var(--color-interactive-disabled-bg); cursor: not-allowed; }
 .checkbox--error .checkbox__box { border-color: var(--color-border-danger); }
-.checkbox__check, .checkbox__dash { display: none; color: var(--color-content-inversed); }
-.checkbox__input:checked + .checkbox__box .checkbox__check { display: block; }
-.checkbox__input[data-indeterminate="true"] + .checkbox__box .checkbox__dash { display: block; }
+.checkbox__check, .checkbox__dash { display: none; align-items: center; justify-content: center; color: var(--color-content-inversed); }
+.checkbox__input:checked + .checkbox__box .checkbox__check { display: flex; }
+.checkbox__input[data-indeterminate="true"] + .checkbox__box .checkbox__dash { display: flex; }
+.checkbox__input[data-indeterminate="true"] + .checkbox__box .checkbox__check { display: none; }
 .checkbox__label { font-family: var(--font-family-label); font-size: var(--font-size-label-md); font-weight: var(--font-weight-body); color: var(--color-content-default); }
 .checkbox__input:disabled ~ .checkbox__label { color: var(--color-interactive-disabled-content); }
 .checkbox:has(.checkbox__input:disabled) { cursor: not-allowed; }

@@ -11,9 +11,10 @@ const HINT =
 interface CartAIPromptProps {
   onSubmit?: (prompt: string) => void
   loading?: boolean
+  hideHeader?: boolean
 }
 
-export function CartAIPrompt({ onSubmit, loading = false }: CartAIPromptProps) {
+export function CartAIPrompt({ onSubmit, loading = false, hideHeader = false }: CartAIPromptProps) {
   const [value, setValue] = useState('')
 
   const handleSubmit = (text: string) => {
@@ -24,15 +25,17 @@ export function CartAIPrompt({ onSubmit, loading = false }: CartAIPromptProps) {
 
   return (
     <div className="cart-ai-prompt">
-      <div className="cart-ai-prompt__header">
-        <h3 className="cart-ai-prompt__title">Compléter mon panier</h3>
-        <Button
-          variant="tertiary"
-          size="XS"
-          iconOnly={<Info size={16} weight="regular" />}
-          label="En savoir plus sur la saisie assistée"
-        />
-      </div>
+      {!hideHeader && (
+        <div className="cart-ai-prompt__header">
+          <h3 className="cart-ai-prompt__title">Compléter mon panier</h3>
+          <Button
+            variant="tertiary"
+            size="XS"
+            iconOnly={<Info size={16} weight="regular" />}
+            label="En savoir plus sur la saisie assistée"
+          />
+        </div>
+      )}
 
       <div className="cart-ai-prompt__field">
         <input

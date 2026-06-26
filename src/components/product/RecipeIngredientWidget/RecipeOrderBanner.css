@@ -55,6 +55,10 @@
   color: var(--partner-content-alt);
 }
 
+.recipe-order-banner__price-per-serving {
+  color: var(--color-content-weak);
+}
+
 .recipe-order-banner__cta {
   display: flex;
   align-items: center;

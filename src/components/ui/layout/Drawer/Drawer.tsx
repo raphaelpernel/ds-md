@@ -1,5 +1,7 @@
 import { type ReactNode, useEffect } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
+import { ArrowLeft, X } from '@phosphor-icons/react'
+import { Button } from '../../form/Button/Button'
 import './Drawer.css'
 
 const drawer = cva('drawer', {
@@ -32,11 +34,13 @@ export interface DrawerProps extends Omit<VariantProps<typeof drawer>, 'open'> {
   open: boolean
   onClose: () => void
   title?: string
+  /** Renders a back button before the title (e.g. nested navigation within the drawer) */
+  onBack?: () => void
   children?: ReactNode
   footer?: ReactNode
 }
 
-export function Drawer({ open, onClose, title, children, footer, placement, mobilePlacement }: DrawerProps) {
+export function Drawer({ open, onClose, title, onBack, children, footer, placement, mobilePlacement }: DrawerProps) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
     if (open) document.addEventListener('keydown', onKey)
@@ -53,8 +57,25 @@ export function Drawer({ open, onClose, title, children, footer, placement, mobi
         aria-labelledby={title ? 'drawer-title' : undefined}
       >
         <div className="drawer__header">
-          {title && <h2 id="drawer-title" className="drawer__title">{title}</h2>}
-          <button className="drawer__close" onClick={onClose} aria-label="Close drawer">✕</button>
+          <div className="drawer__header-start">
+            {onBack && (
+              <Button
+                variant="tertiary"
+                size="S"
+                iconOnly={<ArrowLeft size={18} weight="bold" />}
+                label="Retour"
+                onClick={onBack}
+              />
+            )}
+            {title && <h2 id="drawer-title" className="drawer__title">{title}</h2>}
+          </div>
+          <Button
+            variant="tertiary"
+            size="S"
+            iconOnly={<X size={18} weight="bold" />}
+            label="Fermer"
+            onClick={onClose}
+          />
         </div>
         <div className="drawer__body">{children}</div>
         {footer && <div className="drawer__footer">{footer}</div>}

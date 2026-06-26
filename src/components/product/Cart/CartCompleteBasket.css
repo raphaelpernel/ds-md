@@ -2,8 +2,22 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-20);
-  padding-top: var(--spacing-8);
-  border-top: 1px solid var(--color-border-default);
+  padding: var(--spacing-16) var(--spacing-16) var(--spacing-16) var(--spacing-16);
+  background-color: var(--color-surface-secondary);
+}
+
+.cart-complete-basket__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-8);
+}
+
+.cart-complete-basket__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-body-lg);
+  font-weight: var(--font-weight-body-bold);
+  color: var(--color-content-default);
 }
 
 .cart-complete-basket__loading {
@@ -11,25 +25,6 @@
   color: var(--color-content-weak);
   text-align: center;
   padding: var(--spacing-8) 0;
-}
-
-.cart-complete-basket__ai-results {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-12);
-}
-
-.cart-complete-basket__ai-title {
-  font-size: var(--font-size-body-sm);
-  font-weight: var(--font-weight-body-bold);
-  color: var(--color-content-default);
-}
-
-.cart-complete-basket__ai-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-8);
-  width: 100%;
 }
 
 /* Modal plein panneau au-dessus du drawer panier */
@@ -51,4 +46,34 @@
 .cart-aisle-modal .modal__body {
   padding: var(--spacing-16);
   overflow-y: auto;
+}
+
+.cart-complete-basket__rayons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+}
+
+.cart-complete-basket__rayons-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+}
+
+.cart-complete-basket__rayons-title {
+  flex: 1;
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-body-md);
+  font-weight: var(--font-weight-body-bold);
+  color: var(--color-content-default);
+}
+
+.cart-complete-basket__rayons-results {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-12);
+}
+
+.cart-complete-basket__rayons-results .product-card {
+  width: 100%;
 }
