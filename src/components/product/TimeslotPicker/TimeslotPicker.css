@@ -94,7 +94,8 @@
 }
 
 .timeslot-slot__price {
-  font-size: var(--font-size-body-xs);
+  font-family: var(--font-family-price);
+  font-size: var(--font-size-price-strike);
   color: var(--color-content-weak);
 }
 

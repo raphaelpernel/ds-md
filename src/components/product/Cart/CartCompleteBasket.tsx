@@ -5,7 +5,7 @@ import { ArrowLeft, Info, MagnifyingGlass, Storefront } from '@phosphor-icons/re
 import { Modal } from '../../ui/feedback/Modal/Modal'
 import { Button } from '../../ui/form/Button/Button'
 import { InputField } from '../../ui/form/InputField/InputField'
-import { CartAIPrompt } from './CartAIPrompt'
+import { CartAIBanner } from './CartAIBanner'
 import { CartAisles } from './CartAisles'
 import { CartAisleView } from './CartAisleView'
 import { CartAIChatModal, type ChatTurn, type ChatTurnType } from './CartAIChatModal'
@@ -115,10 +115,10 @@ export function CartCompleteBasket() {
             label="En savoir plus sur la saisie assistée"
           />
         </div>
-
+        <CartAIBanner onSubmit={handleAISubmit} loading={aiLoading && turns.length === 0} />
         <PromoSection products={PROMO_PRODUCTS} onViewAll={() => {}} />
 
-        <CartAIPrompt onSubmit={handleAISubmit} loading={aiLoading && turns.length === 0} hideHeader />
+        
 
         <Button
           variant="secondary"
