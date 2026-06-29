@@ -51,7 +51,10 @@
 }
 
 .recipe-order-banner__price strong {
-  font-weight: var(--font-weight-body-bold);
+  font-family: var(--font-family-price);
+  font-size: var(--font-size-price-sm);
+  font-weight: var(--font-weight-price);
+  line-height: var(--line-height-price-sm);
   color: var(--partner-content-alt);
 }
 
