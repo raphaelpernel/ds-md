@@ -210,6 +210,36 @@ export const MOCK_PRODUCTS: Product[] = [
     available: true,
   },
   {
+    id: 'p-carottes',
+    name: 'Carottes',
+    brand: 'Carrefour',
+    emoji: '🥕',
+    price: 0.82,
+    pricePerUnit: '1,09 €/kg',
+    unit: '5 pièces',
+    available: true,
+  },
+  {
+    id: 'p-pomme-granny',
+    name: 'Pomme Granny Smith',
+    brand: 'Carrefour',
+    emoji: '🍏',
+    price: 1.97,
+    pricePerUnit: '2,99 €/kg',
+    unit: '3 pièces',
+    available: true,
+  },
+  {
+    id: 'p-bananes',
+    name: 'Bananes',
+    brand: 'Carrefour',
+    emoji: '🍌',
+    price: 0.99,
+    pricePerUnit: '1,32 €/kg',
+    unit: '750g',
+    available: true,
+  },
+  {
     id: 'p-dentifrice',
     name: 'Dentifrice protection',
     brand: 'Signal',
@@ -233,6 +263,33 @@ export function getProductsByIds(ids: string[]): Product[] {
   return ids
     .map((id) => MOCK_PRODUCTS.find((p) => p.id === id))
     .filter((p): p is Product => p !== undefined)
+}
+
+export function searchProducts(query: string, pool: Product[] = MOCK_PRODUCTS): Product[] {
+  const q = query.trim().toLowerCase()
+  if (!q) return []
+  return pool.filter((p) => p.name.toLowerCase().includes(q))
+}
+
+/** Generates 3 plausible variants (standard, bio, grand format) of a single matched product for AI product suggestions. */
+export function getProductVariants(base: Product): Product[] {
+  return [
+    base,
+    {
+      ...base,
+      id: `${base.id}-bio`,
+      name: `${base.name} bio`,
+      brand: 'Carrefour Bio',
+      price: Math.round(base.price * 1.35 * 100) / 100,
+    },
+    {
+      ...base,
+      id: `${base.id}-xl`,
+      name: `${base.name} grand format`,
+      unit: '1 kg',
+      price: Math.round(base.price * 1.8 * 100) / 100,
+    },
+  ]
 }
 
 export const SUGGESTION_PRODUCTS: Product[] = MOCK_PRODUCTS.filter((p) => !p.recipeId)

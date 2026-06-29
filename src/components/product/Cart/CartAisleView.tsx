@@ -1,101 +1,82 @@
 'use client'
 
-import { ArrowLeft, CaretRight, Storefront } from '@phosphor-icons/react'
+import { useState } from 'react'
+import { ArrowLeft, MagnifyingGlass } from '@phosphor-icons/react'
 import { Button } from '../../ui/form/Button/Button'
-import { ListItem } from '../../ui/display/ListItem/ListItem'
+import { InputField } from '../../ui/form/InputField/InputField'
+import { ChipTag } from '../../ui/display/ChipTag/ChipTag'
 import { ProductCard } from '../ProductCard/ProductCard'
-import { getAisleById, getSubAisle } from '../../../data/mock/aisles'
-import { getProductsByIds } from '../../../data/mock/products'
+import { getAisleById, getAllProductIds } from '../../../data/mock/aisles'
+import { getProductsByIds, searchProducts } from '../../../data/mock/products'
 import './CartAisleView.css'
 
 interface CartAisleViewProps {
   aisleId: string
-  subAisleId?: string
   onBack: () => void
-  onBackToHome: () => void
-  onSelectSubAisle: (subAisleId: string) => void
 }
 
-export function CartAisleView({
-  aisleId,
-  subAisleId,
-  onBack,
-  onBackToHome,
-  onSelectSubAisle,
-}: CartAisleViewProps) {
+export function CartAisleView({ aisleId, onBack }: CartAisleViewProps) {
+  const [query, setQuery] = useState('')
+  const [subAisleId, setSubAisleId] = useState<string | null>(null)
+
   const aisle = getAisleById(aisleId)
   if (!aisle) return null
 
-  const subAisle = subAisleId ? getSubAisle(aisleId, subAisleId) : undefined
-  const isProductView = !!subAisle || (!aisle.subAisles?.length && !!aisle.productIds?.length)
+  const filteredIds = subAisleId
+    ? aisle.subAisles?.find((s) => s.id === subAisleId)?.productIds ?? []
+    : getAllProductIds(aisle)
 
-  const header = (title: string) => (
-    <div className="cart-aisle-view__header">
-      <Button
-        variant="tertiary"
-        size="S"
-        iconOnly={<ArrowLeft size={16} weight="bold" />}
-        label="Retour"
-        onClick={onBack}
-      />
-      <h3 className="cart-aisle-view__title">{title}</h3>
-    </div>
-  )
-
-  if (isProductView) {
-    const productIds = subAisle?.productIds ?? aisle.productIds ?? []
-    const products = getProductsByIds(productIds)
-    const title = subAisle?.label ?? aisle.label
-
-    return (
-      <div className="cart-aisle-view">
-        <Button
-          variant="secondary"
-          size="S"
-          lIcon={<Storefront size={16} weight="regular" />}
-          label="Retour aux rayons"
-          onClick={onBackToHome}
-        />
-
-        {header(title)}
-
-        <div className="cart-aisle-view__meta">
-          <span className="cart-aisle-view__count">{products.length} résultats</span>
-        </div>
-
-        <div className="cart-aisle-view__products">
-          {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              orientation="horizontal"
-            />
-          ))}
-        </div>
-      </div>
-    )
-  }
+  const pool = getProductsByIds(filteredIds)
+  const products = query.trim() ? searchProducts(query, pool) : pool
 
   return (
     <div className="cart-aisle-view">
-      <Button
-        variant="secondary"
-        size="S"
-        lIcon={<Storefront size={16} weight="regular" />}
-        label="Retour aux rayons"
-        onClick={onBackToHome}
+      <div className="cart-aisle-view__header">
+        <Button
+          variant="tertiary"
+          size="S"
+          iconOnly={<ArrowLeft size={16} weight="bold" />}
+          label="Retour"
+          onClick={onBack}
+        />
+        <h3 className="cart-aisle-view__title">{aisle.label}</h3>
+      </div>
+
+      <InputField
+        lIcon={<MagnifyingGlass size={18} weight="regular" />}
+        placeholder={`Rechercher dans ${aisle.label}`}
+        aria-label={`Rechercher un produit dans ${aisle.label}`}
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
       />
 
-      {header(aisle.label)}
-
-      <div className="cart-aisle-view__sub-list">
-        {aisle.subAisles?.map((sub) => (
-          <ListItem
-            key={sub.id}
-            label={sub.label}
-            onClick={() => onSelectSubAisle(sub.id)}
-            rSlot={<CaretRight size={18} weight="bold" />}
+      {!!aisle.subAisles?.length && (
+        <div className="cart-aisle-view__filters">
+          <ChipTag
+            label="Tous"
+            type="neutral-outline"
+            selected={subAisleId === null}
+            onClick={() => setSubAisleId(null)}
           />
+          {aisle.subAisles.map((sub) => (
+            <ChipTag
+              key={sub.id}
+              label={sub.label}
+              type="neutral-outline"
+              selected={subAisleId === sub.id}
+              onClick={() => setSubAisleId(sub.id)}
+            />
+          ))}
+        </div>
+      )}
+
+      <div className="cart-aisle-view__meta">
+        <span className="cart-aisle-view__count">{products.length} résultats</span>
+      </div>
+
+      <div className="cart-aisle-view__products">
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} orientation="vertical" />
         ))}
       </div>
     </div>

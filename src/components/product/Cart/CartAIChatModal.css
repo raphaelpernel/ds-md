@@ -1,0 +1,101 @@
+/* Modal plein panneau au-dessus du panier */
+.cart-ai-chat-modal {
+  z-index: 210;
+  align-items: stretch;
+  justify-content: center;
+  padding: 0;
+}
+
+.cart-ai-chat-modal .modal {
+  width: 100%;
+  max-width: 480px;
+  max-height: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+
+.cart-ai-chat-modal .modal__body {
+  padding: 0;
+  overflow: hidden;
+  height: 100%;
+}
+
+.cart-ai-chat {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.cart-ai-chat__header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  padding: var(--spacing-16);
+  border-bottom: 1px solid var(--color-border-default);
+  flex-shrink: 0;
+}
+
+.cart-ai-chat__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-body-md);
+  font-weight: var(--font-weight-body-bold);
+  color: var(--color-content-default);
+}
+
+.cart-ai-chat__history {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-20);
+  padding: var(--spacing-16);
+}
+
+.cart-ai-chat__turn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+}
+
+.cart-ai-chat__bubble--user {
+  align-self: flex-end;
+  max-width: 80%;
+  background-color: var(--color-interactive-content);
+  color: var(--color-content-on-interactive, #fff);
+  padding: var(--spacing-8) var(--spacing-12);
+  border-radius: var(--shape-card);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body-sm);
+}
+
+.cart-ai-chat__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+}
+
+.cart-ai-chat__row {
+  display: flex;
+  gap: var(--spacing-12);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: var(--spacing-4);
+}
+
+.cart-ai-chat__row .product-card {
+  scroll-snap-align: start;
+}
+
+.cart-ai-chat__loading {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-content-weak);
+  text-align: center;
+  padding: var(--spacing-8) 0;
+}
+
+.cart-ai-chat__composer {
+  flex-shrink: 0;
+  padding: var(--spacing-16);
+  border-top: 1px solid var(--color-border-default);
+}

@@ -1,15 +1,15 @@
 import './RecipeOrderBanner.css'
 
 interface RecipeOrderBannerProps {
-  estimatedPrice: number
-  servings: number
+  totalPrice: number
+  pricePerServing: number
   onOrder: () => void
   itemCount?: number
 }
 
 export function RecipeOrderBanner({
-  estimatedPrice,
-  servings,
+  totalPrice,
+  pricePerServing,
   onOrder,
   itemCount = 0,
 }: RecipeOrderBannerProps) {
@@ -28,9 +28,11 @@ export function RecipeOrderBanner({
         <p className="recipe-order-banner__price">
           Total estimé :{' '}
           <strong>
-            {estimatedPrice.toFixed(2).replace('.', ',')} €
+            {totalPrice.toFixed(2).replace('.', ',')} €
           </strong>{' '}
-          par personne
+          <span className="recipe-order-banner__price-per-serving">
+            ({pricePerServing.toFixed(2).replace('.', ',')} €/personne)
+          </span>
         </p>
         <button className="recipe-order-banner__cta" onClick={onOrder}>
           <CarrefourLogo small white />

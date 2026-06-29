@@ -29,7 +29,7 @@
 .promo-section__list {
   display: flex;
   flex-direction: row;
-  gap: var(--spacing-12);
+  gap: var(--spacing-8);
   overflow-x: auto;
   padding-bottom: var(--spacing-4);
   scrollbar-width: none;

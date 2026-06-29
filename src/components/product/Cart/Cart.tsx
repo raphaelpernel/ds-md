@@ -4,9 +4,6 @@ import { useCart } from '../../../context/CartContext'
 import { CartSection } from './CartSection'
 import { Button } from '../../ui/form/Button/Button'
 import { CartCompleteBasket } from './CartCompleteBasket'
-import { CartSuggestions } from './CartSuggestions'
-import { PROMO_PRODUCTS, SUGGESTION_PRODUCTS } from '../../../data/mock/products'
-import { PromoSection } from '../PromoSection/PromoSection'
 import './Cart.css'
 
 interface CartProps {
@@ -31,17 +28,12 @@ export function Cart({ onCheckout, onChangeStore }: CartProps) {
           </p>
         </div>
         <CartCompleteBasket />
-        <CartSuggestions products={SUGGESTION_PRODUCTS} />
       </div>
     )
   }
 
   return (
     <div className="cart">
-      <div className="cart__header">
-        <h2 className="cart__title">Mon panier</h2>
-      </div>
-
       <div className="cart__sections">
         {sections.map((section, i) => (
           <CartSection
@@ -51,8 +43,6 @@ export function Cart({ onCheckout, onChangeStore }: CartProps) {
           />
         ))}
       </div>
-
-      <PromoSection products={PROMO_PRODUCTS} onViewAll={() => {}} />
 
       <CartCompleteBasket />
     </div>

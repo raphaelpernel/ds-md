@@ -42,9 +42,9 @@
   .drawer--mobile-left.drawer--open { transform: none; }
 }
 
-.drawer__header { display: flex; align-items: center; justify-content: space-between; padding: var(--spacing-20) var(--spacing-24); border-bottom: 1px solid var(--color-border-default); }
+.drawer__header { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-8); padding: var(--spacing-16) var(--spacing-16); border-bottom: 1px solid var(--color-border-default); }
+.drawer__header-start { display: flex; align-items: center; gap: var(--spacing-8); min-width: 0; }
 .drawer__title  { font-family: var(--font-family-heading); font-size: var(--font-size-heading-sm); font-weight: var(--font-weight-heading); line-height: var(--line-height-heading-sm); color: var(--color-content-default); }
-.drawer__close  { background: none; border: none; cursor: pointer; color: var(--color-content-weak); font-size: 18px; padding: 0; line-height: 1; }
 .drawer__body   { flex: 1; overflow-y: auto; }
 /* Footer is flush — the content component manages its own padding and border */
 .drawer__footer { flex-shrink: 0; }

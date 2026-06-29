@@ -11,7 +11,9 @@
   background-color: var(--color-surface-primary);
   border: 1px solid var(--color-border-default);
   border-radius: var(--shape-card);
-  width: 140px;
+  width: 160px;
+  min-width: 160px;
+  max-width: 240px;
   flex-shrink: 0;
 }
 
@@ -38,6 +40,7 @@
   flex-direction: column;
   gap: var(--spacing-8);
   flex: 1;
+  min-width: 0;
 }
 
 /* ── Content ── */
@@ -207,4 +210,77 @@
 
 .product-card__remove-wrap:hover {
   opacity: 1;
+}
+
+/* ── List context (AI chat / grocery list rows) ── */
+.product-card--list {
+  flex-direction: column;
+  width: 100%;
+  max-width: none;
+  align-items: stretch;
+  gap: var(--spacing-12);
+}
+
+.product-card--list .product-card__main {
+  display: flex;
+  gap: var(--spacing-12);
+  align-items: flex-start;
+}
+
+.product-card--list .product-card__media {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  aspect-ratio: unset;
+}
+
+.product-card--list .product-card__emoji {
+  font-size: 28px;
+}
+
+.product-card--list .product-card__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.product-card__price--row {
+  flex-direction: row;
+  align-items: baseline;
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-2);
+}
+
+.product-card__price--row .product-card__price-current {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-body-bold);
+  line-height: var(--line-height-body-sm);
+}
+
+.product-card__price-unit {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body-xs);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-body-xs);
+  color: var(--color-content-weak);
+}
+
+.product-card__recipe-tag {
+  margin-top: var(--spacing-4);
+  width: fit-content;
+  pointer-events: none;
+}
+
+.product-card__list-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-8);
+}
+
+.product-card__replace--icon {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  text-decoration: none;
 }
