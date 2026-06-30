@@ -10,13 +10,13 @@
 }
 
 .store-card:hover {
-  border-color: #0070CC;
-  background-color: var(--partner-bg-light);
+  border-color: var(--color-interactive-bg);
+  background-color: var(--color-interactive-bg-subtle);
 }
 
 .store-card--selected {
-  border-color: #0070CC;
-  background-color: var(--partner-bg-light);
+  border-color: var(--color-interactive-bg);
+  background-color: var(--color-interactive-bg-subtle);
 }
 
 .store-card__main {
@@ -83,15 +83,3 @@
   color: var(--color-content-default);
 }
 
-.store-card__radio {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 2px solid var(--color-border-default);
-  transition: border-color 0.15s ease;
-}
-
-.store-card__radio--checked {
-  border-color: #0070CC;
-  border-width: 6px;
-}

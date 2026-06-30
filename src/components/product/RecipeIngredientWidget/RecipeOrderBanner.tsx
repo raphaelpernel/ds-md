@@ -1,17 +1,17 @@
 import './RecipeOrderBanner.css'
 
 interface RecipeOrderBannerProps {
-  totalPrice: number
   pricePerServing: number
   onOrder: () => void
-  itemCount?: number
+  allAdded?: boolean
+  onViewCart?: () => void
 }
 
 export function RecipeOrderBanner({
-  totalPrice,
   pricePerServing,
   onOrder,
-  itemCount = 0,
+  allAdded = false,
+  onViewCart,
 }: RecipeOrderBannerProps) {
   return (
     <div className="recipe-order-banner" data-partner="carrefour">
@@ -26,28 +26,27 @@ export function RecipeOrderBanner({
       </div>
       <div className="recipe-order-banner__footer">
         <p className="recipe-order-banner__price">
-          Total estimé :{' '}
-          <strong>
-            {totalPrice.toFixed(2).replace('.', ',')} €
-          </strong>{' '}
-          <span className="recipe-order-banner__price-per-serving">
-            ({pricePerServing.toFixed(2).replace('.', ',')} €/personne)
-          </span>
+          <strong>{pricePerServing.toFixed(2).replace('.', ',')} €</strong>
+          {' '}
+          <span className="recipe-order-banner__price-per-serving">par personne</span>
         </p>
-        <button className="recipe-order-banner__cta" onClick={onOrder}>
-          <CarrefourLogo small white />
-          Ajouter au panier
-          {itemCount > 0 && (
-            <span className="recipe-order-banner__count">{itemCount}</span>
-          )}
-        </button>
+        {allAdded ? (
+          <button className="recipe-order-banner__cta recipe-order-banner__cta--secondary" onClick={onViewCart}>
+            Voir mon panier
+          </button>
+        ) : (
+          <button className="recipe-order-banner__cta" onClick={onOrder}>
+            <CarrefourLogo small white />
+            Ajouter au panier
+          </button>
+        )}
       </div>
     </div>
   )
 }
 
 function CarrefourLogo({ small = false, white = false }: { small?: boolean; white?: boolean }) {
-  const size = small ? 16 : 40
+  const size = small ? 24 : 40
   return (
     <img
       src="/logos/logo-carrefour.svg"

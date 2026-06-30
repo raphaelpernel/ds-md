@@ -1,3 +1,6 @@
+import { Truck, Car } from '@phosphor-icons/react'
+import { Radio } from '../../ui/form/Radio/Radio'
+import { ChipTag } from '../../ui/display/ChipTag/ChipTag'
 import type { Store } from '../../../data/types/store'
 import './StoreCard.css'
 
@@ -23,10 +26,18 @@ export function StoreCard({ store, selected = false, onSelect }: StoreCardProps)
           <p className="store-card__hours">{store.openingHours}</p>
           <div className="store-card__badges">
             {store.delivery && (
-              <span className="store-card__badge">🚚 Livraison</span>
+              <ChipTag
+                label="Livraison"
+                size="S"
+                icon={<Truck size={12} weight="bold" />}
+              />
             )}
             {store.drive && (
-              <span className="store-card__badge">🚗 Drive</span>
+              <ChipTag
+                label="Drive"
+                size="S"
+                icon={<Car size={12} weight="bold" />}
+              />
             )}
           </div>
         </div>
@@ -36,7 +47,11 @@ export function StoreCard({ store, selected = false, onSelect }: StoreCardProps)
               ? `${(store.distance * 1000).toFixed(0)} m`
               : `${store.distance.toFixed(1)} km`}
           </p>
-          <div className={`store-card__radio${selected ? ' store-card__radio--checked' : ''}`} aria-hidden="true" />
+          <Radio
+            checked={selected}
+            onChange={() => onSelect(store)}
+            aria-label={`Sélectionner ${store.name}`}
+          />
         </div>
       </div>
     </button>

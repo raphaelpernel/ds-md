@@ -25,7 +25,10 @@ export default function PanierPage() {
       </header>
 
       <div className="panier-body">
-        <Cart />
+        <Cart
+          onChooseStore={() => router.push('/magasin')}
+          onChangeStore={() => router.push('/magasin')}
+        />
       </div>
 
       <div className="panier-footer">

@@ -38,13 +38,16 @@ export default function RecettePage() {
   const baseTotal = RECIPE.estimatedPricePerServing * RECIPE.servings
   const fixedCost = baseTotal * FIXED_COST_RATIO
   const variableCostPerServing = (baseTotal - fixedCost) / RECIPE.servings
-  const totalPrice = fixedCost + variableCostPerServing * servings
-  const pricePerServing = totalPrice / servings
+  const pricePerServing = (fixedCost + variableCostPerServing * servings) / servings
+
+  const availableProducts = PRODUCTS.filter((p) => p.available)
+  const cartProductIds = new Set(state.items.map((i) => i.product.id))
+  const allAdded = availableProducts.length > 0 && availableProducts.every((p) => cartProductIds.has(p.id))
 
   const handleOrder = () => {
-    PRODUCTS.filter((p) => p.available).forEach((p) =>
-      addItem(p, RECIPE.id, RECIPE.name)
-    )
+    availableProducts
+      .filter((p) => !cartProductIds.has(p.id))
+      .forEach((p) => addItem(p, RECIPE.id, RECIPE.name))
     setDrawerOpen(true)
   }
 
@@ -167,10 +170,10 @@ export default function RecettePage() {
           </div>
 
           <RecipeOrderBanner
-            totalPrice={totalPrice}
             pricePerServing={pricePerServing}
             onOrder={handleOrder}
-            itemCount={itemCount}
+            allAdded={allAdded}
+            onViewCart={() => setDrawerOpen(true)}
           />
 
           <RecipeIngredientWidget
@@ -217,14 +220,13 @@ export default function RecettePage() {
             storeName={state.storeName}
             onCheckout={() => setLoginOpen(true)}
             onChangeStore={() => router.push('/magasin')}
-            onViewDetail={() => {
-              setDrawerOpen(false)
-              router.push('/panier')
-            }}
           />
         }
       >
-        <Cart />
+        <Cart
+          onChooseStore={() => { setDrawerOpen(false); router.push('/magasin') }}
+          onChangeStore={() => { setDrawerOpen(false); router.push('/magasin') }}
+        />
       </Drawer>
 
       <CarrefourLoginModal
