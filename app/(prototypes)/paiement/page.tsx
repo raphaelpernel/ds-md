@@ -36,15 +36,16 @@ export default function PaiementPage() {
 
       <div className="proto-store-bar">
         <div className="proto-store-info">
-          <img src="/logos/logo-carrefour.svg" alt="Carrefour" width={40} height={40} style={{ objectFit: 'contain', display: 'block' }} />
           <span className="proto-store-name">{state.storeName ?? 'Carrefour Boulogne-Billancourt'}</span>
           <span className="proto-store-sub">Retrait parking</span>
         </div>
-        <SegmentedControl
-          options={DELIVERY_OPTIONS}
-          value={deliveryMode}
-          onChange={setDeliveryMode}
-        />
+        <div className="proto-delivery-toggle">
+          <SegmentedControl
+            options={DELIVERY_OPTIONS}
+            value={deliveryMode}
+            onChange={setDeliveryMode}
+          />
+        </div>
       </div>
 
       <div className="proto-content proto-content--two-col">
@@ -68,15 +69,15 @@ export default function PaiementPage() {
         .proto-header__title { font-weight: 700; font-size: 16px; color: var(--color-content-default); }
 
         .proto-store-bar {
-          display: flex; align-items: center; justify-content: space-between;
-          padding: 12px 16px; gap: 16px;
+          display: flex; flex-direction: column;
+          padding: 12px 16px; gap: 12px;
           border-bottom: 1px solid var(--color-border-default);
           background: var(--color-surface-primary);
-          flex-wrap: wrap;
         }
         .proto-store-info { display: flex; flex-direction: column; gap: 2px; }
         .proto-store-name { font-weight: 700; font-size: 14px; color: var(--color-content-default); }
         .proto-store-sub { font-size: 12px; color: var(--color-content-weak); }
+        .proto-delivery-toggle { width: 100%; }
 
         .proto-content { padding: 16px; display: flex; flex-direction: column; gap: 24px; max-width: 900px; margin: 0 auto; }
         @media (min-width: 640px) {

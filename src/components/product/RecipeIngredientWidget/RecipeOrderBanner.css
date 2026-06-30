@@ -85,16 +85,12 @@
   background-color: var(--partner-bg-hover);
 }
 
-.recipe-order-banner__count {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 20px;
-  height: 20px;
-  background-color: var(--partner-content);
+.recipe-order-banner__cta--secondary {
+  background-color: transparent;
   color: var(--partner-bg);
-  border-radius: 999px;
-  font-size: var(--font-size-body-xs);
-  font-weight: var(--font-weight-body-bold);
-  padding: 0 var(--spacing-4);
+  border: 1.5px solid var(--partner-bg);
+}
+
+.recipe-order-banner__cta--secondary:hover {
+  background-color: var(--partner-bg-light);
 }

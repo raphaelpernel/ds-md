@@ -8,7 +8,6 @@ interface CartFooterProps {
   storeName?: string | null
   onCheckout: () => void
   onChangeStore?: () => void
-  onViewDetail?: () => void
   /** Affiche un message contextuel quand le panier est vide */
   isEmpty?: boolean
   /**
@@ -26,21 +25,11 @@ export function CartFooter({
   storeName,
   onCheckout,
   onChangeStore,
-  onViewDetail,
   isEmpty = false,
   partner,
 }: CartFooterProps) {
   return (
     <div className="cart-footer" data-partner={partner}>
-      {onViewDetail && (
-        <div className="cart-footer__detail">
-          <button className="cart-footer__detail-btn" onClick={onViewDetail}>
-            Voir le détail
-            <ArrowRightIcon />
-          </button>
-        </div>
-      )}
-
       <div className="cart-footer__main">
         <div className="cart-footer__left">
           {isEmpty ? (
@@ -95,22 +84,6 @@ function CarrefourIcon({ small = false, white = false }: { small?: boolean; whit
       height={size}
       style={{ objectFit: 'contain', display: 'block', filter: white ? 'brightness(0) invert(1)' : undefined }}
     />
-  )
-}
-
-function ArrowRightIcon() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 24 24"
-      fill="none"
-      aria-hidden="true"
-      focusable="false"
-      style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 4 }}
-    >
-      <path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
   )
 }
 

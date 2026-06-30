@@ -40,8 +40,7 @@ export default function CreneauPage() {
   }
 
   return (
-    /* data-partner="carrefour" → Button primary + DateTabs + Radio deviennent bleus automatiquement */
-    <div className="cr-page" data-partner="carrefour">
+    <div className="cr-page">
       {/* Breadcrumb stepper */}
       <div className="cr-breadcrumb-wrap">
         <Breadcrumb
