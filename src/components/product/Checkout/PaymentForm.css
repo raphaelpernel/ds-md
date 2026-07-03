@@ -22,10 +22,70 @@
   padding: var(--spacing-8) var(--spacing-12);
 }
 
+/* ── Sélection du moyen de paiement (calqué sur carrefour.fr) ── */
+.payment-form__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--shape-card);
+  padding: var(--spacing-12);
+}
+
+.payment-form__section-title {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-body-bold);
+  color: var(--color-content-default);
+}
+
+.payment-form__methods {
+  display: flex;
+  flex-direction: column;
+}
+
+.payment-form__method {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-12);
+  padding: var(--spacing-10) 0;
+  border-top: 1px solid var(--color-border-weak);
+  cursor: pointer;
+}
+
+.payment-form__methods > div:first-child .payment-form__method {
+  border-top: none;
+}
+
+.payment-form__method-icon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-content-default);
+  flex-shrink: 0;
+}
+
+.payment-form__method-label {
+  flex: 1;
+  font-size: var(--font-size-body-sm);
+  color: var(--color-content-default);
+}
+
+.payment-form__hint {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-6);
+  font-size: var(--font-size-body-xs);
+  color: var(--color-interactive-content);
+  background-color: var(--color-interactive-bg-subtle);
+  border-radius: var(--shape-input);
+  padding: var(--spacing-8) var(--spacing-12);
+  margin: 0 0 var(--spacing-8);
+}
+
 .payment-form__fields {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--spacing-12);
+  padding-top: var(--spacing-8);
 }
 
 .payment-form__field {

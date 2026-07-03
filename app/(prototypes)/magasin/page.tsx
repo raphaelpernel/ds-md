@@ -23,7 +23,7 @@ export default function MagasinPage() {
   }
 
   return (
-    <main className="proto-page proto-page--centered">
+    <main className="proto-page proto-page--centered" data-partner="carrefour">
       <p className="proto-bg-text">Choisissez un magasin Carrefour</p>
       <StoreLocator
         open={open}

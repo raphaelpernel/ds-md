@@ -11,9 +11,11 @@ interface RecipeIngredientWidgetProps {
   recipe: Recipe
   products: Product[]
   view?: ViewMode
+  /** Nombre de personnes actuellement sélectionné (Stepper), transmis au panier à l'ajout */
+  servings?: number
 }
 
-export function RecipeIngredientWidget({ recipe, products, view = 'grid' }: RecipeIngredientWidgetProps) {
+export function RecipeIngredientWidget({ recipe, products, view = 'grid', servings }: RecipeIngredientWidgetProps) {
   const productMap = new Map(products.map((p) => [p.id, p]))
 
   return (
@@ -29,6 +31,8 @@ export function RecipeIngredientWidget({ recipe, products, view = 'grid' }: Reci
               view={view}
               recipeId={recipe.id}
               recipeName={recipe.name}
+              recipeImageUrl={recipe.imageUrl}
+              servings={servings ?? recipe.servings}
             />
           )
         })}

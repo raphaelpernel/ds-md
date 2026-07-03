@@ -21,7 +21,7 @@
   background-color: var(--color-surface-secondary-hover);
 }
 
-.cart-section__emoji-wrap {
+.cart-section__visual-wrap {
   width: 40px;
   height: 40px;
   border-radius: var(--shape-input);
@@ -29,9 +29,31 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.cart-section__visual-emoji {
   font-size: 22px;
   line-height: 1;
-  flex-shrink: 0;
+}
+
+/* Visuel recette — volontairement plus grand que le visuel produit (48px)
+   pour signaler que la recette regroupe plusieurs produits */
+.cart-section__visual-wrap--recipe {
+  width: 96px;
+  height: 96px;
+}
+
+.cart-section__visual-wrap--recipe .cart-section__visual-emoji {
+  font-size: 48px;
+}
+
+.cart-section__visual-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .cart-section__meta {

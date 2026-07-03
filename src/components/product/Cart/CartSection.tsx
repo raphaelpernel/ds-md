@@ -19,6 +19,7 @@ export function CartSection({ section, defaultOpen = true }: CartSectionProps) {
   const itemCount = section.items.reduce((s, i) => s + i.quantity, 0)
   const total = section.items.reduce((s, i) => s + i.product.price * i.quantity, 0)
   const emoji = section.items[0]?.product.emoji ?? '🛒'
+  const isRecipe = section.recipeId !== null
 
   return (
     <div className="cart-section">
@@ -27,15 +28,24 @@ export function CartSection({ section, defaultOpen = true }: CartSectionProps) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
       >
-        <div className="cart-section__emoji-wrap" aria-hidden="true">
-          {emoji}
+        <div
+          className={`cart-section__visual-wrap${isRecipe ? ' cart-section__visual-wrap--recipe' : ''}`}
+          aria-hidden="true"
+        >
+          {isRecipe && section.recipeImageUrl ? (
+            <img src={section.recipeImageUrl} alt="" className="cart-section__visual-img" />
+          ) : (
+            <span className="cart-section__visual-emoji">{emoji}</span>
+          )}
         </div>
         <div className="cart-section__meta">
           <p className="cart-section__name">
             {section.recipeName ?? 'Produits hors recette'}
           </p>
           <p className="cart-section__subtitle">
-            {itemCount} produit{itemCount > 1 ? 's' : ''} · {total.toFixed(2).replace('.', ',')} €
+            {itemCount} produit{itemCount > 1 ? 's' : ''}
+            {isRecipe && section.servings ? ` · ${section.servings} personne${section.servings > 1 ? 's' : ''}` : ''}
+            {' '}· {total.toFixed(2).replace('.', ',')} €
           </p>
         </div>
         <span className="cart-section__chevron" aria-hidden="true">
