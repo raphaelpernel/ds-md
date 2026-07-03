@@ -45,7 +45,7 @@ export function StoreLocator({ open, onClose, onConfirm, initialStoreId }: Store
       size="M"
       title="Choisir un magasin"
       footer={
-        <div className="store-locator__footer-actions">
+        <div className="store-locator__footer-actions" data-partner="carrefour">
           <Button variant="secondary" size="M" onClick={onClose}>
             Annuler
           </Button>

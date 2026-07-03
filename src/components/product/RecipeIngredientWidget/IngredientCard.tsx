@@ -15,6 +15,8 @@ interface IngredientCardProps {
   view?: ViewMode
   recipeId?: string | null
   recipeName?: string | null
+  recipeImageUrl?: string | null
+  servings?: number | null
 }
 
 export function IngredientCard({
@@ -23,6 +25,8 @@ export function IngredientCard({
   view = 'grid',
   recipeId = null,
   recipeName = null,
+  recipeImageUrl = null,
+  servings = null,
 }: IngredientCardProps) {
   const cart = useCartOptional()
   const quantity = product && cart ? getProductQuantity(cart.state.items, product.id) : 0
@@ -33,7 +37,7 @@ export function IngredientCard({
     if (newQty <= 0) {
       cart.updateQty(product.id, 0)
     } else if (quantity === 0) {
-      cart.addItem(product, recipeId, recipeName)
+      cart.addItem(product, recipeId, recipeName, recipeImageUrl, servings)
       if (newQty > 1) cart.updateQty(product.id, newQty)
     } else {
       cart.updateQty(product.id, newQty)

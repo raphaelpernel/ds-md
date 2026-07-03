@@ -12,7 +12,6 @@ import { Stepper } from '../../../src/components/ui/form/Stepper/Stepper'
 import { Drawer } from '../../../src/components/ui/layout/Drawer/Drawer'
 import { Cart } from '../../../src/components/product/Cart/Cart'
 import { CartFooter } from '../../../src/components/product/Cart/CartFooter'
-import { CarrefourLoginModal } from '../../../src/components/product/CarrefourLogin/CarrefourLoginModal'
 import { useCart } from '../../../src/context/CartContext'
 import { getRecipeById } from '../../../src/data/mock/recipes'
 import { getProductsByRecipe } from '../../../src/data/mock/products'
@@ -28,7 +27,6 @@ export default function RecettePage() {
   const [servings, setServings] = useState(RECIPE.servings)
   const [ingredientView, setIngredientView] = useState<ViewMode>('grid')
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const [loginOpen, setLoginOpen] = useState(false)
 
   const recipeCount = sections.filter((s) => s.recipeId !== null).length
 
@@ -47,7 +45,7 @@ export default function RecettePage() {
   const handleOrder = () => {
     availableProducts
       .filter((p) => !cartProductIds.has(p.id))
-      .forEach((p) => addItem(p, RECIPE.id, RECIPE.name))
+      .forEach((p) => addItem(p, RECIPE.id, RECIPE.name, RECIPE.imageUrl, servings))
     setDrawerOpen(true)
   }
 
@@ -180,6 +178,7 @@ export default function RecettePage() {
             recipe={RECIPE}
             products={PRODUCTS}
             view={ingredientView}
+            servings={servings}
           />
         </section>
 
@@ -218,7 +217,8 @@ export default function RecettePage() {
             itemCount={itemCount}
             recipeCount={recipeCount}
             storeName={state.storeName}
-            onCheckout={() => setLoginOpen(true)}
+            mode="view"
+            onViewCart={() => { setDrawerOpen(false); router.push('/panier') }}
             onChangeStore={() => router.push('/magasin')}
           />
         }
@@ -228,15 +228,6 @@ export default function RecettePage() {
           onChangeStore={() => { setDrawerOpen(false); router.push('/magasin') }}
         />
       </Drawer>
-
-      <CarrefourLoginModal
-        open={loginOpen}
-        onClose={() => setLoginOpen(false)}
-        onSuccess={() => {
-          setLoginOpen(false)
-          router.push('/magasin')
-        }}
-      />
 
       <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }

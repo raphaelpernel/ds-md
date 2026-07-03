@@ -2,15 +2,22 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { Info } from '@phosphor-icons/react'
 import { Button } from '../../../src/components/ui/form/Button/Button'
+import { InputField } from '../../../src/components/ui/form/InputField/InputField'
 import { SegmentedControl } from '../../../src/components/ui/navigation/SegmentedControl/SegmentedControl'
 import { Radio } from '../../../src/components/ui/form/Radio/Radio'
 import { Breadcrumb } from '../../../src/components/ui/navigation/Breadcrumb/Breadcrumb'
 import { DateTabs } from '../../../src/components/ui/navigation/DateTabs/DateTabs'
+import { Tooltip } from '../../../src/components/ui/feedback/Tooltip/Tooltip'
 import { useCart } from '../../../src/context/CartContext'
 import { MOCK_TIMESLOT_DAYS } from '../../../src/data/mock/timeslots'
 import type { Timeslot } from '../../../src/data/types/timeslot'
 import '../../../src/styles/index.css'
+
+const WEIGHED_PRODUCTS_PROVISION = 8.5
+const DEPOSIT_BAG_COUNT = 3
+const DEPOSIT_BAG_UNIT_PRICE = 0.35
 
 type Mode = 'drive' | 'livraison'
 
@@ -25,8 +32,12 @@ export default function CreneauPage() {
   const [activeDay, setActiveDay] = useState(MOCK_TIMESLOT_DAYS[0].date)
   const [selected, setSelected] = useState<string | null>(state.timeslot?.id ?? null)
   const [mode, setMode] = useState<Mode>('drive')
+  const [promoCode, setPromoCode] = useState('')
 
   const currentDay = MOCK_TIMESLOT_DAYS.find((d) => d.date === activeDay) ?? MOCK_TIMESLOT_DAYS[0]
+  const weighedProductsProvision = WEIGHED_PRODUCTS_PROVISION
+  const depositBagsTotal = DEPOSIT_BAG_COUNT * DEPOSIT_BAG_UNIT_PRICE
+  const grandTotal = total + weighedProductsProvision + depositBagsTotal
   const dayItems = MOCK_TIMESLOT_DAYS.map((d) => ({ date: d.date }))
 
   const handleSlot = (slot: Timeslot) => {
@@ -40,7 +51,7 @@ export default function CreneauPage() {
   }
 
   return (
-    <div className="cr-page">
+    <div className="cr-page" data-partner="carrefour">
       {/* Breadcrumb stepper */}
       <div className="cr-breadcrumb-wrap">
         <Breadcrumb
@@ -127,18 +138,62 @@ export default function CreneauPage() {
         })}
       </div>
 
-      {/* Footer sticky */}
+      {/* Informations — adresse de facturation / téléphone (calqué sur carrefour.fr) */}
+      <div className="cr-infos">
+        <p className="cr-infos__title">Informations</p>
+        <div className="cr-infos__row">
+          <div>
+            <p className="cr-infos__label">Adresse de facturation</p>
+            <p className="cr-infos__value">32 Rue Du Mont Mirel, 76150 Maromme</p>
+          </div>
+          <Button variant="tertiary" size="S">Modifier</Button>
+        </div>
+        <div className="cr-infos__row">
+          <div>
+            <p className="cr-infos__label">Numéro de téléphone</p>
+            <p className="cr-infos__value">+33 06 ****** 39</p>
+          </div>
+          <Button variant="tertiary" size="S">Modifier</Button>
+        </div>
+      </div>
+
+      {/* Footer sticky — récap calqué sur carrefour.fr */}
       <div className="cr-footer">
         <div className="cr-footer__totals">
           <div className="cr-footer__line">
-            <span>Sous-total</span>
+            <span>Sous-total ({state.items.length} article{state.items.length > 1 ? 's' : ''})</span>
             <span>{total.toFixed(2).replace('.', ',')} €</span>
           </div>
           <div className="cr-footer__line">
-            <span>Livraison</span>
-            <span>Gratuite</span>
+            <span className="cr-footer__line-label">
+              Provision produits à la pesée
+              <Tooltip content="Montant estimé, ajusté au poids réel lors de la préparation de votre commande.">
+                <Info size={13} weight="bold" aria-hidden="true" />
+              </Tooltip>
+            </span>
+            <span>+{weighedProductsProvision.toFixed(2).replace('.', ',')} €</span>
+          </div>
+          <div className="cr-footer__line">
+            <span>Provision sacs consignés</span>
+            <span>{DEPOSIT_BAG_COUNT} x {DEPOSIT_BAG_UNIT_PRICE.toFixed(2).replace('.', ',')}€</span>
           </div>
         </div>
+
+        <div className="cr-footer__promo">
+          <InputField
+            placeholder="Code promo"
+            aria-label="Code promo"
+            value={promoCode}
+            onChange={(e) => setPromoCode(e.target.value)}
+          />
+          <Button variant="secondary" size="M">OK</Button>
+        </div>
+
+        <div className="cr-footer__grand-total">
+          <span>Total</span>
+          <span>{grandTotal.toFixed(2).replace('.', ',')} €</span>
+        </div>
+
         <Button
           variant="primary"
           size="L"
@@ -146,7 +201,7 @@ export default function CreneauPage() {
           disabled={!selected}
           className="cr-footer__cta"
         >
-          Confirmer ce créneau
+          Continuer
         </Button>
       </div>
 
@@ -198,6 +253,18 @@ export default function CreneauPage() {
         .cr-slot__tag--fast { background: #FFF3E0; color: #E65100; }
         .cr-slot__tag--full { color: var(--color-content-weak); }
 
+        /* Informations — adresse / téléphone */
+        .cr-infos { padding: 16px; border-bottom: 8px solid var(--color-surface-secondary); }
+        .cr-infos__title { font-size: 15px; font-weight: 700; color: var(--color-content-default); margin-bottom: 12px; }
+        .cr-infos__row {
+          display: flex; align-items: center; justify-content: space-between;
+          gap: 10px; padding: 10px 0;
+          border-top: 1px solid var(--color-border-weak);
+        }
+        .cr-infos__row:first-of-type { border-top: none; }
+        .cr-infos__label { font-size: 12px; color: var(--color-content-weak); }
+        .cr-infos__value { font-size: 14px; color: var(--color-content-default); margin-top: 2px; }
+
         /* Footer sticky */
         .cr-footer {
           position: sticky; bottom: 0;
@@ -209,6 +276,14 @@ export default function CreneauPage() {
         .cr-footer__line {
           display: flex; justify-content: space-between;
           font-size: 13px; color: var(--color-content-weak);
+        }
+        .cr-footer__line-label { display: inline-flex; align-items: center; gap: 4px; }
+        .cr-footer__promo { display: flex; align-items: flex-end; gap: 8px; }
+        .cr-footer__promo .input-field { flex: 1; }
+        .cr-footer__grand-total {
+          display: flex; justify-content: space-between;
+          font-size: 16px; font-weight: 700; color: var(--color-content-default);
+          padding-top: 8px; border-top: 1px solid var(--color-border-default);
         }
         /* Button pleine largeur dans le footer */
         .cr-footer__cta { width: 100%; }

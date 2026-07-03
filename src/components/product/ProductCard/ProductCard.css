@@ -198,6 +198,17 @@
   width: 100%;
 }
 
+/* Visuel produit dans le panier — volontairement plus petit que le visuel
+   recette (96px) pour que la hiérarchie recette > produit soit lisible */
+.product-card--cart .product-card__media {
+  width: 48px;
+  height: 48px;
+}
+
+.product-card--cart .product-card__emoji {
+  font-size: 24px;
+}
+
 .product-card--cart + .product-card--cart {
   border-top: 1px solid var(--color-border-weak);
 }

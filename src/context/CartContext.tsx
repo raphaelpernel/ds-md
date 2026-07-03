@@ -24,7 +24,14 @@ const initialState: CartState = {
 // ─── Actions ─────────────────────────────────────────────────────────────────
 
 type CartAction =
-  | { type: 'ADD_ITEM'; product: Product; recipeId: string | null; recipeName: string | null }
+  | {
+      type: 'ADD_ITEM'
+      product: Product
+      recipeId: string | null
+      recipeName: string | null
+      recipeImageUrl: string | null
+      servings: number | null
+    }
   | { type: 'REMOVE_ITEM'; productId: string }
   | { type: 'UPDATE_QTY'; productId: string; quantity: number }
   | { type: 'SET_STORE'; storeId: string; storeName: string }
@@ -47,7 +54,14 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         ...state,
         items: [
           ...state.items,
-          { product: action.product, quantity: 1, recipeId: action.recipeId, recipeName: action.recipeName },
+          {
+            product: action.product,
+            quantity: 1,
+            recipeId: action.recipeId,
+            recipeName: action.recipeName,
+            recipeImageUrl: action.recipeImageUrl,
+            servings: action.servings,
+          },
         ],
       }
     }
@@ -81,7 +95,13 @@ export function getCartSections(items: CartItem[]): CartSection[] {
   for (const item of items) {
     const key = item.recipeId
     if (!map.has(key)) {
-      map.set(key, { recipeId: item.recipeId, recipeName: item.recipeName, items: [] })
+      map.set(key, {
+        recipeId: item.recipeId,
+        recipeName: item.recipeName,
+        recipeImageUrl: item.recipeImageUrl,
+        servings: item.servings,
+        items: [],
+      })
     }
     map.get(key)!.items.push(item)
   }
@@ -104,7 +124,13 @@ export function getCartItemCount(items: CartItem[]): number {
 
 interface CartContextValue {
   state: CartState
-  addItem: (product: Product, recipeId?: string | null, recipeName?: string | null) => void
+  addItem: (
+    product: Product,
+    recipeId?: string | null,
+    recipeName?: string | null,
+    recipeImageUrl?: string | null,
+    servings?: number | null
+  ) => void
   removeItem: (productId: string) => void
   updateQty: (productId: string, quantity: number) => void
   setStore: (storeId: string, storeName: string) => void
@@ -120,8 +146,13 @@ const CartContext = createContext<CartContextValue | null>(null)
 export function CartProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(cartReducer, initialState)
 
-  const addItem = (product: Product, recipeId: string | null = null, recipeName: string | null = null) =>
-    dispatch({ type: 'ADD_ITEM', product, recipeId, recipeName })
+  const addItem = (
+    product: Product,
+    recipeId: string | null = null,
+    recipeName: string | null = null,
+    recipeImageUrl: string | null = null,
+    servings: number | null = null
+  ) => dispatch({ type: 'ADD_ITEM', product, recipeId, recipeName, recipeImageUrl, servings })
 
   const removeItem = (productId: string) => dispatch({ type: 'REMOVE_ITEM', productId })
 
