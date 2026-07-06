@@ -5,7 +5,6 @@ dist-storybook
 # Build outputs
 .next/
 storybook-static/
-src/styles/dist/
 
 # Logs
 debug-storybook.log
