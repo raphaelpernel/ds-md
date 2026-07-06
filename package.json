@@ -4,11 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "predev": "npm run tokens",
     "dev": "next dev",
+    "prebuild": "npm run tokens",
     "build": "next build",
     "start": "next start",
     "tokens": "node sd.config.js",
+    "prestorybook": "npm run tokens",
     "storybook": "storybook dev -p 6006",
+    "prebuild-storybook": "npm run tokens",
     "build-storybook": "storybook build"
   },
   "dependencies": {

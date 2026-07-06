@@ -9,15 +9,25 @@
 /* Font faces (local) */
 @import './fonts.css';
 
-/* Base tokens (spacing, shape, elevation, typography) */
+/* Base tokens (spacing, shape, elevation, font family/weight) */
 @import './tokens/base.css';
+
+/* Style Dictionary output, generated from tokens/*.tokens.json via
+   `npm run tokens`. Covers color light/dark and typography desktop/mobile —
+   the token categories that already have a Figma export. */
+@import './dist/color-light.generated.css';
+@import './dist/color-dark.generated.css';
+@import './dist/typography-desktop.generated.css';
+@import './dist/typography-mobile.generated.css';
 
 /* Brand primitives — load all, only the matching [data-brand] activates */
 @import './tokens/brands/neutral.css';
 @import './tokens/brands/client-a.css';
 @import './tokens/brands/client-b.css';
 
-/* Color semantics — only the matching [data-color-scheme] activates */
+/* Color mode exceptions — brand-indirection vars that can't be generated
+   (see comments in each file). Everything else for light/dark comes from
+   the generated imports above. */
 @import './tokens/color-light.css';
 @import './tokens/color-dark.css';
 
