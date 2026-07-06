@@ -1,43 +1,15 @@
 {
   "name": "ds-md",
-  "version": "0.1.0",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@11.10.0",
   "scripts": {
-    "predev": "npm run tokens",
-    "dev": "next dev",
-    "prebuild": "npm run tokens",
-    "build": "next build",
-    "start": "next start",
-    "tokens": "node sd.config.js",
-    "prestorybook": "npm run tokens",
-    "storybook": "storybook dev -p 6006",
-    "prebuild-storybook": "npm run tokens",
-    "build-storybook": "storybook build"
-  },
-  "dependencies": {
-    "@phosphor-icons/react": "^2.1.10",
-    "next": "^16.2.9",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7"
-  },
-  "overrides": {
-    "esbuild": "^0.28.1"
-  },
-  "devDependencies": {
-    "@storybook/addon-a11y": "^10.4.5",
-    "@storybook/addon-themes": "^10.4.5",
-    "@storybook/nextjs": "^10.4.5",
-    "@storybook/react": "^10.4.5",
-    "@tailwindcss/postcss": "^4.3.1",
-    "@types/node": "^25.9.3",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
-    "class-variance-authority": "^0.7.1",
-    "postcss": "^8.5.15",
-    "storybook": "^10.4.5",
-    "style-dictionary": "^5.4.4",
-    "tailwindcss": "^4.3.1",
-    "typescript": "^5.6.3"
+    "tokens": "pnpm --filter @mealz-product-team/design-system tokens",
+    "predev": "pnpm run tokens",
+    "dev": "pnpm --filter @mealz-product-team/marmiton-prototype dev",
+    "prebuild": "pnpm run tokens",
+    "build": "pnpm -r build",
+    "storybook": "pnpm --filter @mealz-product-team/design-system storybook",
+    "build-storybook": "pnpm --filter @mealz-product-team/design-system build-storybook"
   }
 }

@@ -1,0 +1,11 @@
+packages:
+  - 'packages/*'
+
+overrides:
+  esbuild: ^0.28.1
+
+allowBuilds:
+  # esbuild/sharp need their install script to fetch the right native binary.
+  core-js-pure: false
+  esbuild: true
+  sharp: true
