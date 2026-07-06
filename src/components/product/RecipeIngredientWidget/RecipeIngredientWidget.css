@@ -56,3 +56,11 @@
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* Tablet+ : le container s'élargit, on plafonne la carte à 164px plutôt
+   que d'étirer 4 colonnes fixes — la grille ajoute des colonnes à la place. */
+@media (min-width: 768px) {
+  .riw__grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 164px));
+  }
+}

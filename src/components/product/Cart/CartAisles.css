@@ -32,6 +32,12 @@
 
 }
 
+@media (min-width: 768px) {
+  .cart-aisles__grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 150px));
+  }
+}
+
 
 
 .cart-aisles__item {

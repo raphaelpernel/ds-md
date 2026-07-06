@@ -7,6 +7,7 @@ import type { ViewMode } from './RecipeIngredientWidget'
 import { Button } from '../../ui/form/Button/Button'
 import { Stepper } from '../../ui/form/Stepper/Stepper'
 import { getProductQuantity, useCartOptional } from '../../../context/CartContext'
+import { useMediaQuery } from '../../../hooks/useMediaQuery'
 import './IngredientCard.css'
 
 interface IngredientCardProps {
@@ -29,6 +30,7 @@ export function IngredientCard({
   servings = null,
 }: IngredientCardProps) {
   const cart = useCartOptional()
+  const isTabletUp = useMediaQuery('(min-width: 768px)')
   const quantity = product && cart ? getProductQuantity(cart.state.items, product.id) : 0
 
   const handleQuantityChange = (newQty: number) => {
@@ -46,7 +48,7 @@ export function IngredientCard({
 
   const addButtonControl = (
     <Button
-      size="XS"
+      size={isTabletUp ? 'S' : 'XS'}
       variant="primary"
       iconOnly={<Plus size={16} weight="bold" />}
       label={`Ajouter ${ingredient.name} au panier`}
@@ -69,7 +71,7 @@ export function IngredientCard({
           value={quantity}
           onChange={handleQuantityChange}
           min={0}
-          size="XS"
+          size={isTabletUp ? 'S' : 'XS'}
           label={`Quantité ${ingredient.name}`}
           disabled={!product?.available}
         />

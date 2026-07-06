@@ -6,6 +6,7 @@ import { Modal } from '../../ui/feedback/Modal/Modal'
 import { Button } from '../../ui/form/Button/Button'
 import { InputField } from '../../ui/form/InputField/InputField'
 import { CartAIBanner } from './CartAIBanner'
+import { CartAIPromptSuggestions } from './CartAIPromptSuggestions'
 import { CartAisles } from './CartAisles'
 import { CartAisleView } from './CartAisleView'
 import { CartAIChatModal, type ChatTurn, type ChatTurnType } from './CartAIChatModal'
@@ -23,7 +24,7 @@ import './CartCompleteBasket.css'
 
 type NavState =
   | { level: 'home' }
-  | { level: 'rayons' }
+  | { level: 'aisles' }
   | { level: 'aisle'; aisleId: string }
 
 const RECIPE_KEYWORDS: Record<string, string[]> = {
@@ -81,12 +82,12 @@ export function CartCompleteBasket() {
   const [aiLoading, setAiLoading] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
   const [turns, setTurns] = useState<ChatTurn[]>([])
-  const [rayonsQuery, setRayonsQuery] = useState('')
+  const [aislesQuery, setAislesQuery] = useState('')
 
   const isModalOpen = nav.level !== 'home'
 
   const handleBackToHome = () => {
-    setRayonsQuery('')
+    setAislesQuery('')
     setNav({ level: 'home' })
   }
 
@@ -101,7 +102,7 @@ export function CartCompleteBasket() {
     }, 600)
   }
 
-  const rayonsResults = rayonsQuery.trim() ? searchProducts(rayonsQuery) : []
+  const aislesResults = aislesQuery.trim() ? searchProducts(aislesQuery) : []
 
   return (
     <>
@@ -116,6 +117,9 @@ export function CartCompleteBasket() {
           />
         </div>
         <CartAIBanner onSubmit={handleAISubmit} loading={aiLoading && turns.length === 0} />
+        {turns.length === 0 && (
+          <CartAIPromptSuggestions onSelect={handleAISubmit} disabled={aiLoading} />
+        )}
         <PromoSection products={PROMO_PRODUCTS} onViewAll={() => {}} />
 
         
@@ -125,7 +129,7 @@ export function CartCompleteBasket() {
           size="M"
           lIcon={<Storefront size={18} weight="regular" />}
           label="Voir les rayons"
-          onClick={() => setNav({ level: 'rayons' })}
+          onClick={() => setNav({ level: 'aisles' })}
         />
       </div>
 
@@ -136,9 +140,9 @@ export function CartCompleteBasket() {
         size="M"
         className="cart-aisle-modal"
       >
-        {nav.level === 'rayons' && (
-          <div className="cart-complete-basket__rayons">
-            <div className="cart-complete-basket__rayons-header">
+        {nav.level === 'aisles' && (
+          <div className="cart-complete-basket__aisles">
+            <div className="cart-complete-basket__aisles-header">
               <Button
                 variant="tertiary"
                 size="S"
@@ -146,20 +150,20 @@ export function CartCompleteBasket() {
                 label="Retour"
                 onClick={handleBackToHome}
               />
-              <h3 className="cart-complete-basket__rayons-title">Rayons</h3>
+              <h3 className="cart-complete-basket__aisles-title">Rayons</h3>
             </div>
 
             <InputField
               lIcon={<MagnifyingGlass size={18} weight="regular" />}
               placeholder="Rechercher un produit"
               aria-label="Rechercher un produit dans tous les rayons"
-              value={rayonsQuery}
-              onChange={(e) => setRayonsQuery(e.target.value)}
+              value={aislesQuery}
+              onChange={(e) => setAislesQuery(e.target.value)}
             />
 
-            {rayonsQuery.trim() ? (
-              <div className="cart-complete-basket__rayons-results">
-                {rayonsResults.map((product) => (
+            {aislesQuery.trim() ? (
+              <div className="cart-complete-basket__aisles-results">
+                {aislesResults.map((product) => (
                   <ProductCard key={product.id} product={product} orientation="vertical" />
                 ))}
               </div>
@@ -172,7 +176,7 @@ export function CartCompleteBasket() {
         {nav.level === 'aisle' && (
           <CartAisleView
             aisleId={nav.aisleId}
-            onBack={() => setNav({ level: 'rayons' })}
+            onBack={() => setNav({ level: 'aisles' })}
           />
         )}
       </Modal>

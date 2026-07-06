@@ -51,9 +51,9 @@ export default function CreneauPage() {
   }
 
   return (
-    <div className="cr-page" data-partner="carrefour">
+    <div className="order-timeslot-page" data-partner="carrefour">
       {/* Breadcrumb stepper */}
-      <div className="cr-breadcrumb-wrap">
+      <div className="order-timeslot-breadcrumb-wrap">
         <Breadcrumb
           items={[
             { label: 'Magasin', href: '/magasin' },
@@ -66,10 +66,10 @@ export default function CreneauPage() {
 
       {/* Store info */}
       {state.storeName && (
-        <div className="cr-store-row">
+        <div className="order-timeslot-store-row">
           <div>
-            <p className="cr-store-name">{state.storeName}</p>
-            <p className="cr-store-sub">Retrait parking</p>
+            <p className="order-timeslot-store-name">{state.storeName}</p>
+            <p className="order-timeslot-store-sub">Retrait parking</p>
           </div>
           <Button variant="tertiary" size="S" onClick={() => router.push('/magasin')}>
             Modifier
@@ -78,7 +78,7 @@ export default function CreneauPage() {
       )}
 
       {/* Drive / Livraison toggle */}
-      <div className="cr-mode-wrap">
+      <div className="order-timeslot-mode-wrap">
         <SegmentedControl
           options={MODE_TABS}
           value={mode}
@@ -88,7 +88,7 @@ export default function CreneauPage() {
       </div>
 
       {/* Day tabs — DateTabs DS */}
-      <div className="cr-days-wrap">
+      <div className="order-timeslot-days-wrap">
         <DateTabs
           items={dayItems}
           value={activeDay}
@@ -97,7 +97,7 @@ export default function CreneauPage() {
       </div>
 
       {/* Time slots — Radio DS */}
-      <div className="cr-slots" role="tabpanel">
+      <div className="order-timeslot-slots" role="tabpanel">
         {currentDay.slots.map((slot) => {
           const isSelected = selected === slot.id
           const isFree = slot.price === 0
@@ -105,25 +105,25 @@ export default function CreneauPage() {
             <div
               key={slot.id}
               className={[
-                'cr-slot',
-                !slot.available && 'cr-slot--disabled',
-                isSelected && 'cr-slot--selected',
+                'order-timeslot-slot',
+                !slot.available && 'order-timeslot-slot--disabled',
+                isSelected && 'order-timeslot-slot--selected',
               ].filter(Boolean).join(' ')}
               onClick={() => handleSlot(slot)}
               role="button"
               tabIndex={slot.available ? 0 : -1}
               onKeyDown={(e) => e.key === 'Enter' && handleSlot(slot)}
             >
-              <span className="cr-slot__time">{slot.startTime} — {slot.endTime}</span>
-              <div className="cr-slot__right">
+              <span className="order-timeslot-slot__time">{slot.startTime} — {slot.endTime}</span>
+              <div className="order-timeslot-slot__right">
                 {slot.available && isFree && (
-                  <span className="cr-slot__tag cr-slot__tag--free">Moins d&rsquo;attente</span>
+                  <span className="order-timeslot-slot__tag order-timeslot-slot__tag--free">Moins d&rsquo;attente</span>
                 )}
                 {slot.available && !isFree && (
-                  <span className="cr-slot__tag cr-slot__tag--fast">Disponible</span>
+                  <span className="order-timeslot-slot__tag order-timeslot-slot__tag--fast">Disponible</span>
                 )}
                 {!slot.available && (
-                  <span className="cr-slot__tag cr-slot__tag--full">Complet</span>
+                  <span className="order-timeslot-slot__tag order-timeslot-slot__tag--full">Complet</span>
                 )}
                 {/* Radio DS — checked state hérite de --color-interactive-bg = bleu Carrefour */}
                 <Radio
@@ -139,33 +139,33 @@ export default function CreneauPage() {
       </div>
 
       {/* Informations — adresse de facturation / téléphone (calqué sur carrefour.fr) */}
-      <div className="cr-infos">
-        <p className="cr-infos__title">Informations</p>
-        <div className="cr-infos__row">
+      <div className="order-timeslot-infos">
+        <p className="order-timeslot-infos__title">Informations</p>
+        <div className="order-timeslot-infos__row">
           <div>
-            <p className="cr-infos__label">Adresse de facturation</p>
-            <p className="cr-infos__value">32 Rue Du Mont Mirel, 76150 Maromme</p>
+            <p className="order-timeslot-infos__label">Adresse de facturation</p>
+            <p className="order-timeslot-infos__value">32 Rue Du Mont Mirel, 76150 Maromme</p>
           </div>
           <Button variant="tertiary" size="S">Modifier</Button>
         </div>
-        <div className="cr-infos__row">
+        <div className="order-timeslot-infos__row">
           <div>
-            <p className="cr-infos__label">Numéro de téléphone</p>
-            <p className="cr-infos__value">+33 06 ****** 39</p>
+            <p className="order-timeslot-infos__label">Numéro de téléphone</p>
+            <p className="order-timeslot-infos__value">+33 06 ****** 39</p>
           </div>
           <Button variant="tertiary" size="S">Modifier</Button>
         </div>
       </div>
 
       {/* Footer sticky — récap calqué sur carrefour.fr */}
-      <div className="cr-footer">
-        <div className="cr-footer__totals">
-          <div className="cr-footer__line">
+      <div className="order-timeslot-footer">
+        <div className="order-timeslot-footer__totals">
+          <div className="order-timeslot-footer__line">
             <span>Sous-total ({state.items.length} article{state.items.length > 1 ? 's' : ''})</span>
             <span>{total.toFixed(2).replace('.', ',')} €</span>
           </div>
-          <div className="cr-footer__line">
-            <span className="cr-footer__line-label">
+          <div className="order-timeslot-footer__line">
+            <span className="order-timeslot-footer__line-label">
               Provision produits à la pesée
               <Tooltip content="Montant estimé, ajusté au poids réel lors de la préparation de votre commande.">
                 <Info size={13} weight="bold" aria-hidden="true" />
@@ -173,13 +173,13 @@ export default function CreneauPage() {
             </span>
             <span>+{weighedProductsProvision.toFixed(2).replace('.', ',')} €</span>
           </div>
-          <div className="cr-footer__line">
+          <div className="order-timeslot-footer__line">
             <span>Provision sacs consignés</span>
             <span>{DEPOSIT_BAG_COUNT} x {DEPOSIT_BAG_UNIT_PRICE.toFixed(2).replace('.', ',')}€</span>
           </div>
         </div>
 
-        <div className="cr-footer__promo">
+        <div className="order-timeslot-footer__promo">
           <InputField
             placeholder="Code promo"
             aria-label="Code promo"
@@ -189,7 +189,7 @@ export default function CreneauPage() {
           <Button variant="secondary" size="M">OK</Button>
         </div>
 
-        <div className="cr-footer__grand-total">
+        <div className="order-timeslot-footer__grand-total">
           <span>Total</span>
           <span>{grandTotal.toFixed(2).replace('.', ',')} €</span>
         </div>
@@ -199,7 +199,7 @@ export default function CreneauPage() {
           size="L"
           onClick={handleConfirm}
           disabled={!selected}
-          className="cr-footer__cta"
+          className="order-timeslot-footer__cta"
         >
           Continuer
         </Button>
@@ -208,85 +208,85 @@ export default function CreneauPage() {
       <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .cr-page {
+        .order-timeslot-page {
           min-height: 100vh; max-width: 480px; margin: 0 auto;
           background: #fff; font-family: var(--font-family-body);
           display: flex; flex-direction: column;
         }
 
-        .cr-breadcrumb-wrap {
+        .order-timeslot-breadcrumb-wrap {
           padding: 10px 16px;
           border-bottom: 1px solid var(--color-border-default);
         }
 
-        .cr-store-row {
+        .order-timeslot-store-row {
           display: flex; align-items: center; justify-content: space-between;
           padding: 10px 16px;
           border-bottom: 1px solid var(--color-border-default);
         }
-        .cr-store-name { font-size: 14px; font-weight: 700; color: var(--color-content-default); }
-        .cr-store-sub { font-size: 12px; color: var(--color-content-weak); margin-top: 2px; }
+        .order-timeslot-store-name { font-size: 14px; font-weight: 700; color: var(--color-content-default); }
+        .order-timeslot-store-sub { font-size: 12px; color: var(--color-content-weak); margin-top: 2px; }
 
-        .cr-mode-wrap { padding: 12px 16px; }
+        .order-timeslot-mode-wrap { padding: 12px 16px; }
 
-        .cr-days-wrap {
+        .order-timeslot-days-wrap {
           padding: 4px 16px 8px;
           border-bottom: 1px solid var(--color-border-default);
         }
 
-        .cr-slots { flex: 1; }
-        .cr-slot {
+        .order-timeslot-slots { flex: 1; }
+        .order-timeslot-slot {
           display: flex; align-items: center; justify-content: space-between;
           padding: 14px 16px;
           border-bottom: 1px solid var(--color-border-weak);
           cursor: pointer; transition: background 0.15s;
         }
-        .cr-slot:hover:not(.cr-slot--disabled) { background: #f9f9f9; }
-        .cr-slot--disabled { opacity: 0.45; cursor: not-allowed; }
-        .cr-slot--selected { background: var(--color-interactive-bg-subtle); }
-        .cr-slot__time { font-size: 14px; color: var(--color-content-default); }
-        .cr-slot__right { display: flex; align-items: center; gap: 10px; }
-        .cr-slot__tag {
+        .order-timeslot-slot:hover:not(.order-timeslot-slot--disabled) { background: #f9f9f9; }
+        .order-timeslot-slot--disabled { opacity: 0.45; cursor: not-allowed; }
+        .order-timeslot-slot--selected { background: var(--color-interactive-bg-subtle); }
+        .order-timeslot-slot__time { font-size: 14px; color: var(--color-content-default); }
+        .order-timeslot-slot__right { display: flex; align-items: center; gap: 10px; }
+        .order-timeslot-slot__tag {
           font-size: 11px; font-weight: 600; border-radius: 4px; padding: 2px 7px;
         }
-        .cr-slot__tag--free { background: var(--color-interactive-bg-subtle); color: var(--color-interactive-content); }
-        .cr-slot__tag--fast { background: #FFF3E0; color: #E65100; }
-        .cr-slot__tag--full { color: var(--color-content-weak); }
+        .order-timeslot-slot__tag--free { background: var(--color-interactive-bg-subtle); color: var(--color-interactive-content); }
+        .order-timeslot-slot__tag--fast { background: #FFF3E0; color: #E65100; }
+        .order-timeslot-slot__tag--full { color: var(--color-content-weak); }
 
         /* Informations — adresse / téléphone */
-        .cr-infos { padding: 16px; border-bottom: 8px solid var(--color-surface-secondary); }
-        .cr-infos__title { font-size: 15px; font-weight: 700; color: var(--color-content-default); margin-bottom: 12px; }
-        .cr-infos__row {
+        .order-timeslot-infos { padding: 16px; border-bottom: 8px solid var(--color-surface-secondary); }
+        .order-timeslot-infos__title { font-size: 15px; font-weight: 700; color: var(--color-content-default); margin-bottom: 12px; }
+        .order-timeslot-infos__row {
           display: flex; align-items: center; justify-content: space-between;
           gap: 10px; padding: 10px 0;
           border-top: 1px solid var(--color-border-weak);
         }
-        .cr-infos__row:first-of-type { border-top: none; }
-        .cr-infos__label { font-size: 12px; color: var(--color-content-weak); }
-        .cr-infos__value { font-size: 14px; color: var(--color-content-default); margin-top: 2px; }
+        .order-timeslot-infos__row:first-of-type { border-top: none; }
+        .order-timeslot-infos__label { font-size: 12px; color: var(--color-content-weak); }
+        .order-timeslot-infos__value { font-size: 14px; color: var(--color-content-default); margin-top: 2px; }
 
         /* Footer sticky */
-        .cr-footer {
+        .order-timeslot-footer {
           position: sticky; bottom: 0;
           background: #fff; border-top: 1px solid var(--color-border-default);
           padding: 12px 16px;
           display: flex; flex-direction: column; gap: 10px;
         }
-        .cr-footer__totals { display: flex; flex-direction: column; gap: 4px; }
-        .cr-footer__line {
+        .order-timeslot-footer__totals { display: flex; flex-direction: column; gap: 4px; }
+        .order-timeslot-footer__line {
           display: flex; justify-content: space-between;
           font-size: 13px; color: var(--color-content-weak);
         }
-        .cr-footer__line-label { display: inline-flex; align-items: center; gap: 4px; }
-        .cr-footer__promo { display: flex; align-items: flex-end; gap: 8px; }
-        .cr-footer__promo .input-field { flex: 1; }
-        .cr-footer__grand-total {
+        .order-timeslot-footer__line-label { display: inline-flex; align-items: center; gap: 4px; }
+        .order-timeslot-footer__promo { display: flex; align-items: flex-end; gap: 8px; }
+        .order-timeslot-footer__promo .input-field { flex: 1; }
+        .order-timeslot-footer__grand-total {
           display: flex; justify-content: space-between;
           font-size: 16px; font-weight: 700; color: var(--color-content-default);
           padding-top: 8px; border-top: 1px solid var(--color-border-default);
         }
         /* Button pleine largeur dans le footer */
-        .cr-footer__cta { width: 100%; }
+        .order-timeslot-footer__cta { width: 100%; }
       `}</style>
     </div>
   )

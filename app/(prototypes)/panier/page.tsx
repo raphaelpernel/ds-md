@@ -17,29 +17,31 @@ export default function PanierPage() {
   const recipeCount = sections.filter((s) => s.recipeId !== null).length
 
   return (
-    <main className="panier-page">
-      <header className="panier-header">
-        <Link href="/recette" className="panier-back">← Retour recette</Link>
-        <span className="panier-header__title">Mon panier ({itemCount})</span>
-        <span className="panier-header__spacer" />
-      </header>
+    <main className="cart-page">
+      <div className="cart-card">
+        <header className="cart-header">
+          <Link href="/recette" className="cart-back">← Retour recette</Link>
+          <span className="cart-header__title">Mon panier ({itemCount})</span>
+          <span className="cart-header__spacer" />
+        </header>
 
-      <div className="panier-body">
-        <Cart
-          onChooseStore={() => router.push('/magasin')}
-          onChangeStore={() => router.push('/magasin')}
-        />
-      </div>
+        <div className="cart-body">
+          <Cart
+            onChooseStore={() => router.push('/magasin')}
+            onChangeStore={() => router.push('/magasin')}
+          />
+        </div>
 
-      <div className="panier-footer">
-        <CartFooter
-          total={total}
-          itemCount={itemCount}
-          recipeCount={recipeCount}
-          storeName={state.storeName}
-          onCheckout={() => setLoginOpen(true)}
-          onChangeStore={() => router.push('/magasin')}
-        />
+        <div className="cart-footer-wrap">
+          <CartFooter
+            total={total}
+            itemCount={itemCount}
+            recipeCount={recipeCount}
+            storeName={state.storeName}
+            onCheckout={() => setLoginOpen(true)}
+            onChangeStore={() => router.push('/magasin')}
+          />
+        </div>
       </div>
 
       <CarrefourLoginModal
@@ -54,18 +56,25 @@ export default function PanierPage() {
       <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .panier-page {
-          min-height: 100vh;
+        .cart-page {
+          height: 100vh;
           display: flex;
           flex-direction: column;
           background-color: var(--color-surface-page);
           font-family: var(--font-family-body);
           color: var(--color-content-default);
-          max-width: 480px;
-          margin: 0 auto;
         }
 
-        .panier-header {
+        .cart-card {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          min-height: 0;
+          width: 100%;
+          background-color: var(--color-surface-page);
+        }
+
+        .cart-header {
           position: sticky;
           top: 0;
           z-index: 20;
@@ -78,32 +87,48 @@ export default function PanierPage() {
           background: var(--color-surface-primary);
         }
 
-        .panier-back {
+        .cart-back {
           font-size: 14px;
           color: var(--color-interactive-content);
           text-decoration: none;
           white-space: nowrap;
         }
 
-        .panier-header__title {
+        .cart-header__title {
           font-weight: 700;
           font-size: 16px;
           color: var(--color-content-default);
         }
 
-        .panier-header__spacer {
+        .cart-header__spacer {
           width: 80px;
         }
 
-        .panier-body {
+        .cart-body {
           flex: 1;
+          min-height: 0;
           overflow-y: auto;
         }
 
-        .panier-footer {
+        .cart-footer-wrap {
           position: sticky;
           bottom: 0;
           z-index: 10;
+        }
+
+        /* Desktop — fluid container capped at 1200px, floats on the gray backdrop.
+           Below 1024 the container stays full width, no side margin. */
+        @media (min-width: 1024px) {
+          .cart-page {
+            background-color: #f5f5f5;
+          }
+          .cart-card {
+            max-width: 1200px;
+            margin: 32px auto;
+            border-radius: var(--radius-card);
+            box-shadow: var(--elevation-300);
+            overflow: hidden;
+          }
         }
       `}</style>
     </main>

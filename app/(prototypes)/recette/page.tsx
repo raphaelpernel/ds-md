@@ -50,24 +50,24 @@ export default function RecettePage() {
   }
 
   return (
-    <div className="mr-page">
-      {/* ── Header sticky ── */}
-      <header className="mr-header">
-        <Link href="/" className="mr-header__back" aria-label="Retour">
+    <div className="recipe-page">
+      {/* ── Site header (global nav, sticky) ── */}
+      <header className="site-header">
+        <Link href="/" className="site-header__back" aria-label="Retour">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M19 12H5M12 5l-7 7 7 7"/>
           </svg>
         </Link>
-        <span className="mr-header__logo">
+        <span className="site-header__logo">
           <img
             src="/logos/logo-marmiton.svg"
             alt="Marmiton"
-            className="mr-header__brand"
+            className="site-header__brand"
             width={120}
             height={19}
           />
         </span>
-        <div className="mr-header__cart">
+        <div className="site-header__cart">
           <Button
             variant="secondary"
             size="M"
@@ -80,129 +80,131 @@ export default function RecettePage() {
             onClick={() => setDrawerOpen(true)}
           />
           {itemCount > 0 && (
-            <span className="mr-header__cart-count" aria-hidden="true">
+            <span className="site-header__cart-count" aria-hidden="true">
               {itemCount}
             </span>
           )}
         </div>
       </header>
 
-      {/* ── Zone pré-hero : fil d'Ariane + titre + rating ── */}
-      <div className="mr-pre-hero">
-        <nav className="mr-breadcrumb" aria-label="Fil d'Ariane">
-          <span>Accueil</span>
-          <span className="mr-breadcrumb__sep">›</span>
-          <span>Recettes</span>
-          <span className="mr-breadcrumb__sep">›</span>
-          <span>Plats principaux</span>
-        </nav>
+      <div className="recipe-wrapper">
+        {/* ── Fil d'Ariane + titre + rating ── */}
+        <div className="recipe-header">
+          <nav className="recipe-breadcrumb" aria-label="Fil d'Ariane">
+            <span>Accueil</span>
+            <span className="recipe-breadcrumb__sep">›</span>
+            <span>Recettes</span>
+            <span className="recipe-breadcrumb__sep">›</span>
+            <span>Plats principaux</span>
+          </nav>
 
-        <h1 className="mr-title">{RECIPE.name}</h1>
+          <h1 className="recipe-title">{RECIPE.name}</h1>
 
-        <div className="mr-meta-row">
-          <span className="mr-stars">★★★★½</span>
-          <span className="mr-rating-score">4,7/5</span>
-          <span className="mr-dot">·</span>
-          <span className="mr-comments">247 commentaires</span>
-        </div>
-      </div>
-
-      {/* ── Hero image plein format ── */}
-      <div className="mr-hero">
-        <img src={RECIPE.imageUrl} alt={RECIPE.name} className="mr-hero__img" />
-      </div>
-
-      {/* ── Contenu ── */}
-      <div className="mr-content">
-        {/* Badges */}
-        <div className="mr-badges">
-          <span className="mr-badge">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            {RECIPE.duration} min
-          </span>
-          <span className="mr-badge">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            Très Facile
-          </span>
-          <span className="mr-badge">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            Bon Marché
-          </span>
+          <div className="recipe-meta-row">
+            <span className="recipe-stars">★★★★½</span>
+            <span className="recipe-rating-score">4,7/5</span>
+            <span className="recipe-dot">·</span>
+            <span className="recipe-comments">247 commentaires</span>
+          </div>
         </div>
 
-        {/* Actions icon-only */}
-        <div className="mr-actions">
-          <Button
-            variant={liked ? 'primary' : 'secondary'}
-            size="M"
-            label="J'aime"
-            iconOnly={<Heart size={18} weight={liked ? 'fill' : 'regular'} aria-hidden="true" />}
-            onClick={() => setLiked((v) => !v)}
-          />
-          <Button
-            variant="secondary"
-            size="M"
-            label="Partager"
-            iconOnly={<ShareNetwork size={18} weight="regular" aria-hidden="true" />}
-          />
+        {/* ── Image plein format ── */}
+        <div className="recipe-media">
+          <img src={RECIPE.imageUrl} alt={RECIPE.name} className="recipe-media__img" />
         </div>
 
-        <hr className="mr-divider" />
-
-        {/* ── Section ingrédients ── */}
-        <section>
-          <div className="mr-section-head">
-            <h2 className="mr-section-title">🥄 Ingrédients</h2>
+        {/* ── Contenu ── */}
+        <div className="recipe-content">
+          {/* Badges */}
+          <div className="recipe-badges">
+            <span className="recipe-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              {RECIPE.duration} min
+            </span>
+            <span className="recipe-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Très Facile
+            </span>
+            <span className="recipe-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              Bon Marché
+            </span>
           </div>
 
-          <div className="mr-servings-row">
-            <Stepper
-              value={servings}
-              onChange={setServings}
-              min={1}
-              size="S"
-              suffix="personnes"
-              label="Nombre de personnes"
+          {/* Actions icon-only */}
+          <div className="recipe-actions">
+            <Button
+              variant={liked ? 'primary' : 'secondary'}
+              size="M"
+              label="J'aime"
+              iconOnly={<Heart size={18} weight={liked ? 'fill' : 'regular'} aria-hidden="true" />}
+              onClick={() => setLiked((v) => !v)}
             />
-            <ViewToggle view={ingredientView} onChange={setIngredientView} />
+            <Button
+              variant="secondary"
+              size="M"
+              label="Partager"
+              iconOnly={<ShareNetwork size={18} weight="regular" aria-hidden="true" />}
+            />
           </div>
 
-          <RecipeOrderBanner
-            pricePerServing={pricePerServing}
-            onOrder={handleOrder}
-            allAdded={allAdded}
-            onViewCart={() => setDrawerOpen(true)}
-          />
+          <hr className="recipe-divider" />
 
-          <RecipeIngredientWidget
-            recipe={RECIPE}
-            products={PRODUCTS}
-            view={ingredientView}
-            servings={servings}
-          />
-        </section>
+          {/* ── Section ingrédients ── */}
+          <section>
+            <div className="recipe-section-head">
+              <h2 className="recipe-section-title">🥄 Ingrédients</h2>
+            </div>
 
-        <hr className="mr-divider" />
+            <div className="recipe-servings-row">
+              <Stepper
+                value={servings}
+                onChange={setServings}
+                min={1}
+                size="S"
+                suffix="personnes"
+                label="Nombre de personnes"
+              />
+              <ViewToggle view={ingredientView} onChange={setIngredientView} />
+            </div>
 
-        {/* ── Préparation ── */}
-        <section>
-          <div className="mr-section-head">
-            <h2 className="mr-section-title">👨‍🍳 Préparation</h2>
-          </div>
-          <ol className="mr-steps">
-            {[
-              'Préchauffez le four à 180°C. Étalez la pâte dans un moule à tarte beurré et fariné.',
-              'Lavez et coupez les abricots en deux, retirez les noyaux et disposez-les sur la pâte, côté bombé vers le bas.',
-              'Mélangez la cassonade, la farine et le beurre froid coupé en dés avec les doigts pour former un crumble grossier.',
-              'Saupoudrez le crumble sur les abricots et enfournez 35 à 40 min. Laissez tiédir avant de servir.',
-            ].map((step, i) => (
-              <li key={i} className="mr-step">
-                <span className="mr-step__num">{i + 1}</span>
-                <p className="mr-step__text">{step}</p>
-              </li>
-            ))}
-          </ol>
-        </section>
+            <RecipeOrderBanner
+              pricePerServing={pricePerServing}
+              onOrder={handleOrder}
+              allAdded={allAdded}
+              onViewCart={() => setDrawerOpen(true)}
+            />
+
+            <RecipeIngredientWidget
+              recipe={RECIPE}
+              products={PRODUCTS}
+              view={ingredientView}
+              servings={servings}
+            />
+          </section>
+
+          <hr className="recipe-divider" />
+
+          {/* ── Préparation ── */}
+          <section>
+            <div className="recipe-section-head">
+              <h2 className="recipe-section-title">👨‍🍳 Préparation</h2>
+            </div>
+            <ol className="recipe-steps">
+              {[
+                'Préchauffez le four à 180°C. Étalez la pâte dans un moule à tarte beurré et fariné.',
+                'Lavez et coupez les abricots en deux, retirez les noyaux et disposez-les sur la pâte, côté bombé vers le bas.',
+                'Mélangez la cassonade, la farine et le beurre froid coupé en dés avec les doigts pour former un crumble grossier.',
+                'Saupoudrez le crumble sur les abricots et enfournez 35 à 40 min. Laissez tiédir avant de servir.',
+              ].map((step, i) => (
+                <li key={i} className="recipe-step">
+                  <span className="recipe-step__num">{i + 1}</span>
+                  <p className="recipe-step__text">{step}</p>
+                </li>
+              ))}
+            </ol>
+          </section>
+        </div>
       </div>
 
       <Drawer
@@ -232,17 +234,15 @@ export default function RecettePage() {
       <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .mr-page {
+        .recipe-page {
           min-height: 100vh;
           background-color: #f5f5f5;
           font-family: var(--font-family-body);
           color: var(--color-content-default);
-          max-width: 480px;
-          margin: 0 auto;
         }
 
-        /* Header */
-        .mr-header {
+        /* Site header — global nav, not part of the recipe card */
+        .site-header {
           position: sticky; top: 0; z-index: 20;
           background: #fff;
           border-bottom: 1px solid var(--color-border-default);
@@ -250,24 +250,24 @@ export default function RecettePage() {
           padding: 10px 16px;
           height: 52px;
         }
-        .mr-header__back {
+        .site-header__back {
           color: var(--color-content-default);
           display: flex; align-items: center;
           text-decoration: none;
           width: 36px;
         }
-        .mr-header__logo { flex: 1; text-align: center; }
-        .mr-header__brand {
+        .site-header__logo { flex: 1; text-align: center; }
+        .site-header__brand {
           display: block;
           height: 19px;
           width: auto;
           margin: 0 auto;
         }
-        .mr-header__cart {
+        .site-header__cart {
           position: relative;
           display: flex; justify-content: flex-end; align-items: center;
         }
-        .mr-header__cart-count {
+        .site-header__cart-count {
           position: absolute; top: -5px; right: -4px;
           background: var(--color-interactive-bg); color: #fff;
           border-radius: 50%; font-size: 10px; font-weight: 700;
@@ -275,32 +275,38 @@ export default function RecettePage() {
           display: flex; align-items: center; justify-content: center;
         }
 
-        /* Pré-hero : fil d'Ariane + titre + rating */
-        .mr-pre-hero {
+        /* Recipe wrapper — the card holding this recipe's own content */
+        .recipe-wrapper {
+          width: 100%;
+          margin: 0;
+        }
+
+        /* Recipe header : fil d'Ariane + titre + rating */
+        .recipe-header {
           background: #fff;
           padding: 12px 16px 14px;
           display: flex; flex-direction: column; gap: 8px;
         }
 
         /* Fil d'Ariane */
-        .mr-breadcrumb {
+        .recipe-breadcrumb {
           display: flex; align-items: center; gap: 4px; flex-wrap: wrap;
           font-size: 12px; color: var(--color-content-weak);
         }
-        .mr-breadcrumb__sep { color: #ccc; }
+        .recipe-breadcrumb__sep { color: #ccc; }
 
-        /* Hero */
-        .mr-hero { width: 100%; aspect-ratio: 4/3; max-height: 280px; overflow: hidden; }
-        .mr-hero__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        /* Media */
+        .recipe-media { width: 100%; aspect-ratio: 4/3; max-height: 280px; overflow: hidden; }
+        .recipe-media__img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
         /* Content */
-        .mr-content {
+        .recipe-content {
           background: #fff;
           padding: 16px 16px 20px;
           display: flex; flex-direction: column; gap: 14px;
         }
 
-        .mr-title {
+        .recipe-title {
           font-family: var(--font-family-heading);
           font-size: 22px; font-weight: 700;
           color: var(--color-content-default);
@@ -308,15 +314,15 @@ export default function RecettePage() {
         }
 
         /* Meta */
-        .mr-meta-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-        .mr-stars { color: #FF6F61; font-size: 15px; letter-spacing: 1px; }
-        .mr-rating-score { font-size: 13px; color: var(--color-content-weak); }
-        .mr-dot { color: #ccc; }
-        .mr-comments { font-size: 13px; color: var(--color-interactive-content); text-decoration: underline; cursor: pointer; }
+        .recipe-meta-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .recipe-stars { color: #FF6F61; font-size: 15px; letter-spacing: 1px; }
+        .recipe-rating-score { font-size: 13px; color: var(--color-content-weak); }
+        .recipe-dot { color: #ccc; }
+        .recipe-comments { font-size: 13px; color: var(--color-interactive-content); text-decoration: underline; cursor: pointer; }
 
         /* Badges */
-        .mr-badges { display: flex; gap: 8px; flex-wrap: wrap; }
-        .mr-badge {
+        .recipe-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+        .recipe-badge {
           display: flex; align-items: center; gap: 5px;
           font-size: 13px; color: var(--color-content-default);
           background: #f5f5f5; border-radius: 20px;
@@ -324,14 +330,14 @@ export default function RecettePage() {
         }
 
         /* Actions */
-        .mr-actions { display: flex; gap: 8px; }
+        .recipe-actions { display: flex; gap: 8px; }
 
         /* Divider */
-        .mr-divider { border: none; border-top: 1px solid var(--color-border-default); }
+        .recipe-divider { border: none; border-top: 1px solid var(--color-border-default); }
 
         /* Section header */
-        .mr-section-head { margin-bottom: 12px; }
-        .mr-section-title {
+        .recipe-section-head { margin-bottom: 12px; }
+        .recipe-section-title {
           font-family: var(--font-family-heading);
           font-size: 18px; font-weight: 700;
           color: var(--color-content-default);
@@ -339,25 +345,47 @@ export default function RecettePage() {
         }
 
         /* Servings row */
-        .mr-servings-row {
+        .recipe-servings-row {
           display: flex; align-items: center;
           justify-content: space-between;
           margin-bottom: 16px;
         }
 
         /* Steps */
-        .mr-steps { list-style: none; display: flex; flex-direction: column; gap: 16px; }
-        .mr-step { display: flex; gap: 14px; align-items: flex-start; }
-        .mr-step__num {
+        .recipe-steps { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+        .recipe-step { display: flex; gap: 14px; align-items: flex-start; }
+        .recipe-step__num {
           flex-shrink: 0; width: 26px; height: 26px;
           background: var(--color-interactive-bg); color: #fff;
           border-radius: 50%; display: flex; align-items: center; justify-content: center;
           font-size: 12px; font-weight: 700;
         }
-        .mr-step__text {
+        .recipe-step__text {
           font-size: 15px; line-height: 1.6;
           color: var(--color-content-default);
           padding-top: 2px;
+        }
+
+        /* Desktop — fluid container capped at 1200px, starts floating on the gray backdrop.
+           Below 1024 the container stays full width, no side margin. The site header stays
+           full-bleed at every breakpoint — it's global nav, not part of the recipe card. */
+        @media (min-width: 1024px) {
+          .recipe-wrapper {
+            width: 100%;
+            max-width: 1200px;
+            margin: 32px auto 48px;
+            box-shadow: var(--elevation-300);
+          }
+          .recipe-header {
+            border-top-left-radius: var(--radius-card);
+            border-top-right-radius: var(--radius-card);
+          }
+          .recipe-content {
+            border-bottom-left-radius: var(--radius-card);
+            border-bottom-right-radius: var(--radius-card);
+          }
+          .recipe-media { max-height: 440px; }
+          .recipe-title { font-size: 28px; }
         }
       `}</style>
     </div>

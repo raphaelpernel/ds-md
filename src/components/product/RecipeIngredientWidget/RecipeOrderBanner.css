@@ -38,10 +38,11 @@
   line-height: var(--line-height-body-xs);
 }
 
-.recipe-order-banner__footer {
+.recipe-order-banner__info {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-12);
+  min-width: 0;
 }
 
 .recipe-order-banner__price {
@@ -93,4 +94,20 @@
 
 .recipe-order-banner__cta--secondary:hover {
   background-color: var(--partner-bg-light);
+}
+
+/* Tablet+ : la bannière devient une ligne, le CTA hug son contenu à droite
+   au lieu d'occuper toute la largeur. */
+@media (min-width: 768px) {
+  .recipe-order-banner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-16);
+  }
+
+  .recipe-order-banner__cta {
+    width: auto;
+    flex-shrink: 0;
+  }
 }
