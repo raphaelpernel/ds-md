@@ -7,6 +7,20 @@
       "runtimeArgs": ["run", "dev"],
       "port": 3000,
       "autoPort": true
+    },
+    {
+      "name": "form-mealz-planner-dev",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@mealz-product-team/form-mealz-planner", "dev"],
+      "port": 3001,
+      "autoPort": true
+    },
+    {
+      "name": "design-system-storybook",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@mealz-product-team/design-system", "storybook"],
+      "port": 6006,
+      "autoPort": true
     }
   ]
 }

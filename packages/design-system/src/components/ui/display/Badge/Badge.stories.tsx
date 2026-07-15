@@ -5,7 +5,7 @@ const meta: Meta<typeof Badge> = {
   args: { label: 'Badge', variant: 'default', size: 'M' },
   argTypes: {
     variant: { control: 'select', options: ['default', 'brand', 'success', 'danger', 'warning', 'info'] },
-    size:    { control: 'radio', options: ['M', 'S'] },
+    size:    { control: 'radio', options: ['L', 'M', 'S'] },
     icon:    { control: false },
   },
   parameters: {
@@ -26,3 +26,4 @@ export const AllVariants: Story = {
   ),
 }
 export const WithDot: Story = { args: { dot: true, variant: 'success', label: 'Online' } }
+export const SizeL: Story = { args: { size: 'L' } }
