@@ -8,3 +8,14 @@
 .modal__close { background: none; border: none; cursor: pointer; color: var(--color-content-weak); font-size: 18px; padding: 0; line-height: 1; }
 .modal__body { padding: var(--spacing-24); overflow-y: auto; flex: 1; color: var(--color-content-default); font-size: var(--font-size-body-md); line-height: var(--line-height-body-md); }
 .modal__footer { display: flex; justify-content: flex-end; gap: var(--spacing-12); padding: var(--spacing-16) var(--spacing-24); border-top: 1px solid var(--color-border-default); }
+
+/* Mobile/App (Figma) — footer passe en stack vertical plein-largeur.
+   Convention : le contenu de `footer` doit placer l'action Primary en DERNIER
+   dans le JSX — column-reverse la remonte visuellement en haut, comme sur Figma. */
+@media (max-width: 480px) {
+  .modal__footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+  .modal__footer > * { width: 100%; }
+}

@@ -18,6 +18,12 @@ export interface ModalProps extends VariantProps<typeof modal> {
   onClose: () => void
   title?: string
   children?: ReactNode
+  /**
+   * Convention : placer l'action Primary en DERNIER dans le JSX (après Secondary/Tertiary).
+   * Le footer est en ligne sur desktop (ordre JSX = ordre visuel), mais passe en stack
+   * vertical sous 480px (Mobile/App, cf. Figma) via `column-reverse` — la dernière action
+   * du JSX remonte donc visuellement en haut, où doit se trouver le Primary.
+   */
   footer?: ReactNode
   className?: string
   hideHeader?: boolean
