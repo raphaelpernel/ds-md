@@ -1,4 +1,5 @@
 .badge { display: inline-flex; align-items: center; gap: var(--spacing-4); font-family: var(--font-family-label); font-weight: var(--font-weight-label); border-radius: var(--shape-pill); white-space: nowrap; }
+.badge--L { font-size: var(--font-size-label-md); line-height: var(--line-height-label-md); padding: var(--spacing-4) var(--spacing-12); }
 .badge--M { font-size: var(--font-size-label-sm); line-height: var(--line-height-label-sm); padding: var(--spacing-2) var(--spacing-8); }
 .badge--S { font-size: 10px; line-height: 12px; padding: 2px var(--spacing-4); }
 .badge--default { background-color: var(--color-surface-secondary); color: var(--color-content-weak); }

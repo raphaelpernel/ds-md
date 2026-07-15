@@ -15,6 +15,7 @@ const badge = cva('badge', {
     size: {
       S: 'badge--S',
       M: 'badge--M',
+      L: 'badge--L',
     },
     dot: {
       true:  'badge--dot',

@@ -46,7 +46,7 @@ export function Stepper({
         {value}{suffix ? ` ${suffix}` : ''}
       </span>
       <Button
-        variant="secondary"
+        variant="primary"
         size={size}
         iconOnly={<Plus size={px} aria-hidden="true" />}
         className="stepper__btn"

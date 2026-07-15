@@ -1,0 +1,61 @@
+.question-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-24);
+  background-image: url('/img/planner-bg-mobile.png');
+  background-size: cover;
+  background-position: center;
+}
+
+@media (min-width: 768px) {
+  .question-screen {
+    background-image: url('/img/planner-bg-desktop.png');
+  }
+}
+
+.question-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--color-surface-page);
+  border-radius: var(--shape-sheet);
+  box-shadow: var(--elevation-400);
+  padding: var(--spacing-32) var(--spacing-24);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+}
+
+.question-card__step {
+  font-family: var(--font-family-label);
+  font-size: var(--font-size-label-sm);
+  color: var(--color-content-weak);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.question-card__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-heading-lg);
+  line-height: var(--line-height-heading-lg);
+  color: var(--color-content-default);
+}
+
+.question-card__subtitle {
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+  color: var(--color-content-weak);
+}
+
+.question-card__control {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-8);
+  padding: var(--spacing-16) 0;
+}
+
+.question-card__cta {
+  width: 100%;
+}
