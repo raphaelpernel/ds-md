@@ -1,12 +1,13 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { Button } from '@mealz-product-team/design-system'
+import { Button, Heading } from '@mealz-product-team/design-system'
 import './QuestionCard.css'
 
 interface QuestionCardProps {
   step: number
   totalSteps: number
+  icon?: ReactNode
   title: string
   subtitle?: string
   children: ReactNode
@@ -18,6 +19,7 @@ interface QuestionCardProps {
 export function QuestionCard({
   step,
   totalSteps,
+  icon,
   title,
   subtitle,
   children,
@@ -28,8 +30,11 @@ export function QuestionCard({
   return (
     <div className="question-screen">
       <div className="question-card">
-        <span className="question-card__step">Étape {step}/{totalSteps}</span>
-        <h1 className="question-card__title">{title}</h1>
+        <div className="question-card__header">
+          {icon && <span className="question-card__icon" aria-hidden="true">{icon}</span>}
+          <span className="question-card__step">Étape {step}/{totalSteps}</span>
+        </div>
+        <Heading as="h1" size="lg" className="question-card__title">{title}</Heading>
         {subtitle && <p className="question-card__subtitle">{subtitle}</p>}
         <div className="question-card__control">{children}</div>
         <Button

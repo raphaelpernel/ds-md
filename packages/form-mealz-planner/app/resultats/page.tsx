@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Button, ChipTag } from '@mealz-product-team/design-system'
+import { Button, ChipTag, Heading } from '@mealz-product-team/design-system'
 import { useWizard } from '@/context/WizardContext'
 import { pickRecipes } from '@/data/mock/recipes'
 import '@mealz-product-team/design-system/styles/index.css'
@@ -19,7 +19,7 @@ export default function ResultatsPage() {
   return (
     <div className="results-page">
       <div className="results-page__header">
-        <h1 className="results-page__title">Vos {state.meals} repas de la semaine</h1>
+        <Heading as="h1" size="lg" className="results-page__title">Vos {state.meals} repas de la semaine</Heading>
         <p className="results-page__subtitle">Pour {state.people} personne{state.people > 1 ? 's' : ''}</p>
       </div>
 

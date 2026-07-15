@@ -11,7 +11,8 @@
     "prestorybook": "npm run tokens",
     "storybook": "storybook dev -p 6006",
     "prebuild-storybook": "npm run tokens",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test": "vitest run"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
@@ -31,6 +32,11 @@
     "storybook": "^10.4.5",
     "style-dictionary": "^5.4.4",
     "tailwindcss": "^4.3.1",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vitest": "^3.2.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "@testing-library/react": "^16.1.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "jsdom": "^25.0.1"
   }
 }

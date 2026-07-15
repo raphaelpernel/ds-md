@@ -36,5 +36,8 @@ export { ChipTag } from './components/ui/display/ChipTag/ChipTag'
 // ── Layout ──
 export { Drawer } from './components/ui/layout/Drawer/Drawer'
 
+// ── Typography ──
+export { Heading } from './components/ui/typography/Heading/Heading'
+
 // ── Hooks ──
 export { useMediaQuery } from './hooks/useMediaQuery'

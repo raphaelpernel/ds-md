@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { ArrowsClockwise } from '@phosphor-icons/react'
-import { Badge, Button, Stepper } from '@mealz-product-team/design-system'
+import { Badge, Button, Heading, Stepper } from '@mealz-product-team/design-system'
 import { useWizard } from '@/context/WizardContext'
 import '@mealz-product-team/design-system/styles/index.css'
 
@@ -18,11 +18,11 @@ export default function Home() {
         <div className="entry-banner__card">
           <div className="entry-banner__left">
             <Badge label="NOUVEAU" icon={<ArrowsClockwise size={12} weight="bold" />} variant="brand" size="L" />
-            <h1 className="entry-banner__title">
+            <Heading as="h1" size="md" className="entry-banner__title">
               Qu&rsquo;est-ce qu&rsquo;on <strong>mange</strong>
               <br />
               <span className="entry-banner__title-accent">cette semaine ?</span>
-            </h1>
+            </Heading>
           </div>
 
           <div className="entry-banner__right">
@@ -51,7 +51,6 @@ export default function Home() {
 
         .entry-page {
           min-height: 100vh;
-          background: var(--color-surface-secondary);
           display: flex;
           align-items: center;
           justify-content: center;

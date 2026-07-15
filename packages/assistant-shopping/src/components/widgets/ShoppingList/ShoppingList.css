@@ -1,0 +1,105 @@
+.shopping-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  background: var(--color-surface-primary);
+  border-radius: var(--shape-card);
+  box-shadow: var(--elevation-100);
+  padding: var(--spacing-16);
+  width: 100%;
+  max-width: 420px;
+}
+
+.shopping-list__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.shopping-list__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-12);
+  padding-bottom: var(--spacing-8);
+  border-bottom: 1px solid var(--color-border-weak);
+}
+
+.shopping-list__item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.shopping-list__item-main {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  flex: 1;
+  min-width: 0;
+}
+
+.shopping-list__item-emoji {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.shopping-list__item-info {
+  min-width: 0;
+}
+
+.shopping-list__item-name {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-label);
+  color: var(--color-content-default);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.shopping-list__item-brand {
+  font-size: var(--font-size-label-sm);
+  color: var(--color-content-weak);
+}
+
+.shopping-list__item-price {
+  font-family: var(--font-family-price);
+  font-weight: var(--font-weight-price);
+  font-size: var(--font-size-body-sm);
+  color: var(--color-content-default);
+  flex-shrink: 0;
+}
+
+.shopping-list__item-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-12);
+  flex-shrink: 0;
+}
+
+.shopping-list__replace {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-interactive-content);
+  font-size: var(--font-size-label-sm);
+  font-family: var(--font-family-label);
+}
+
+.shopping-list__item-added {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-4) var(--spacing-8);
+  border-radius: var(--shape-pill);
+  background: var(--color-semantic-success-bg-light);
+  color: var(--color-semantic-success-content);
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-label);
+}
+
+.shopping-list__submit {
+  width: 100%;
+}

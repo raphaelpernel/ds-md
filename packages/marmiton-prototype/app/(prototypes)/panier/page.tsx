@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Cart } from '@/components/product/Cart/Cart'
 import { CartFooter } from '@/components/product/Cart/CartFooter'
+import { CartSummary } from '@/components/product/Cart/CartSummary'
 import { CarrefourLoginModal } from '@/components/product/CarrefourLogin/CarrefourLoginModal'
 import { useCart } from '@/context/CartContext'
 import '@mealz-product-team/design-system/styles/index.css'
@@ -26,10 +27,22 @@ export default function PanierPage() {
         </header>
 
         <div className="cart-body">
-          <Cart
-            onChooseStore={() => router.push('/magasin')}
-            onChangeStore={() => router.push('/magasin')}
-          />
+          <div className="cart-layout">
+            <div className="cart-layout__main">
+              <Cart
+                onChooseStore={() => router.push('/magasin')}
+                onChangeStore={() => router.push('/magasin')}
+              />
+            </div>
+            <aside className="cart-layout__sidebar">
+              <CartSummary
+                total={total}
+                itemCount={itemCount}
+                storeName={state.storeName}
+                onCheckout={() => setLoginOpen(true)}
+              />
+            </aside>
+          </div>
         </div>
 
         <div className="cart-footer-wrap">
@@ -116,18 +129,48 @@ export default function PanierPage() {
           z-index: 10;
         }
 
-        /* Desktop — fluid container capped at 1200px, floats on the gray backdrop.
-           Below 1024 the container stays full width, no side margin. */
+        /* Mobile/tablet: single column, sidebar recap hidden — CartFooter is the only CTA. */
+        .cart-layout {
+          display: block;
+        }
+
+        .cart-layout__sidebar {
+          display: none;
+        }
+
+        /* Desktop — full-bleed standalone page (no floating card), 2-column layout:
+           product list on the left, sticky recap sidebar on the right. */
         @media (min-width: 1024px) {
           .cart-page {
-            background-color: #f5f5f5;
+            height: auto;
+            min-height: 100vh;
           }
+
           .cart-card {
             max-width: 1200px;
-            margin: 32px auto;
-            border-radius: var(--radius-card);
-            box-shadow: var(--elevation-300);
-            overflow: hidden;
+            margin: 0 auto;
+          }
+
+          .cart-body {
+            overflow-y: visible;
+          }
+
+          .cart-footer-wrap {
+            display: none;
+          }
+
+          .cart-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 360px;
+            align-items: start;
+            gap: 32px;
+            padding: 24px 32px 48px;
+          }
+
+          .cart-layout__sidebar {
+            display: block;
+            position: sticky;
+            top: 88px;
           }
         }
       `}</style>

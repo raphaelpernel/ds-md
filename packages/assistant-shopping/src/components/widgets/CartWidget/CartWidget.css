@@ -1,0 +1,92 @@
+.cart-widget {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+  background: var(--color-surface-primary);
+  border-radius: var(--shape-card);
+  box-shadow: var(--elevation-100);
+  padding: var(--spacing-16);
+  width: 100%;
+  max-width: 420px;
+}
+
+.cart-widget--empty {
+  color: var(--color-content-weak);
+  font-size: var(--font-size-body-sm);
+}
+
+.cart-widget__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.cart-widget__section-title {
+  font-size: var(--font-size-label-sm);
+  color: var(--color-content-weak);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.cart-widget__row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  padding-bottom: var(--spacing-8);
+  border-bottom: 1px solid var(--color-border-weak);
+}
+
+.cart-widget__row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.cart-widget__emoji {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.cart-widget__row-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.cart-widget__row-name {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-label);
+  color: var(--color-content-default);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cart-widget__row-meta {
+  font-size: var(--font-size-label-sm);
+  color: var(--color-content-weak);
+}
+
+.cart-widget__row-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  flex-shrink: 0;
+}
+
+.cart-widget__row-price {
+  font-family: var(--font-family-price);
+  font-weight: var(--font-weight-price);
+  font-size: var(--font-size-body-sm);
+  color: var(--color-content-default);
+}
+
+.cart-widget__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--spacing-12);
+  border-top: 1.5px solid var(--color-border-default);
+  font-family: var(--font-family-price);
+  font-weight: var(--font-weight-price);
+  font-size: var(--font-size-body-md);
+  color: var(--color-content-default);
+}

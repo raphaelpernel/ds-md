@@ -34,13 +34,15 @@ export interface DrawerProps extends Omit<VariantProps<typeof drawer>, 'open'> {
   open: boolean
   onClose: () => void
   title?: string
+  /** Custom header content rendered in place of the title (takes priority over title) */
+  headerContent?: ReactNode
   /** Renders a back button before the title (e.g. nested navigation within the drawer) */
   onBack?: () => void
   children?: ReactNode
   footer?: ReactNode
 }
 
-export function Drawer({ open, onClose, title, onBack, children, footer, placement, mobilePlacement }: DrawerProps) {
+export function Drawer({ open, onClose, title, headerContent, onBack, children, footer, placement, mobilePlacement }: DrawerProps) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
     if (open) document.addEventListener('keydown', onKey)
@@ -54,7 +56,7 @@ export function Drawer({ open, onClose, title, onBack, children, footer, placeme
         className={drawer({ placement, mobilePlacement, open })}
         role="dialog"
         aria-modal="true"
-        aria-labelledby={title ? 'drawer-title' : undefined}
+        aria-labelledby={!headerContent && title ? 'drawer-title' : undefined}
       >
         <div className="drawer__header">
           <div className="drawer__header-start">
@@ -67,7 +69,7 @@ export function Drawer({ open, onClose, title, onBack, children, footer, placeme
                 onClick={onBack}
               />
             )}
-            {title && <h2 id="drawer-title" className="drawer__title">{title}</h2>}
+            {headerContent ?? (title && <h2 id="drawer-title" className="drawer__title">{title}</h2>)}
           </div>
           <Button
             variant="tertiary"

@@ -1,0 +1,15 @@
+<svg width="1440" height="1024" viewBox="0 0 1440 1024" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1440" height="1024" fill="#F4F4F5"/>
+  <rect width="1440" height="72" fill="#FFFFFF"/>
+  <rect x="40" y="24" width="140" height="24" rx="4" fill="#D4D4D8"/>
+  <rect x="1140" y="24" width="260" height="24" rx="4" fill="#E4E4E7"/>
+  <text x="40" y="140" font-family="sans-serif" font-size="32" fill="#52525B">Mon panier</text>
+  <g fill="#FFFFFF" stroke="#D4D4D8">
+    <rect x="40" y="180" width="820" height="120" rx="8"/>
+    <rect x="40" y="316" width="820" height="120" rx="8"/>
+    <rect x="40" y="452" width="820" height="120" rx="8"/>
+  </g>
+  <rect x="900" y="180" width="500" height="260" rx="8" fill="#FFFFFF" stroke="#D4D4D8"/>
+  <text x="1150" y="320" font-family="sans-serif" font-size="20" fill="#A1A1AA" text-anchor="middle">Récapitulatif</text>
+  <text x="720" y="1000" font-family="sans-serif" font-size="20" fill="#A1A1AA" text-anchor="middle">PLACEHOLDER — à remplacer par une vraie capture d'écran CoursesU (page panier)</text>
+</svg>

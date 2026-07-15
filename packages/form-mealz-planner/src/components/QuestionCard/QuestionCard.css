@@ -17,7 +17,7 @@
 
 .question-card {
   width: 100%;
-  max-width: 400px;
+  max-width: 800px;
   background: var(--color-surface-page);
   border-radius: var(--shape-sheet);
   box-shadow: var(--elevation-400);
@@ -25,6 +25,24 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-16);
+}
+
+.question-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-12);
+}
+
+.question-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--color-surface-secondary);
+  color: var(--color-content-default);
 }
 
 .question-card__step {

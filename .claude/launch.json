@@ -21,6 +21,13 @@
       "runtimeArgs": ["--filter", "@mealz-product-team/design-system", "storybook"],
       "port": 6006,
       "autoPort": true
+    },
+    {
+      "name": "assistant-shopping-dev",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@mealz-product-team/assistant-shopping", "dev"],
+      "port": 3002,
+      "autoPort": true
     }
   ]
 }
