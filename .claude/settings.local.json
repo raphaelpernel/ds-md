@@ -48,7 +48,21 @@
       "Bash(grep -A10 '\"paths\"' packages/marmiton-prototype/tsconfig.json)",
       "Bash(grep -nE '^/\\\\*|--\\(spacing|font|shape|elevation\\)' packages/design-system/src/styles/tokens/base.css)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(git clone *)",
+      "Bash(echo \"---CLONE DONE, EXIT: $?---\")",
+      "Bash(ls -la ~/.claude/skills/gstack 2>&1 | head -30; echo \"---\"; ls ~/.claude/skills/gstack/setup* 2>&1)",
+      "Bash(./setup)",
+      "mcp__visualize__read_me",
+      "Skill(plan-design-review)",
+      "Skill(plan-design-review:*)",
+      "Bash(printf '/** Formats a price in euros. Falls back to \"\\\\xe2\\\\x80\\\\x94\" for invalid input rather than rendering \"NaN \\\\xe2\\\\x82\\\\xac\". */\\\\nexport function formatPrice\\(price: number\\): string {\\\\n if \\(!Number.isFinite\\(price\\)\\) return '\"'\"'\\\\xe2\\\\x80\\\\x94'\"'\"'\\\\n return price.toFixed\\(2\\).replace\\('\"'\"'.'\"'\"', '\"'\"','\"'\"'\\) + '\"'\"'\\\\\\\\u00a0\\\\xe2\\\\x82\\\\xac'\"'\"'\\\\n}\\\\n')",
+      "Bash(pnpm --filter @mealz-product-team/assistant-shopping test)",
+      "Bash(pnpm --filter @mealz-product-team/design-system exec tsc --noEmit)",
+      "Bash(pnpm --filter @mealz-product-team/assistant-shopping exec tsc --noEmit)",
+      "Bash(pnpm --filter @mealz-product-team/assistant-shopping build)",
+      "Bash(pnpm --filter @mealz-product-team/marmiton-prototype exec tsc --noEmit)",
+      "Bash(rm -rf \"F:/Workspace/Mealz/CLAUDE/Projects/DS.MD/packages/assistant-shopping/.next\")"
     ]
   }
 }

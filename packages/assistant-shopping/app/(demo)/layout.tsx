@@ -3,9 +3,9 @@ import { AssistantLauncher } from '@/components/assistant/AssistantLauncher/Assi
 import './coursesu-demo.css'
 
 const PAGES = [
-  { href: '/demo/coursesu/accueil', label: 'Accueil' },
-  { href: '/demo/coursesu/categorie', label: 'Catégorie' },
-  { href: '/demo/coursesu/panier', label: 'Panier' },
+  { href: '/', label: 'Accueil' },
+  { href: '/categorie', label: 'Catégorie' },
+  { href: '/panier', label: 'Panier' },
 ]
 
 export default function CoursesUDemoLayout({ children }: { children: React.ReactNode }) {

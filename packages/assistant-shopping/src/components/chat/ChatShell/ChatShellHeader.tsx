@@ -15,7 +15,6 @@ export function ChatShellHeader() {
         </span>
         <div>
           <p className="chat-shell__title">Assistant Shopping</p>
-          <p className="chat-shell__subtitle">Carrefour Belgique · Prototype</p>
         </div>
       </div>
 

@@ -15,9 +15,6 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-16);
-  padding: var(--spacing-16) var(--spacing-24);
-  background: var(--color-surface-primary);
-  border-bottom: 1px solid var(--color-border-default);
 }
 
 .chat-shell__brand {

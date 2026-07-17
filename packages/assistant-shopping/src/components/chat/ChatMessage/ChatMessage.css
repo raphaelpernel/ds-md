@@ -2,7 +2,7 @@
   display: flex;
   align-items: flex-start;
   gap: var(--spacing-8);
-  max-width: 100%;
+  width: 100%;
 }
 
 .chat-message--user {
@@ -30,7 +30,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-12);
-  max-width: 640px;
+  width: 100%;
 }
 
 .chat-message--user .chat-message__content {

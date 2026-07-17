@@ -6,8 +6,8 @@
   background-color: var(--color-surface-primary); box-shadow: var(--elevation-600);
   transition: transform 0.25s ease;
 }
-.drawer--right  { top: 0; right: 0; bottom: 0; width: 400px; max-width: 90vw; border-radius: 0; transform: translateX(100%); }
-.drawer--left   { top: 0; left: 0; bottom: 0; width: 400px; max-width: 90vw; border-radius: 0; transform: translateX(-100%); }
+.drawer--right  { top: 0; right: 0; bottom: 0; min-width: 400px; max-width: 650; border-radius: 0; transform: translateX(100%); }
+.drawer--left   { top: 0; left: 0; bottom: 0; width: 400px; max-width: 650px; border-radius: 0; transform: translateX(-100%); }
 .drawer--bottom { left: 0; right: 0; bottom: 0; max-height: 85vh; border-radius: 0; transform: translateY(100%); }
 .drawer--open   { transform: none; }
 

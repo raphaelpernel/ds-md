@@ -15,7 +15,6 @@ export function AssistantLauncher() {
       <div className="assistant-launcher__fab">
         <FAB
           size="M"
-          alpha
           icon={<Sparkle size={24} weight="fill" />}
           aria-label="Ouvrir l'assistant shopping"
           onClick={() => setOpen(true)}
