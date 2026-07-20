@@ -9,8 +9,8 @@ import { getBrandThemeScript } from '@mealz-product-team/design-system/devtools/
 import '@mealz-product-team/design-system/styles/index.css'
 
 export const metadata: Metadata = {
-  title: 'Assistant Shopping — Carrefour Belgique',
-  description: 'Prototype de l\u2019assistant shopping ChatGPT pour Carrefour Belgique.',
+  title: 'Assistant Shopping ',
+  description: 'Prototype de l\u2019assistant shopping ChatGPT.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
