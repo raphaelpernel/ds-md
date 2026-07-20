@@ -1,3 +1,13 @@
+# Démarrage de travail dans un package (packages/<nom>)
+
+Quand je commence à travailler dans un dossier `packages/<nom>` (ou équivalent : premier message de la session qui touche ce package), avant toute construction ou réflexion :
+
+1. **Vérifier `docs/`** : chercher dans le package un dossier `docs/` contenant un brief, des règles, ou un `.md` de cadrage. Le lire entièrement s'il existe, avant de commencer.
+2. **Si aucun doc n'existe** : le signaler explicitement à l'utilisateur, puis poser les questions de cadrage nécessaires (intention, but, contraintes, utilisateurs cibles, UX attendue). Une fois les réponses obtenues, rédiger un `docs/BRIEF.md` qui les capture, pour que la prochaine session (ou un autre agent) n'ait pas à repartir de zéro.
+3. **Poser des questions de cadrage même hors skill gstack** dès qu'il s'agit d'une nouvelle feature ou d'un nouveau flow UX — pas besoin que l'utilisateur invoque `/office-hours`, `/spec` ou un skill design pour déclencher cette réflexion. Confirmer l'intention et le but, et pousser la réflexion UX de base de l'utilisateur (alternatives, cas limites, cohérence avec l'existant) plutôt que d'exécuter tel quel ce qui a été demandé au premier degré.
+4. Ce cadrage est **par package et par session** : une fois fait pour un package donné, ne pas reposer les mêmes questions à chaque message suivant dans la même session — seulement le refaire si on entre dans un nouveau package non encore exploré, ou si le contexte change fondamentalement.
+5. Ce cadrage ne s'applique pas aux tâches triviales ou déjà précises (fix de bug ciblé, typo, tâche entièrement spécifiée par l'utilisateur) — seulement quand une nouvelle feature ou un nouveau flow UX est en jeu.
+
 # Fin de journée — commit, push, merge dev → main
 
 Quand l'utilisateur dit **"fin de journée"** (ou variante proche : "c'est la fin de journée", "on clôture la journée"), exécuter automatiquement ce workflow sans redemander confirmation :
