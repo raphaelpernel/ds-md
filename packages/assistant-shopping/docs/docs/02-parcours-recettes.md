@@ -129,12 +129,13 @@ Chaque carte recette contient :
 
 **Accès** : bouton/lien vers le panier visible après ajout.
 
-**Contenu affiché** :
-- Nom de la recette
-- Photo
-- Prix total
-- Prix par personne
-- (Dans le panier produits : boutons − et + pour modifier les quantités)
+> ⚠️ **Mise à jour (2026-07-20, aligné sur le comportement réel du code) :** le panier n'a **pas** de ligne "recette" séparée. Ajouter une recette ajoute directement ses ingrédients comme des lignes produit normales, chacune **taguée avec le nom de la recette** (tag neutre, non cliquable, affiché sous le prix de la ligne). Un produit déjà présent au panier avant l'ajout de la recette voit son tag mis à jour avec le nom de cette recette. Retirer une recette retire toutes les lignes produit portant son tag.
+
+**Contenu affiché par ligne produit** :
+- Nom du produit
+- Prix
+- Tag "nom de la recette", si le produit provient d'une recette
+- Boutons − et + pour modifier les quantités
 
 ---
 

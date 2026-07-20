@@ -1,7 +1,9 @@
-.recipe-detail {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-16);
+.recipe-detail__title {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-heading);
+  font-size: var(--font-size-heading-sm);
+  line-height: var(--line-height-heading-sm);
+  color: var(--color-content-default);
 }
 
 .recipe-detail__hero {

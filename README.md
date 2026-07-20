@@ -67,7 +67,7 @@ DS.MD/
     │               ├── base.css       # Spacing/Shape/Elevation/Font Family/Font Weight (jamais générés)
     │               ├── color-light.css # Exceptions brand-indirection — mode clair
     │               ├── color-dark.css  # Exceptions brand-indirection — mode sombre
-    │               ├── brands/         # neutral.css, client-a.css, client-b.css
+    │               ├── brands/         # neutral.css, marmiton.css, coursesu.css
     │               └── partners/       # carrefour.css
     │
     └── marmiton-prototype/           # @mealz-product-team/marmiton-prototype
@@ -126,8 +126,8 @@ function MyComponent() {
 | Valeur | Description |
 |---|---|
 | `neutral` | Brand neutre (défaut) |
-| `client-a` | Brand client A |
-| `client-b` | Brand client B |
+| `marmiton` | Marmiton |
+| `coursesu` | CoursesU |
 
 ---
 

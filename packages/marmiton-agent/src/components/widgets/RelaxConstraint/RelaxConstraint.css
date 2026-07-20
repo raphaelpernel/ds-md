@@ -1,0 +1,9 @@
+.relax-constraint {
+  display: flex;
+  gap: var(--spacing-8);
+}
+
+.relax-constraint__kept {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-content-weak);
+}

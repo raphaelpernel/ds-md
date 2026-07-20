@@ -1,0 +1,109 @@
+/**
+ * DS.MD — BrandThemeSwitcher
+ *
+ * CSS volontairement hardcodé (pas de tokens --color-* du DS) : ce composant
+ * est un outil méta, il doit garder la même DA sombre "Next dev tools" quelle
+ * que soit la brand active — jamais teinté par data-brand/data-color-scheme.
+ */
+
+.brand-switcher {
+  position: fixed;
+  left: 68px;
+  bottom: 20px;
+  z-index: 2147483000;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.brand-switcher__fab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: none;
+  background-color: #000;
+  color: #fff;
+  cursor: pointer;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.145),
+    0px 1px 4px rgba(0, 0, 0, 0.5),
+    0px 4px 8px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.brand-switcher__fab:hover {
+  background-color: #1a1a1a;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.2),
+    0px 2px 8px rgba(0, 0, 0, 0.5),
+    0px 6px 12px rgba(0, 0, 0, 0.35);
+}
+
+.brand-switcher__fab:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.brand-switcher__menu {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 8px);
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  min-width: 168px;
+  border-radius: 12px;
+  background-color: #0a0a0a;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.145),
+    0px 8px 16px rgba(0, 0, 0, 0.4),
+    0px 16px 32px rgba(0, 0, 0, 0.3);
+  animation: brand-switcher-menu-in 0.12s ease-out;
+}
+
+@keyframes brand-switcher-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.brand-switcher__menu-item + .brand-switcher__menu-item {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.brand-switcher__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 13px;
+  line-height: 20px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.brand-switcher__item:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.brand-switcher__item[aria-checked='true'] {
+  color: #fff;
+  font-weight: 500;
+}
+
+.brand-switcher__check {
+  flex-shrink: 0;
+  color: #fff;
+}

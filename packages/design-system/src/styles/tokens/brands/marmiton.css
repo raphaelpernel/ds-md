@@ -1,5 +1,5 @@
 /**
- * DS.MD — Brand: Marmiton (Client A)
+ * DS.MD — Brand: Marmiton
  *
  * Palette extraite de marmiton.org :
  *   Corail primary : #FF6F61  (--corail)
@@ -10,10 +10,10 @@
  *   Light grey     : #F4F4F4  (--light-grey)
  *   Typographie    : "Open Sans"
  *
- * Usage : <html data-brand="client-a">
+ * Usage : <html data-brand="marmiton">
  */
 
-[data-brand="client-a"] {
+[data-brand="marmiton"] {
   /* ─────────────────────────────────────────
      BRAND SCALE — Palette corail Marmiton
   ───────────────────────────────────────── */
@@ -68,7 +68,7 @@
    les valeurs navy hardcodées de color-light.css
    importé après les brands.
 ───────────────────────────────────────── */
-[data-brand="client-a"][data-color-scheme="light"] {
+[data-brand="marmiton"][data-color-scheme="light"] {
   --color-surface-secondary:          #F4F4F4;
   --color-surface-inverse:            #3F3735;
   --color-surface-primary-hover:      rgba(63, 55, 53, 0.05);
@@ -94,7 +94,7 @@
 /* ─────────────────────────────────────────
    NEUTRAL OVERRIDES — Brun chaud (dark mode)
 ───────────────────────────────────────── */
-[data-brand="client-a"][data-color-scheme="dark"] {
+[data-brand="marmiton"][data-color-scheme="dark"] {
   --color-surface-page:               #3F3735;
   --color-surface-primary:            #3F3735;
   --color-surface-secondary:          #4D4240;

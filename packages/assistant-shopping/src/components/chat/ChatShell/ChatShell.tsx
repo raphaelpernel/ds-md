@@ -3,13 +3,15 @@
 import { useEffect, useRef } from 'react'
 import { useAssistant } from '@/context/AssistantContext'
 import { ChatShellHeader } from './ChatShellHeader'
+import { ChatShellActionsBar } from './ChatShellActionsBar'
 import { ChatMessage } from '../ChatMessage/ChatMessage'
 import { ChatComposer } from '../ChatComposer/ChatComposer'
 import './ChatShell.css'
 
 export interface ChatShellProps {
-  /** Hides the internal header — use when composing ChatShell inside a container that
-   *  renders its own header (e.g. Drawer's headerContent), to avoid a duplicated bar. */
+  /** Use when composing ChatShell inside a container that renders its own title/close
+   *  bar (e.g. Drawer with a `title`), to avoid a duplicated header. Only the actions
+   *  toolbar (store + cart) is shown instead, as a slim banner fixed under that header. */
   hideHeader?: boolean
 }
 
@@ -23,7 +25,13 @@ export function ChatShell({ hideHeader = false }: ChatShellProps) {
 
   return (
     <div className={hideHeader ? 'chat-shell chat-shell--embedded' : 'chat-shell'}>
-      {!hideHeader && <ChatShellHeader />}
+      {hideHeader ? (
+        <div className="chat-shell__toolbar">
+          <ChatShellActionsBar />
+        </div>
+      ) : (
+        <ChatShellHeader />
+      )}
 
       <div className="chat-shell__history" ref={scrollRef}>
         <div className="chat-shell__history-inner">

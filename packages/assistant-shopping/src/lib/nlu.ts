@@ -2,8 +2,9 @@ import { MOCK_RECIPES } from '../data/mock/recipes'
 import { MOCK_PRODUCTS } from '../data/mock/products'
 import type { Recipe } from '../data/types/recipe'
 import type { Product } from '../data/types/product'
+import { normalize, includesAny, tokenize, scoreByTags } from './matching'
 
-export type Intent = 'recipes' | 'shopping-list' | 'cart' | 'store' | 'offtopic' | 'unknown'
+export type Intent = 'recipes' | 'shopping-list' | 'product-search' | 'cart' | 'store' | 'offtopic' | 'unknown'
 
 export interface Interpretation {
   intent: Intent
@@ -25,37 +26,6 @@ const OCCASION_PRODUCT_SETS: { match: string[]; tags: string[] }[] = [
   { match: ['raclette'], tags: ['raclette'] },
   { match: ['petit-déjeuner', 'petit dejeuner', 'petit déjeuner', 'petit-dejeuner'], tags: ['petit-dejeuner'] },
 ]
-
-function normalize(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .trim()
-}
-
-function includesAny(haystack: string, needles: string[]): boolean {
-  return needles.some((n) => haystack.includes(normalize(n)))
-}
-
-function tokenize(text: string): string[] {
-  return normalize(text)
-    .split(/[^a-z0-9-]+/)
-    .filter((t) => t.length > 2)
-}
-
-function scoreByTags<T extends { tags: string[] }>(items: T[], tokens: string[]): T[] {
-  const scored = items
-    .map((item) => {
-      const itemTags = item.tags.map(normalize)
-      const score = tokens.reduce((acc, token) => acc + (itemTags.some((tag) => tag.includes(token) || token.includes(tag)) ? 1 : 0), 0)
-      return { item, score }
-    })
-    .filter((s) => s.score > 0)
-    .sort((a, b) => b.score - a.score)
-
-  return scored.map((s) => s.item)
-}
 
 function pickDefaultRecipes(): Recipe[] {
   return MOCK_RECIPES.filter((r) => r.mealType === 'plat').slice(0, 4)
@@ -121,6 +91,24 @@ function interpretShoppingListRequest(raw: string): Interpretation {
 }
 
 /**
+ * Demande de produit direct ("je veux des pâtes") : contrairement à une liste de
+ * courses, on ne présente pas une case-à-cocher géante mais quelques alternatives
+ * comparables (cf. widget `render.product.carousel` — `docs/docs/04-architecture-technique.md`).
+ */
+function interpretProductSearchRequest(raw: string): Interpretation | null {
+  const tokens = tokenize(raw)
+  const matched = scoreByTags(MOCK_PRODUCTS, tokens)
+
+  if (matched.length === 0) return null
+
+  return {
+    intent: 'product-search',
+    contextSentence: 'Voici plusieurs produits qui correspondent à votre demande.',
+    products: matched.slice(0, 3),
+  }
+}
+
+/**
  * Simule l'interprétation en langage naturel réalisée côté serveur MCP
  * (recipe.search / shopping_list.search) : reconnaissance par mots-clés,
  * pas de compréhension sémantique fine — fidèle au comportement MVP documenté.
@@ -148,6 +136,10 @@ export function interpretMessage(raw: string): Interpretation {
   if (includesAny(normalized, ['faim', 'idee', 'idée', 'inspire', 'inspirer'])) {
     return interpretRecipeRequest(raw)
   }
+
+  // Demande de produit direct, sans mot-clé "liste"/"recette" ("je veux des pâtes").
+  const productSearch = interpretProductSearchRequest(raw)
+  if (productSearch) return productSearch
 
   return {
     intent: 'unknown',

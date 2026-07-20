@@ -1,23 +1,21 @@
 'use client'
 
-import { useState } from 'react'
 import { Check, Trash, Users } from '@phosphor-icons/react'
 import { Button } from '@mealz-product-team/design-system'
 import { useAssistant } from '@/context/AssistantContext'
 import { MOCK_RECIPES } from '@/data/mock/recipes'
-import { RecipeDetail } from '../RecipeDetail/RecipeDetail'
+import { WidgetCard } from '../WidgetCard/WidgetCard'
 import './RecipeCarousel.css'
 
 const PRICE_LABEL = { 1: '€', 2: '€€', 3: '€€€' }
 
 export function RecipeCarousel({ recipeIds }: { recipeIds: string[] }) {
-  const { isRecipeInCart, requestAddRecipe, removeRecipeFromCart } = useAssistant()
-  const [detailRecipeId, setDetailRecipeId] = useState<string | null>(null)
+  const { isRecipeInCart, requestAddRecipe, removeRecipeFromCart, openRecipeDetail } = useAssistant()
 
   const recipes = recipeIds.map((id) => MOCK_RECIPES.find((r) => r.id === id)).filter(Boolean) as typeof MOCK_RECIPES
 
   return (
-    <>
+    <WidgetCard>
       <div className="recipe-carousel" role="list">
         {recipes.map((recipe) => {
           const added = isRecipeInCart(recipe.id)
@@ -27,14 +25,14 @@ export function RecipeCarousel({ recipeIds }: { recipeIds: string[] }) {
               <button
                 type="button"
                 className="recipe-card__media"
-                onClick={() => setDetailRecipeId(recipe.id)}
+                onClick={() => openRecipeDetail(recipe.id)}
                 aria-label={`Voir le détail de ${recipe.name}`}
               >
                 <span className="recipe-card__emoji" aria-hidden="true">{recipe.emoji}</span>
               </button>
 
               <div className="recipe-card__body">
-                <button type="button" className="recipe-card__title" onClick={() => setDetailRecipeId(recipe.id)}>
+                <button type="button" className="recipe-card__title" onClick={() => openRecipeDetail(recipe.id)}>
                   {recipe.name}
                 </button>
 
@@ -71,9 +69,7 @@ export function RecipeCarousel({ recipeIds }: { recipeIds: string[] }) {
           )
         })}
       </div>
-
-      <RecipeDetail recipeId={detailRecipeId} onClose={() => setDetailRecipeId(null)} />
-    </>
+    </WidgetCard>
   )
 }
 

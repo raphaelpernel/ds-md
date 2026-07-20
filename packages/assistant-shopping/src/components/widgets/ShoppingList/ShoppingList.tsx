@@ -7,6 +7,7 @@ import { useAssistant } from '@/context/AssistantContext'
 import { MOCK_PRODUCTS } from '@/data/mock/products'
 import type { Product } from '@/data/types/product'
 import { formatPrice } from '@/lib/format'
+import { WidgetCard } from '../WidgetCard/WidgetCard'
 import './ShoppingList.css'
 
 function findAlternative(product: Product, excludeIds: string[]): Product | null {
@@ -44,7 +45,7 @@ export function ShoppingList({ productIds, requestId }: { productIds: string[]; 
   }
 
   return (
-    <div className="shopping-list">
+    <WidgetCard className="shopping-list">
       <ul className="shopping-list__items">
         {rows.map(({ originalId, product }) => (
           <li key={originalId} className="shopping-list__item">
@@ -53,8 +54,8 @@ export function ShoppingList({ productIds, requestId }: { productIds: string[]; 
               <div className="shopping-list__item-info">
                 <p className="shopping-list__item-name">{product.name}</p>
                 <p className="shopping-list__item-brand">{product.brand}{product.unit ? ` · ${product.unit}` : ''}</p>
+                <p className="shopping-list__item-price">{formatPrice(product.price)}</p>
               </div>
-              <span className="shopping-list__item-price">{formatPrice(product.price)}</span>
             </div>
 
             <div className="shopping-list__item-actions">
@@ -64,14 +65,14 @@ export function ShoppingList({ productIds, requestId }: { productIds: string[]; 
                 </span>
               ) : (
                 <>
-                  <button
-                    type="button"
-                    className="shopping-list__replace"
-                    onClick={() => handleReplace(originalId, product)}
+                  <Button
+                    variant="tertiary"
+                    size="XS"
+                    lIcon={<ArrowsClockwise size={14} aria-hidden="true" />}
+                    label="Remplacer"
                     aria-label={`Remplacer ${product.name}`}
-                  >
-                    <ArrowsClockwise size={14} aria-hidden="true" /> Remplacer
-                  </button>
+                    onClick={() => handleReplace(originalId, product)}
+                  />
                   <Checkbox
                     checked={!!checked[originalId]}
                     onChange={(e) => setChecked((prev) => ({ ...prev, [originalId]: e.target.checked }))}
@@ -93,7 +94,7 @@ export function ShoppingList({ productIds, requestId }: { productIds: string[]; 
       >
         {added ? 'Produits déjà ajoutés au panier' : 'Ajouter la sélection au panier'}
       </Button>
-    </div>
+    </WidgetCard>
   )
 }
 

@@ -41,3 +41,8 @@ export { Heading } from './components/ui/typography/Heading/Heading'
 
 // ── Hooks ──
 export { useMediaQuery } from './hooks/useMediaQuery'
+
+// ── Devtools (outils méta — pas des composants DS "produit") ──
+export { BrandThemeSwitcher } from './devtools/BrandThemeSwitcher/BrandThemeSwitcher'
+export { getBrandThemeScript } from './devtools/brandThemeScript'
+export { BRANDS, type BrandOption } from './styles/tokens/brands/brands'

@@ -1,0 +1,14 @@
+.proactive-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-12);
+  padding: var(--spacing-20);
+  background: var(--color-surface-brand-light);
+  border-radius: var(--shape-card);
+  text-decoration: none;
+  color: var(--color-content-default);
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-heading);
+  font-size: var(--font-size-heading-sm);
+}

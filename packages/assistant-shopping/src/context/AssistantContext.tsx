@@ -2,24 +2,12 @@
 
 import { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from 'react'
 import { interpretMessage } from '@/lib/nlu'
+import { mergeRecipeIntoCart, resolveRecipeProducts } from '@/lib/recipeProducts'
 import { MOCK_PRODUCTS } from '@/data/mock/products'
+import { MOCK_RECIPES } from '@/data/mock/recipes'
 import type { ChatMessage, PendingAction } from '@/data/types/chat'
 import type { Store } from '@/data/types/store'
-
-interface CartRecipeItem {
-  recipeId: string
-  guests?: number
-}
-
-interface CartProductItem {
-  productId: string
-  quantity: number
-}
-
-interface CartState {
-  recipes: CartRecipeItem[]
-  products: CartProductItem[]
-}
+import type { CartState } from '@/data/types/cart'
 
 interface AssistantState {
   messages: ChatMessage[]
@@ -35,6 +23,7 @@ interface AssistantContextValue extends AssistantState {
   sendMessage: (text: string) => void
   openStoreLocator: () => void
   openCart: () => void
+  openRecipeDetail: (recipeId: string) => void
   confirmStore: (store: Store) => void
   cancelStoreLocator: () => void
   requestAddRecipe: (recipeId: string, guests?: number) => void
@@ -58,14 +47,14 @@ function welcomeMessage(): ChatMessage {
   return {
     id: makeId(),
     role: 'assistant',
-    text: 'Bonjour \u{1F44B} Je suis votre assistant shopping Carrefour Belgique. Je peux vous suggérer des recettes ou préparer une liste de courses \u2014 dites-moi ce dont vous avez besoin !',
+    text: 'Bonjour \u{1F44B} Je suis votre assistant shopping. Je peux vous suggérer des recettes ou préparer une liste de courses \u2014 dites-moi ce dont vous avez besoin !',
   }
 }
 
 export function AssistantProvider({ children }: { children: ReactNode }) {
   const [messages, setMessages] = useState<ChatMessage[]>([welcomeMessage()])
   const [store, setStore] = useState<Store | null>(null)
-  const [cart, setCart] = useState<CartState>({ recipes: [], products: [] })
+  const [cart, setCart] = useState<CartState>({ products: [] })
   // Ref plutôt que state : cette action différée n'est jamais lue par le rendu, et la
   // consommer dans un ref évite le double-appel (StrictMode) des updaters fonctionnels
   // de useState, qui dupliquerait les effets de bord (messages, ajout panier).
@@ -109,6 +98,12 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
               payload: { productIds: result.products.map((p) => p.id), requestId: makeId() },
             },
           })
+        } else if (result.intent === 'product-search' && result.products) {
+          pushMessage({
+            role: 'assistant',
+            text: result.contextSentence,
+            widget: { type: 'product-carousel', payload: { productIds: result.products.map((p) => p.id) } },
+          })
         }
 
         setLoading(false)
@@ -130,6 +125,19 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
     pushMessage({ role: 'assistant', text: 'Voici le contenu de votre panier.', widget: { type: 'cart' } })
   }, [pushMessage])
 
+  const openRecipeDetail = useCallback(
+    (recipeId: string) => {
+      const recipe = MOCK_RECIPES.find((r) => r.id === recipeId)
+      if (!recipe) return
+      pushMessage({
+        role: 'assistant',
+        text: `Voici le détail de « ${recipe.name} ».`,
+        widget: { type: 'recipe-detail', payload: { recipeId } },
+      })
+    },
+    [pushMessage],
+  )
+
   const confirmStore = useCallback(
     (selected: Store) => {
       setStore(selected)
@@ -141,15 +149,11 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
       pendingActionRef.current = null
 
       if (current?.type === 'add-recipe') {
-        const { recipeId, guests } = current
-        setCart((prev) =>
-          prev.recipes.some((r) => r.recipeId === recipeId)
-            ? prev
-            : { ...prev, recipes: [...prev.recipes, { recipeId, guests }] },
-        )
+        const recipe = MOCK_RECIPES.find((r) => r.id === current.recipeId)
+        if (recipe) setCart((prev) => mergeRecipeIntoCart(prev, recipe))
         pushMessage({
           role: 'assistant',
-          text: `Magasin « ${selected.name} » sélectionné. La recette a été ajoutée à votre panier.`,
+          text: `Magasin « ${selected.name} » sélectionné. Les ingrédients de la recette ont été ajoutés à votre panier.`,
         })
       } else if (current?.type === 'add-products') {
         const { productIds, requestId } = current
@@ -174,9 +178,22 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
     [pushMessage],
   )
 
-  const isRecipeInCart = useCallback((recipeId: string) => cart.recipes.some((r) => r.recipeId === recipeId), [cart.recipes])
+  const isRecipeInCart = useCallback(
+    (recipeId: string) => {
+      const recipe = MOCK_RECIPES.find((r) => r.id === recipeId)
+      if (!recipe) return false
+      const productIds = resolveRecipeProducts(recipe).map((p) => p.id)
+      return (
+        productIds.length > 0 &&
+        productIds.every((id) => cart.products.some((p) => p.productId === id && p.recipeTag === recipe.name))
+      )
+    },
+    [cart.products],
+  )
 
   const requestAddRecipe = useCallback(
+    // `guests` n'ajuste pas encore les quantités des produits ajoutés (limitation MVP
+    // documentée : pas de modification de convives via l'UI).
     (recipeId: string, guests?: number) => {
       if (!store) {
         pendingActionRef.current = { type: 'add-recipe', recipeId, guests }
@@ -187,15 +204,16 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
         })
         return
       }
-      setCart((prev) =>
-        prev.recipes.some((r) => r.recipeId === recipeId) ? prev : { ...prev, recipes: [...prev.recipes, { recipeId, guests }] },
-      )
+      const recipe = MOCK_RECIPES.find((r) => r.id === recipeId)
+      if (recipe) setCart((prev) => mergeRecipeIntoCart(prev, recipe))
     },
     [store, pushMessage],
   )
 
   const removeRecipeFromCart = useCallback((recipeId: string) => {
-    setCart((prev) => ({ ...prev, recipes: prev.recipes.filter((r) => r.recipeId !== recipeId) }))
+    const recipe = MOCK_RECIPES.find((r) => r.id === recipeId)
+    if (!recipe) return
+    setCart((prev) => ({ ...prev, products: prev.products.filter((p) => p.recipeTag !== recipe.name) }))
   }, [])
 
   const isListRequestAdded = useCallback((requestId: string) => addedListRequests.includes(requestId), [addedListRequests])
@@ -248,11 +266,7 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
 
   const getEffectiveProductId = useCallback((productId: string) => replacements[productId] ?? productId, [replacements])
 
-  const cartItemsCount = useMemo(() => {
-    const recipeGuestsWeight = cart.recipes.length
-    const productsWeight = cart.products.reduce((sum, p) => sum + p.quantity, 0)
-    return recipeGuestsWeight + productsWeight
-  }, [cart])
+  const cartItemsCount = useMemo(() => cart.products.reduce((sum, p) => sum + p.quantity, 0), [cart])
 
   const value = useMemo<AssistantContextValue>(
     () => ({
@@ -266,6 +280,7 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
       sendMessage,
       openStoreLocator,
       openCart,
+      openRecipeDetail,
       confirmStore,
       cancelStoreLocator,
       requestAddRecipe,
@@ -289,6 +304,7 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
       sendMessage,
       openStoreLocator,
       openCart,
+      openRecipeDetail,
       confirmStore,
       cancelStoreLocator,
       requestAddRecipe,

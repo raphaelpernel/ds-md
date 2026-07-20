@@ -1,0 +1,22 @@
+.memory-strip {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  padding: var(--spacing-8) var(--spacing-24);
+  overflow-x: auto;
+  background: var(--color-surface-primary);
+  border-bottom: 1px dashed var(--color-border-default);
+}
+
+.memory-strip__label {
+  font-size: var(--font-size-label-sm);
+  color: var(--color-content-weak);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .memory-strip {
+    padding: var(--spacing-8) var(--spacing-12);
+  }
+}

@@ -1,0 +1,170 @@
+import type { Recipe } from '../types/recipe'
+
+/**
+ * Trois recettes portant EXACTEMENT le même nom, avec des ingrédients et des
+ * étapes différents — le mécanisme d'ambiguïté observé en conditions réelles
+ * (pas le volume générique du brief, mais l'homonymie). Voir design doc
+ * rapha-dev-design-20260720-114501.md, section "Target User & Narrowest Wedge".
+ */
+export const MOCK_RECIPES: Recipe[] = [
+  {
+    id: 'carbonara-romaine',
+    name: 'Pâte carbonara',
+    emoji: '🍝',
+    servings: 2,
+    duration: 25,
+    difficulty: 'facile',
+    tags: ['rapide', 'pates', 'italien', 'sans-legumes'],
+    rating: 4.8,
+    reviewCount: 247,
+    estimatedPricePerServing: 4.79,
+    ingredients: [
+      { id: 'ing-1', name: 'spaghetti', quantity: 200, unit: 'g', emoji: '🍝', productId: 'prod-pates' },
+      { id: 'ing-2', name: 'lardons fumés', quantity: 100, unit: 'g', emoji: '🥓', productId: 'prod-lardons' },
+      { id: 'ing-3', name: 'parmesan râpé', quantity: 50, unit: 'g', emoji: '🧀', productId: 'prod-parmesan' },
+      { id: 'ing-4', name: 'œufs entiers', quantity: 2, unit: '', emoji: '🥚', productId: 'prod-oeufs' },
+      { id: 'ing-5', name: 'poivre noir', quantity: 1, unit: 'pincée', emoji: '🧂', productId: null },
+      { id: 'ing-6', name: 'sel', quantity: 1, unit: 'pincée', emoji: '🧂', productId: null },
+    ],
+    steps: [
+      'Portez une grande casserole d’eau salée à ébullition. Plongez les spaghetti et cuisez-les al dente (8 à 9 min).',
+      'Pendant ce temps, faites revenir les lardons à feu vif dans un filet d’huile d’olive jusqu’à ce qu’ils soient dorés. Réservez.',
+      'Dans un bol, battez les œufs entiers avec le parmesan râpé et une bonne dose de poivre noir.',
+      'Égouttez les pâtes en réservant un verre d’eau de cuisson. Hors du feu, mélangez aussitôt les pâtes, les lardons et le mélange œufs-parmesan.',
+      'Détendez avec un peu d’eau de cuisson jusqu’à obtenir une sauce crémeuse. Servez immédiatement.',
+    ],
+    communitySignals: [
+      { text: 'Hors du feu pour mélanger les œufs, sinon vous obtenez des œufs brouillés.', agreeCount: 89 },
+      { text: 'Gardez un verre d’eau de cuisson : c’est ce qui rend la sauce crémeuse sans crème.', agreeCount: 23 },
+      { text: 'Version enfants validée : moins de poivre, un peu plus de parmesan.', agreeCount: 6 },
+    ],
+  },
+  {
+    id: 'carbonara-a-la-creme',
+    name: 'Pâte carbonara',
+    emoji: '🍝',
+    servings: 4,
+    duration: 20,
+    difficulty: 'facile',
+    tags: ['rapide', 'pates', 'creme', 'sans-legumes'],
+    rating: 4.3,
+    reviewCount: 512,
+    estimatedPricePerServing: 3.9,
+    ingredients: [
+      { id: 'ing-1', name: 'tagliatelles', quantity: 400, unit: 'g', emoji: '🍝', productId: 'prod-tagliatelles' },
+      { id: 'ing-2', name: 'lardons fumés', quantity: 200, unit: 'g', emoji: '🥓', productId: 'prod-lardons' },
+      { id: 'ing-3', name: 'crème fraîche épaisse', quantity: 20, unit: 'cl', emoji: '🥛', productId: 'prod-creme' },
+      { id: 'ing-4', name: 'parmesan râpé', quantity: 40, unit: 'g', emoji: '🧀', productId: 'prod-parmesan' },
+      { id: 'ing-5', name: 'poivre noir', quantity: 1, unit: 'pincée', emoji: '🧂', productId: null },
+    ],
+    steps: [
+      'Faites cuire les tagliatelles selon les instructions du paquet.',
+      'Faites revenir les lardons dans une poêle sans matière grasse ajoutée jusqu’à ce qu’ils soient bien dorés.',
+      'Ajoutez la crème fraîche et laissez chauffer doucement, sans bouillir.',
+      'Égouttez les pâtes, mélangez-les à la sauce, ajoutez le parmesan et le poivre. Servez chaud.',
+    ],
+    communitySignals: [
+      { text: 'Version plus simple pour les enfants qui n’aiment pas le goût prononcé des œufs.', agreeCount: 41 },
+      { text: 'Ne pas laisser bouillir la crème, elle graine sinon.', agreeCount: 15 },
+    ],
+  },
+  {
+    id: 'carbonara-vegetarienne',
+    name: 'Pâte carbonara',
+    emoji: '🍝',
+    servings: 2,
+    duration: 20,
+    difficulty: 'facile',
+    tags: ['rapide', 'pates', 'vegetarien', 'sans-viande'],
+    rating: 4.1,
+    reviewCount: 34,
+    estimatedPricePerServing: 3.2,
+    ingredients: [
+      { id: 'ing-1', name: 'spaghetti', quantity: 200, unit: 'g', emoji: '🍝', productId: 'prod-pates' },
+      { id: 'ing-2', name: 'champignons de Paris', quantity: 150, unit: 'g', emoji: '🍄', productId: 'prod-champignons' },
+      { id: 'ing-3', name: 'parmesan râpé', quantity: 50, unit: 'g', emoji: '🧀', productId: 'prod-parmesan' },
+      { id: 'ing-4', name: 'œufs entiers', quantity: 2, unit: '', emoji: '🥚', productId: 'prod-oeufs' },
+    ],
+    steps: [
+      'Cuisez les spaghetti al dente.',
+      'Faites revenir les champignons émincés à la poêle jusqu’à évaporation de leur eau.',
+      'Battez les œufs avec le parmesan.',
+      'Mélangez hors du feu pâtes, champignons et appareil œufs-parmesan.',
+    ],
+    communitySignals: [
+      { text: 'Les champignons remplacent bien les lardons en texture, moins en goût fumé.', agreeCount: 12 },
+    ],
+  },
+  {
+    id: 'poulet-express-enfants',
+    name: 'Poulet sauté express',
+    emoji: '🍗',
+    servings: 4,
+    duration: 20,
+    difficulty: 'facile',
+    tags: ['rapide', 'poulet', 'enfants', 'sans-sauce'],
+    rating: 4.6,
+    reviewCount: 178,
+    estimatedPricePerServing: 3.4,
+    ingredients: [
+      { id: 'ing-1', name: 'escalopes de poulet', quantity: 3, unit: '', emoji: '🍗', productId: 'prod-poulet' },
+      { id: 'ing-2', name: 'riz basmati', quantity: 300, unit: 'g', emoji: '🍚', productId: 'prod-riz' },
+      { id: 'ing-3', name: 'carottes', quantity: 3, unit: '', emoji: '🥕', productId: 'prod-carottes' },
+    ],
+    steps: [
+      'Coupez le poulet en dés, faites-le revenir 8 minutes dans une poêle avec un filet d’huile.',
+      'Cuisez le riz selon les instructions du paquet.',
+      'Faites revenir les carottes en rondelles à la poêle, servez à part pour que chacun se serve.',
+    ],
+    communitySignals: [
+      { text: 'Servir les carottes à part, pas mélangées : les enfants difficiles trient sinon tout leur assiette.', agreeCount: 34 },
+    ],
+  },
+  {
+    id: 'buddha-bowl-vegetarien',
+    name: 'Buddha bowl végétarien sans gluten',
+    emoji: '🥗',
+    servings: 2,
+    duration: 25,
+    difficulty: 'facile',
+    tags: ['vegetarien', 'sans-gluten', 'sans-lactose', 'legumes'],
+    rating: 4.4,
+    reviewCount: 61,
+    estimatedPricePerServing: 4.1,
+    ingredients: [
+      { id: 'ing-1', name: 'quinoa', quantity: 150, unit: 'g', emoji: '🌾', productId: 'prod-quinoa' },
+      { id: 'ing-2', name: 'pois chiches', quantity: 200, unit: 'g', emoji: '🫘', productId: 'prod-poischiches' },
+      { id: 'ing-3', name: 'avocat', quantity: 1, unit: '', emoji: '🥑', productId: 'prod-avocat' },
+    ],
+    steps: [
+      'Cuisez le quinoa selon les instructions du paquet.',
+      'Égouttez et rincez les pois chiches.',
+      'Dressez le bol avec le quinoa, les pois chiches et l’avocat tranché.',
+    ],
+    communitySignals: [],
+  },
+  {
+    id: 'pancakes-moelleux',
+    name: 'Pancakes moelleux',
+    emoji: '🥞',
+    servings: 4,
+    duration: 15,
+    difficulty: 'facile',
+    tags: ['petit-dejeuner', 'sucre', 'enfants'],
+    rating: 4.6,
+    reviewCount: 132,
+    estimatedPricePerServing: 1.2,
+    ingredients: [
+      { id: 'ing-1', name: 'farine', quantity: 250, unit: 'g', emoji: '🌾', productId: 'prod-farine' },
+      { id: 'ing-2', name: 'lait', quantity: 30, unit: 'cl', emoji: '🥛', productId: 'prod-lait' },
+      { id: 'ing-3', name: 'œufs', quantity: 2, unit: '', emoji: '🥚', productId: 'prod-oeufs' },
+    ],
+    steps: [
+      'Mélangez la farine, le lait et les œufs jusqu’à obtenir une pâte lisse.',
+      'Faites cuire des petites louches de pâte dans une poêle chaude, 2 minutes par face.',
+    ],
+    communitySignals: [
+      { text: 'Laisser reposer la pâte 10 minutes rend les pancakes plus moelleux.', agreeCount: 19 },
+    ],
+  },
+]

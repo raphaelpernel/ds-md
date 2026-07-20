@@ -1,12 +1,12 @@
 'use client'
 
-import { ShoppingCart, MapPin, ChatCircleDots } from '@phosphor-icons/react'
-import { Button, Badge } from '@mealz-product-team/design-system'
-import { useAssistant } from '@/context/AssistantContext'
+import { ChatCircleDots } from '@phosphor-icons/react'
+import { ChatShellActionsBar } from './ChatShellActionsBar'
 
+/** Full standalone header — brand + title + actions. Used on the full-page chat route.
+ *  When ChatShell is embedded in the assistant Drawer, the Drawer renders its own
+ *  title/close bar instead, and only `ChatShellActionsBar` is shown below it. */
 export function ChatShellHeader() {
-  const { store, cartItemsCount, openStoreLocator, openCart } = useAssistant()
-
   return (
     <div className="chat-shell__header">
       <div className="chat-shell__brand">
@@ -19,27 +19,7 @@ export function ChatShellHeader() {
       </div>
 
       <div className="chat-shell__actions">
-        <Button
-          variant={store ? 'secondary' : 'primary'}
-          size="S"
-          lIcon={<MapPin size={16} weight="bold" />}
-          label={store ? store.name : 'Choisir un magasin'}
-          onClick={openStoreLocator}
-        />
-        <div className="chat-shell__cart-button">
-          <Button
-            variant="tertiary"
-            size="S"
-            iconOnly={<ShoppingCart size={18} weight="bold" />}
-            label="Voir mon panier"
-            onClick={openCart}
-          />
-          {cartItemsCount > 0 && (
-            <span className="chat-shell__cart-badge">
-              <Badge variant="brand" label={String(cartItemsCount)} />
-            </span>
-          )}
-        </div>
+        <ChatShellActionsBar />
       </div>
     </div>
   )

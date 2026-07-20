@@ -6,6 +6,7 @@ import { InputField, Button } from '@mealz-product-team/design-system'
 import { useAssistant } from '@/context/AssistantContext'
 import { MOCK_STORES } from '@/data/mock/stores'
 import type { Store } from '@/data/types/store'
+import { WidgetCard } from '../WidgetCard/WidgetCard'
 import './StoreLocatorWidget.css'
 
 export function StoreLocatorWidget() {
@@ -27,15 +28,15 @@ export function StoreLocatorWidget() {
 
   if (confirmed && selected) {
     return (
-      <div className="store-locator-widget store-locator-widget--confirmed">
+      <WidgetCard className="store-locator-widget--confirmed">
         <CheckCircle size={18} weight="fill" aria-hidden="true" />
         <span>{selected.name}</span>
-      </div>
+      </WidgetCard>
     )
   }
 
   return (
-    <div className="store-locator-widget">
+    <WidgetCard className="store-locator-widget">
       <InputField
         placeholder="Ville, code postal…"
         aria-label="Rechercher un magasin"
@@ -73,7 +74,7 @@ export function StoreLocatorWidget() {
         <Button variant="secondary" size="M" onClick={cancelStoreLocator}>Annuler</Button>
         <Button variant="primary" size="M" onClick={handleConfirm} disabled={!selected}>Valider ce magasin</Button>
       </div>
-    </div>
+    </WidgetCard>
   )
 }
 

@@ -1,8 +1,15 @@
 # TODOS
 
-## Appliquer les tokens de marque CoursesU au chrome de l'assistant
+## ~~Appliquer les tokens de marque CoursesU au chrome de l'assistant~~ — Résolu (2026-07-20)
 
-**What:** Créer `packages/design-system/src/styles/tokens/brands/coursesu.css` (sur le modèle de `neutral.css`, `client-a.css`, `client-b.css` déjà existants) pour appliquer les couleurs de marque CoursesU au chrome du FAB/Drawer (header, accent, bouton) — pas aux cartes produit ni au contenu de l'assistant.
+**Résolu le 2026-07-20** : `packages/design-system/src/styles/tokens/brands/coursesu.css` a été peuplé avec une palette CoursesU réelle (teal `#007D8F`/`#005562`, rouge promo `#E22019`, jaune `#FFC700`, turquoise `#6BBDAE`, typographie Mulish/Open Sans), extraite par analyse live de coursesu.com (même méthode que Marmiton sur `marmiton.css` : scraping du site public, pas de charte officielle sponsor). Le commentaire TODO dans `brands.ts` a été retiré. Les fichiers `client-a.css`/`client-b.css` ont ensuite été renommés en `marmiton.css`/`coursesu.css` (valeur `data-brand` alignée) pour rester lisibles en cas de partage du repo.
+
+**Limite connue** : ces valeurs viennent du site public, pas d'une charte graphique officielle transmise par un sponsor CoursesU. Si le sponsor fournit une vraie charte (logo, nuancier officiel), remplacer les valeurs dans `coursesu.css` en conséquence — la structure du fichier n'aura pas à changer.
+
+<details>
+<summary>Contexte original</summary>
+
+**What:** Créer `packages/design-system/src/styles/tokens/brands/coursesu.css` (sur le modèle de `neutral.css` déjà existant) pour appliquer les couleurs de marque CoursesU au chrome du FAB/Drawer (header, accent, bouton) — pas aux cartes produit ni au contenu de l'assistant.
 
 **Why:** L'architecture `data-brand` existe déjà dans le design-system (mécanisme multi-tenant déjà en place). Répondre à l'inquiétude de fidélité visuelle/objection marque-merchandising (soulevée en office-hours et confirmée par la voix extérieure en /plan-eng-review) coûte donc un fichier de tokens, pas une refonte de composants.
 
@@ -13,6 +20,8 @@
 **Context:** Découvert en /plan-design-review (2026-07-15) lors de la Pass 5 (Design System Alignment) du POC drawer CoursesU. Voir `packages/design-system/src/styles/tokens/brands/neutral.css` pour le modèle de fichier à suivre.
 
 **Depends on:** Accord du sponsor CoursesU + obtention de leur charte graphique (couleurs, éventuellement logo).
+
+</details>
 
 ---
 
@@ -61,3 +70,35 @@
 **Context:** Voir Section 1 (Architecture Review) de /plan-eng-review du 2026-07-15 pour le détail de la recherche (sources : makerkit.dev, web.dev/articles/embed-best-practices, dev.to micro-frontends guide).
 
 **Depends on:** Décision positive du comité CoursesU suite à la démo POC.
+
+---
+
+## Vrai algorithme de substitution produit (marmiton-agent)
+
+**What:** Remplacer le stub visuel `SUBSTITUTE_ITEM` (un simple flag « remplacé » sur la ligne panier, décidé en `/plan-eng-review` du 2026-07-20) par une vraie logique de matching produit équivalent (même famille, prix comparable, disponibilité) dans `packages/marmiton-agent`.
+
+**Why:** Le POC n'a besoin que de démontrer l'écran panier avec substitution, pas de résoudre le matching réel — même report déjà fait sur le TODO CoursesU ci-dessus (« Adapter de données réelles CoursesU »). Construire l'algorithme maintenant reviendrait à deviner un contrat produit/distributeur inconnu.
+
+**Pros:** Coûte un flag et une valeur `originalProductId` sur `CartItem` pour le POC ; l'algorithme réel ne bloque rien avant qu'un vrai accès catalogue existe.
+
+**Cons:** Reste spéculatif tant que l'accès aux données produit réelles (Marmiton/Carrefour ou autre enseigne) n'est pas confirmé.
+
+**Context:** Décision Code Quality #1 de `/plan-eng-review` du 2026-07-20 sur `rapha-dev-design-20260720-114501.md` — `CartContext` copié de `marmiton-prototype`, étendu d'une action `SUBSTITUTE_ITEM` minimale.
+
+**Depends on:** Réponse du PO Marmiton sur l'accès technique (catalogue produit réel), et décision distributeur (brief §11 Q4 — Marmiton doit rester agnostique, pas mono-Carrefour).
+
+---
+
+## Adapter marmiton-agent aux vraies données Marmiton/Carrefour
+
+**What:** Remplacer le dataset mock dédié de `packages/marmiton-agent` (recettes homonymes, signaux communautaires pré-extraits, `steps`) par une vraie source de données Marmiton (catalogue recettes, avis, contenu communautaire) si le PO obtient un go en interne.
+
+**Why:** Miroir exact du TODO CoursesU « Adapter de données réelles CoursesU » ci-dessus — le contrat API Marmiton n'est pas connu, deviner maintenant serait prématuré et le dataset mock actuel (créé pour démontrer désambiguïsation homonymes + détection d'incohérence + extraction de signal) suffit pour l'objet de conviction du POC.
+
+**Pros:** Capture déjà la recherche/le scope produit fait (quelles données comptent : `steps`, homonymes, signaux communautaires) — évite de le redécouvrir de zéro si le go arrive.
+
+**Cons:** Reste hypothétique tant que le PO Marmiton n'a pas statué ; peut glisser si personne ne le reprend après la démo.
+
+**Context:** Design doc source : `~/.gstack/projects/raphaelpernel-ds-md/rapha-dev-design-20260720-114501.md` (mode Startup, adapté intrapreneuriat).
+
+**Depends on:** Réponse du PO Marmiton sur l'accès technique et le go budgétaire, dans la fenêtre Q3 2026 (pas de deadline contractuelle).

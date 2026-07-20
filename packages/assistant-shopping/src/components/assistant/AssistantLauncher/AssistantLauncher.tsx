@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { Sparkle } from '@phosphor-icons/react'
 import { FAB, Drawer } from '@mealz-product-team/design-system'
 import { ChatShell } from '@/components/chat/ChatShell/ChatShell'
-import { ChatShellHeader } from '@/components/chat/ChatShell/ChatShellHeader'
 import './AssistantLauncher.css'
 
 export function AssistantLauncher() {
@@ -26,7 +25,7 @@ export function AssistantLauncher() {
         onClose={() => setOpen(false)}
         placement="right"
         mobilePlacement="bottom"
-        headerContent={<ChatShellHeader />}
+        title="Assistant Shopping"
       >
         <ChatShell hideHeader />
       </Drawer>

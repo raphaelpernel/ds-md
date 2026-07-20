@@ -28,6 +28,13 @@
       "runtimeArgs": ["--filter", "@mealz-product-team/assistant-shopping", "dev"],
       "port": 3002,
       "autoPort": true
+    },
+    {
+      "name": "marmiton-agent-dev",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@mealz-product-team/marmiton-agent", "dev"],
+      "port": 3003,
+      "autoPort": true
     }
   ]
 }

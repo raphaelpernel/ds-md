@@ -22,8 +22,8 @@
 
 /* Brand primitives — load all, only the matching [data-brand] activates */
 @import './tokens/brands/neutral.css';
-@import './tokens/brands/client-a.css';
-@import './tokens/brands/client-b.css';
+@import './tokens/brands/marmiton.css';
+@import './tokens/brands/coursesu.css';
 
 /* Color mode exceptions — brand-indirection vars that can't be generated
    (see comments in each file). Everything else for light/dark comes from

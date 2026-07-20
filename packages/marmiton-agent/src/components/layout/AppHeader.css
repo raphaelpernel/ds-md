@@ -1,0 +1,74 @@
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-16);
+  padding: var(--spacing-12) var(--spacing-24);
+  background: var(--color-surface-primary);
+  border-bottom: 1px solid var(--color-border-default);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.app-header__brand {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-heading);
+  font-size: var(--font-size-heading-sm);
+  color: var(--color-surface-brand);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.app-header__search {
+  flex: 1;
+  max-width: 480px;
+}
+
+/* Le wrapper d'icône du design system a pointer-events:none (il n'est pas
+   censé être cliquable) — on le réactive explicitement sur ce bouton précis. */
+.app-header__search-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: -14px;
+  pointer-events: auto;
+  border: none;
+  background: none;
+  color: var(--color-interactive-content);
+  cursor: pointer;
+}
+
+.app-header__search-submit:disabled {
+  color: var(--color-content-weak);
+  cursor: default;
+}
+
+.app-header__cart {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--color-content-default);
+  flex-shrink: 0;
+}
+
+.app-header__cart-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+}
+
+@media (max-width: 480px) {
+  .app-header {
+    gap: var(--spacing-8);
+    padding: var(--spacing-8) var(--spacing-12);
+  }
+
+  .app-header__brand {
+    font-size: var(--font-size-body-md);
+  }
+}

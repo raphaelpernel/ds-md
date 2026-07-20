@@ -35,7 +35,7 @@ export const Default: Story = {
 
 export const InMarmitonContext: Story = {
   render: () => (
-    <div data-brand="client-a" data-color-scheme="light">
+    <div data-brand="marmiton" data-color-scheme="light">
       <Controlled value="2026-06-21" />
     </div>
   ),

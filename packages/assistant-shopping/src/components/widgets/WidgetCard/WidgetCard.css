@@ -1,0 +1,10 @@
+.widget-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  background: var(--color-surface-primary);
+  border-radius: var(--shape-card);
+  box-shadow: var(--elevation-100);
+  padding: var(--spacing-16);
+  width: 100%;
+}

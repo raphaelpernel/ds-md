@@ -1,0 +1,102 @@
+/**
+ * DS.MD — Brand: CoursesU
+ *
+ * Palette extraite de coursesu.com (site public — aucune charte officielle
+ * transmise par un sponsor à ce stade, voir TODOS.md) :
+ *   Primary teal    : #007D8F  (--brand-500) — su-btn-primary-default
+ *   Dark teal       : #005562  (--brand-700) — état actif menu "Courses en ligne"
+ *   Accent rouge    : #E22019  — accent-button-inverted-square, bandeaux
+ *                                promo produit ("ICI PRIX MINI", "AVANTAGE CARTE U")
+ *   Accent jaune    : #FFC700  (su-bg-color-forsythia) — mise en avant
+ *   Turquoise       : #6BBDAE  (su-bg-color-t-bird-turquoise) — badges valeur/distance
+ *   Barre utilitaire: #000000  (su-bg-color-black)
+ *   Texte par défaut: #575756 · Surface secondaire : #F5F4F2
+ *   Typographie     : "Mulish" (titres/nav/corps), "Open Sans" (boutons/CTA)
+ *
+ * Usage : <html data-brand="coursesu">
+ */
+
+[data-brand="coursesu"] {
+  /* ─────────────────────────────────────────
+     BRAND SCALE — Palette teal CoursesU
+  ───────────────────────────────────────── */
+  --brand-50:  #E6F2F4;
+  --brand-100: #CCE5EA;
+  --brand-300: #66AEBB;
+  --brand-500: #007D8F;
+  --brand-700: #005562;
+  --brand-950: #00272E;
+
+  /* ─────────────────────────────────────────
+     TYPOGRAPHY — Mulish (UI) + Open Sans (CTA/prix)
+  ───────────────────────────────────────── */
+  --font-family-heading: 'Mulish', sans-serif;
+  --font-family-body:    'Mulish', sans-serif;
+  --font-family-label:   'Mulish', sans-serif;
+  --font-family-price:   'Open Sans', sans-serif;
+
+  /* ─────────────────────────────────────────
+     CATEGORY — Merchandising CoursesU
+  ───────────────────────────────────────── */
+
+  /* Promo — rouge de marque CoursesU (brand-dépendant, cf. bandeaux produit
+     "ICI PRIX MINI" / "AVANTAGE CARTE U", même rouge que accent-button-inverted-square) */
+  --color-category-promo-bg:       #E22019;
+  --color-category-promo-bg-light: #FCE1DF;
+  --color-category-promo-content:  #E22019;
+
+  /* New — jaune "forsythia" CoursesU (#FFC700) */
+  --color-category-new-bg:         #FFC700;
+  --color-category-new-bg-light:   #FFF7D6;
+  --color-category-new-content:    #8A6600;
+
+  /* Healthy — vert générique (aucun vert "Bio" dédié détecté sur le site public) */
+  --color-category-healthy-bg:       #12B76A;
+  --color-category-healthy-bg-light: #D1FAE5;
+  --color-category-healthy-content:  #12B76A;
+
+  /* Express — teal brand (drive / livraison rapide) */
+  --color-category-express-bg:       #007D8F;
+  --color-category-express-bg-light: #E6F2F4;
+  --color-category-express-content:  #007D8F;
+
+  /* Low Cost — turquoise CoursesU (badges valeur, cohérent avec "Gamme Prix Mini") */
+  --color-category-low-cost-bg:       #6BBDAE;
+  --color-category-low-cost-bg-light: #E7F5F2;
+  --color-category-low-cost-content:  #3D8A7A;
+}
+
+/* ─────────────────────────────────────────
+   NEUTRAL OVERRIDES — Gris chaud CoursesU (light mode)
+───────────────────────────────────────── */
+[data-brand="coursesu"][data-color-scheme="light"] {
+  --color-surface-secondary:          #F5F4F2;
+  --color-surface-inverse:            #005562;
+  --color-surface-secondary-hover:    #E9E7E4;
+  --color-surface-overlay:            rgba(0, 0, 0, 0.60);
+
+  --color-content-default:            #000;
+  --color-content-weak:               rgba(0, 0, 0, 0.60);
+
+  --color-border-default:             rgba(0, 0, 0, 0.12);
+  --color-border-weak:                rgba(0, 0, 0, 0.06);
+
+  --color-interactive-alpha-bg:       rgba(0, 0, 0, 0.60);
+  --color-interactive-alpha-bg-hover: rgba(0, 0, 0, 0.30);
+}
+
+/* ─────────────────────────────────────────
+   NEUTRAL OVERRIDES — Dark mode (extrapolé, coursesu.com n'a pas de dark mode)
+───────────────────────────────────────── */
+[data-brand="coursesu"][data-color-scheme="dark"] {
+  --color-surface-page:               #101314;
+  --color-surface-primary:            #101314;
+  --color-surface-secondary:          #1B1F20;
+  --color-surface-secondary-hover:    #262B2C;
+  --color-surface-inverse:            #FFFFFF;
+
+  --color-content-inversed:           #101314;
+
+  --color-interactive-alpha-bg:       rgba(0, 0, 0, 0.60);
+  --color-interactive-alpha-bg-hover: rgba(0, 0, 0, 0.30);
+}

@@ -1,7 +1,12 @@
 import type { Preview, Decorator } from '@storybook/react'
 import { withThemeByDataAttribute } from '@storybook/addon-themes'
 import { useEffect } from 'storybook/preview-api'
+import { BRANDS } from '../src/styles/tokens/brands/brands'
 import '../src/styles/index.css'
+
+// withThemeByDataAttribute needs a { [displayLabel]: value } map — derived
+// from the single BRANDS source of truth shared with BrandThemeSwitcher.
+const brandThemes = Object.fromEntries(BRANDS.map(({ value, label }) => [label, value]))
 
 /**
  * Custom decorator for data-color-scheme.
@@ -41,11 +46,7 @@ const preview: Preview = {
     withColorScheme,
     // withThemeByDataAttribute owns the addon-themes GLOBAL_KEY exclusively for brand.
     withThemeByDataAttribute({
-      themes: {
-        Neutral: 'neutral',
-        'Client A': 'client-a',
-        'Client B': 'client-b',
-      },
+      themes: brandThemes,
       defaultTheme: 'Neutral',
       attributeName: 'data-brand',
     }),

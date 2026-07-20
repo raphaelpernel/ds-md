@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
 // Types
 // ─────────────────────────────────────────
 
-export type Brand = 'neutral' | 'client-a' | 'client-b'
+export type Brand = 'neutral' | 'marmiton' | 'coursesu'
 export type ColorScheme = 'light' | 'dark'
 
 export interface Theme {

@@ -12,15 +12,10 @@
 .drawer--open   { transform: none; }
 
 @media (max-width: 767px) {
-  .drawer--right  { border-radius: var(--shape-sheet) 0 0 var(--shape-sheet); }
-  .drawer--left   { border-radius: 0 var(--shape-sheet) var(--shape-sheet) 0; }
-  .drawer--bottom { border-radius: var(--shape-sheet) var(--shape-sheet) 0 0; }
 
   /* Mobile placement overrides — priment sur le placement desktop */
   .drawer--mobile-bottom {
-    top: auto; left: 0; right: 0; bottom: 0;
-    width: auto; max-width: none; max-height: 85vh;
-    border-radius: var(--shape-sheet) var(--shape-sheet) 0 0;
+    width: 100vw;
     transform: translateY(100%);
   }
   .drawer--mobile-bottom.drawer--open { transform: none; }

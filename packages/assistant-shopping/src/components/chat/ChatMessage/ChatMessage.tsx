@@ -1,7 +1,9 @@
 import { ChatCircleDots } from '@phosphor-icons/react'
 import type { ChatMessage as ChatMessageModel } from '@/data/types/chat'
 import { RecipeCarousel } from '@/components/widgets/RecipeCarousel/RecipeCarousel'
+import { RecipeDetail } from '@/components/widgets/RecipeDetail/RecipeDetail'
 import { ShoppingList } from '@/components/widgets/ShoppingList/ShoppingList'
+import { ProductCarousel } from '@/components/widgets/ProductCarousel/ProductCarousel'
 import { StoreLocatorWidget } from '@/components/widgets/StoreLocatorWidget/StoreLocatorWidget'
 import { CartWidget } from '@/components/widgets/CartWidget/CartWidget'
 import './ChatMessage.css'
@@ -12,8 +14,12 @@ function ChatWidgetRenderer({ message }: { message: ChatMessageModel }) {
   switch (message.widget.type) {
     case 'recipe-carousel':
       return <RecipeCarousel recipeIds={message.widget.payload.recipeIds} />
+    case 'recipe-detail':
+      return <RecipeDetail recipeId={message.widget.payload.recipeId} />
     case 'shopping-list':
       return <ShoppingList productIds={message.widget.payload.productIds} requestId={message.widget.payload.requestId} />
+    case 'product-carousel':
+      return <ProductCarousel productIds={message.widget.payload.productIds} />
     case 'store-locator':
       return <StoreLocatorWidget />
     case 'cart':

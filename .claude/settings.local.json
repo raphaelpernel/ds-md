@@ -67,7 +67,25 @@
       "PowerShell(gh pr list --head dev --json url,number,title)",
       "PowerShell(winget install --id GitHub.cli -e --source winget --accept-package-agreements --accept-source-agreements)",
       "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); gh --version; gh auth status)",
-      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); if \\($env:GH_TOKEN\\) { \"GH_TOKEN set\" } else { \"no GH_TOKEN\" }; if \\($env:GITHUB_TOKEN\\) { \"GITHUB_TOKEN set\" } else { \"no GITHUB_TOKEN\" }; git config --get credential.helper)"
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); if \\($env:GH_TOKEN\\) { \"GH_TOKEN set\" } else { \"no GH_TOKEN\" }; if \\($env:GITHUB_TOKEN\\) { \"GITHUB_TOKEN set\" } else { \"no GITHUB_TOKEN\" }; git config --get credential.helper)",
+      "Bash(find / -iname \"*office-hours*\" 2>/dev/null | grep -v node_modules | head -50)",
+      "Read(//c/Users/rapha/.claude/plugins/**)",
+      "Read(//c/Users/rapha/.claude/**)",
+      "Skill(office-hours)",
+      "Skill(office-hours:*)",
+      "WebFetch(domain:miamtech.github.io)",
+      "Bash(cat > *)",
+      "Bash(rm -rf src/components/chat)",
+      "Bash(rm -rf src/components/widgets/CartWidget)",
+      "Bash(rm -f src/context/AssistantContext.tsx)",
+      "Bash(rm -f src/data/types/chat.ts)",
+      "Bash(pnpm test *)",
+      "Bash(pnpm build *)",
+      "Bash(git remote *)",
+      "Bash(gh auth *)",
+      "Bash(git symbolic-ref *)",
+      "Bash('C:\\\\Users\\\\rapha/.claude/skills/gstack/design/dist/design' generate *)",
+      "Bash(powershell.exe -NoProfile -Command 'Get-CimInstance Win32_Process -Filter \"Name='\\\\''node.exe'\\\\''\" | Where-Object { $_.CommandLine -like '\\\\''*marmiton-agent*'\\\\'' } | Select-Object ProcessId,CommandLine')"
     ]
   }
 }

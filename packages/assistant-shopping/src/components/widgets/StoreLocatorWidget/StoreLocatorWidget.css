@@ -1,15 +1,3 @@
-.store-locator-widget {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-12);
-  background: var(--color-surface-primary);
-  border-radius: var(--shape-card);
-  box-shadow: var(--elevation-100);
-  padding: var(--spacing-16);
-  width: 100%;
-  max-width: 420px;
-}
-
 .store-locator-widget--confirmed {
   flex-direction: row;
   align-items: center;
@@ -50,6 +38,7 @@
   background: var(--color-surface-page);
   cursor: pointer;
   color: var(--color-content-default);
+  width: 100%;
 }
 
 .store-locator-widget__item:hover {
