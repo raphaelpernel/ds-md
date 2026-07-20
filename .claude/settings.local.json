@@ -85,7 +85,9 @@
       "Bash(gh auth *)",
       "Bash(git symbolic-ref *)",
       "Bash('C:\\\\Users\\\\rapha/.claude/skills/gstack/design/dist/design' generate *)",
-      "Bash(powershell.exe -NoProfile -Command 'Get-CimInstance Win32_Process -Filter \"Name='\\\\''node.exe'\\\\''\" | Where-Object { $_.CommandLine -like '\\\\''*marmiton-agent*'\\\\'' } | Select-Object ProcessId,CommandLine')"
+      "Bash(powershell.exe -NoProfile -Command 'Get-CimInstance Win32_Process -Filter \"Name='\\\\''node.exe'\\\\''\" | Where-Object { $_.CommandLine -like '\\\\''*marmiton-agent*'\\\\'' } | Select-Object ProcessId,CommandLine')",
+      "Bash(powershell.exe -NoProfile -Command '37412,8884,29108,27380 | ForEach-Object { try { Stop-Process -Id $_ -Force -ErrorAction Stop; Write-Output \"killed $_\" } catch { Write-Output \"skip $_\" } }')",
+      "Bash(pnpm --filter @mealz-product-team/marmiton-prototype... run build)"
     ]
   }
 }

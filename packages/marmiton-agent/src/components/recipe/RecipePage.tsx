@@ -171,6 +171,7 @@ export function RecipePage({ recipeId }: { recipeId: string }) {
           <form onSubmit={handleAsk} className="recipe-page__ask-form">
             <ChatCircleDots size={18} weight="bold" aria-hidden="true" />
             <InputField
+              id="recipe-ask"
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               placeholder="Une question sur cette recette ? Ex : « je n’ai pas de crème, je fais quoi ? »"

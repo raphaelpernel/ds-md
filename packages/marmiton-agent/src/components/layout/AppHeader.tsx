@@ -32,6 +32,7 @@ export function AppHeader({ initialQuery }: { initialQuery?: string }) {
 
       <form className="app-header__search" onSubmit={handleSubmit}>
         <InputField
+          id="app-header-search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Qu’est-ce qu’on mange ? (ex : « poulet, 20 min, enfants »)"

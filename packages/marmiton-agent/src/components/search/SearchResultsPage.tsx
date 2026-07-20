@@ -128,6 +128,7 @@ export function SearchResultsPage() {
         {result && (
           <form className="search-results-page__refine" onSubmit={handleRefine}>
             <InputField
+              id="search-refine"
               value={refineText}
               onChange={(e) => setRefineText(e.target.value)}
               placeholder="Affiner : ex. « et sans lactose ? »"
