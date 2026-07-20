@@ -27,3 +27,22 @@ Résumer brièvement en français ce qui a été fait.
 Les skills gstack (`/office-hours`, `/plan-eng-review`, `/plan-design-review`, etc.) écrivent leurs artefacts dans `~/.gstack/projects/<slug>/` (hors du repo, par design de gstack — ne pas déplacer, les autres skills les retrouvent via ce chemin fixe).
 
 **Systématiquement, après qu'un skill gstack écrit un `.md` dans `~/.gstack/projects/`, en copier une copie dans `.gstack-artifacts/` à la racine de ce repo** (créer le dossier s'il n'existe pas), pour que l'utilisateur les retrouve facilement dans le projet. L'original dans `~/.gstack` reste la source de vérité pour l'auto-découverte inter-skills — la copie dans le repo est juste pour la consultation humaine.
+
+## Skill routing
+
+When the user's request matches an available skill, invoke it via the Skill tool. When in doubt, invoke the skill.
+
+Key routing rules:
+- Product ideas/brainstorming → invoke /office-hours
+- Strategy/scope → invoke /plan-ceo-review
+- Architecture → invoke /plan-eng-review
+- Design system/plan review → invoke /design-consultation or /plan-design-review
+- Full review pipeline → invoke /autoplan
+- Bugs/errors → invoke /investigate
+- QA/testing site behavior → invoke /qa or /qa-only
+- Code review/diff check → invoke /review
+- Visual polish → invoke /design-review
+- Ship/deploy/PR → invoke /ship or /land-and-deploy
+- Save progress → invoke /context-save
+- Resume context → invoke /context-restore
+- Author a backlog-ready spec/issue → invoke /spec
