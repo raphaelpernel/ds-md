@@ -47,6 +47,17 @@ Référence d'implémentation : `packages/assistant-shopping/app/layout.tsx` et 
    - **Toujours ajouter `suppressHydrationWarning` sur `<html>`** : le script anti-FOUC mute `data-brand` avant l'hydratation React (lecture localStorage), donc le DOM client diverge du HTML SSR par design — sans cet attribut, React logue une "hydration mismatch" en dev dès qu'un brand non-neutral est actif (pattern standard, cf. `next-themes`).
 3. Ne pas toucher aux fichiers `packages/design-system/src/devtools/**` ni `packages/design-system/src/styles/tokens/brands/brands.ts` pour cette intégration — ce sont des fichiers partagés, à ne faire évoluer que si un nouveau brand doit être ajouté à la liste.
 
+# Police Satoshi — copie automatique sur les nouveaux packages Next.js
+
+`packages/design-system/src/styles/fonts.css` déclare `@font-face { src: url('/fonts/Satoshi-Variable.woff2'|'.woff'|'.ttf') }` avec des chemins **absolus**, résolus depuis `public/` de l'app qui importe le CSS (pas depuis `design-system`). Si ces 3 fichiers sont absents du `public/fonts/` d'un package, la requête 404 silencieusement et le navigateur bascule sur le fallback `sans-serif` (police système) sans erreur visible — `font-family` reste affiché "Satoshi, sans-serif" dans les DevTools même quand la police n'a pas chargé, donc ce n'est pas fiable pour vérifier (préférer `document.fonts` / l'onglet Network).
+
+Dès qu'un **nouveau package Next.js** importe `@mealz-product-team/design-system/styles/index.css` (donc hérite de `fonts.css`), copier automatiquement les 3 fichiers depuis `packages/marmiton-prototype/public/fonts/` (source de vérité) vers `public/fonts/` du nouveau package, dès sa création — sans attendre que l'utilisateur le redemande :
+- `Satoshi-Variable.woff2`
+- `Satoshi-Variable.woff`
+- `Satoshi-Variable.ttf`
+
+Vérifier ensuite en dev que `GET /fonts/Satoshi-Variable.woff2` renvoie 200 (Network tab) et que `document.fonts` liste Satoshi avec le statut `loaded` (pas `error`).
+
 # Fin de journée — commit, push, merge dev → main
 
 Quand l'utilisateur dit **"fin de journée"** (ou variante proche : "c'est la fin de journée", "on clôture la journée"), exécuter automatiquement ce workflow sans redemander confirmation :

@@ -15,7 +15,7 @@ export default function ConfirmationPage() {
 
   const handleContinue = () => {
     clear()
-    router.push('/recette')
+    router.push('/recipe')
   }
 
   return (

@@ -4,8 +4,8 @@ import './coursesu-demo.css'
 
 const PAGES = [
   { href: '/', label: 'Accueil' },
-  { href: '/categorie', label: 'Catégorie' },
-  { href: '/panier', label: 'Panier' },
+  { href: '/category', label: 'Catégorie' },
+  { href: '/cart', label: 'Panier' },
 ]
 
 export default function CoursesUDemoLayout({ children }: { children: React.ReactNode }) {

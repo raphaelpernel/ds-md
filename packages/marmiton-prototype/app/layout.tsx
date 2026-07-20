@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import '@mealz-product-team/design-system/styles/index.css'
 
 export const metadata: Metadata = {
-  title: 'DS.MD — Mealz Design System',
+  title: 'Marmiton Prototype',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

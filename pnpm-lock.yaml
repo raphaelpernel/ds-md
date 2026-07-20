@@ -176,6 +176,43 @@ importers:
         specifier: ^5.6.3
         version: 5.9.3
 
+  packages/home:
+    dependencies:
+      '@mealz-product-team/design-system':
+        specifier: workspace:*
+        version: link:../design-system
+      next:
+        specifier: ^16.2.9
+        version: 16.2.10(@babel/core@7.29.7)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react:
+        specifier: ^19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: ^19.2.7
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@tailwindcss/postcss':
+        specifier: ^4.3.1
+        version: 4.3.2
+      '@types/node':
+        specifier: ^25.9.3
+        version: 25.9.4
+      '@types/react':
+        specifier: ^18.3.12
+        version: 18.3.31
+      '@types/react-dom':
+        specifier: ^18.3.1
+        version: 18.3.7(@types/react@18.3.31)
+      postcss:
+        specifier: ^8.5.15
+        version: 8.5.16
+      tailwindcss:
+        specifier: ^4.3.1
+        version: 4.3.2
+      typescript:
+        specifier: ^5.6.3
+        version: 5.9.3
+
   packages/marmiton-agent:
     dependencies:
       '@mealz-product-team/design-system':

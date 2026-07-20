@@ -1,12 +1,36 @@
-export default function Home() {
+import './page.css'
+
+interface FlowLink {
+  title: string
+  description: string
+  href: string
+}
+
+const FLOWS: FlowLink[] = [
+  {
+    title: 'Recipe',
+    description: "Parcours d'achat depuis une recette Marmiton (recette → panier → magasin → créneau → paiement).",
+    href: '/recipe',
+  },
+  {
+    title: 'Agent',
+    description: 'Parcours agent conversationnel — en cours de refonte.',
+    href: '/agent',
+  },
+]
+
+export default function HomePage() {
   return (
-    <main style={{ padding: '2rem', fontFamily: 'var(--font-family-body)' }}>
-      <h1 style={{ fontSize: 'var(--font-size-heading-lg)', lineHeight: 'var(--line-height-heading-lg)', marginBottom: '1rem' }}>
-        DS.MD — Mealz Design System
-      </h1>
-      <p style={{ color: 'var(--color-content-weak)' }}>
-        Consultez le Storybook pour explorer les composants.
-      </p>
+    <main className="home">
+      <h1 className="home__title">Marmiton Prototype</h1>
+      <div className="home__grid">
+        {FLOWS.map((flow) => (
+          <a key={flow.href} className="home__card" href={flow.href}>
+            <span className="home__card-title">{flow.title}</span>
+            <span className="home__card-desc">{flow.description}</span>
+          </a>
+        ))}
+      </div>
     </main>
   )
 }

@@ -87,7 +87,16 @@
       "Bash('C:\\\\Users\\\\rapha/.claude/skills/gstack/design/dist/design' generate *)",
       "Bash(powershell.exe -NoProfile -Command 'Get-CimInstance Win32_Process -Filter \"Name='\\\\''node.exe'\\\\''\" | Where-Object { $_.CommandLine -like '\\\\''*marmiton-agent*'\\\\'' } | Select-Object ProcessId,CommandLine')",
       "Bash(powershell.exe -NoProfile -Command '37412,8884,29108,27380 | ForEach-Object { try { Stop-Process -Id $_ -Force -ErrorAction Stop; Write-Output \"killed $_\" } catch { Write-Output \"skip $_\" } }')",
-      "Bash(pnpm --filter @mealz-product-team/marmiton-prototype... run build)"
+      "Bash(pnpm --filter @mealz-product-team/marmiton-prototype... run build)",
+      "Bash(~/.claude/skills/gstack/bin/gstack-learnings-log '{\"skill\":\"plan-design-review\",\"type\":\"pitfall\",\"key\":\"inputfield-random-id-hydration\",\"insight\":\"Le composant InputField du design system genere un id via Math.random\\(\\) quand aucune prop id n est passee. En SSR \\(Next.js\\), cela cree systematiquement un mismatch d hydratation \\(id different cote serveur et client\\). Toujours passer un id explicite et stable a InputField.\",\"confidence\":9,\"source\":\"observed\",\"files\":[\"packages/design-system/src/components/ui/form/InputField/InputField.tsx\"]}')",
+      "Bash(~/.claude/skills/gstack/bin/gstack-learnings-log '{\"skill\":\"plan-design-review\",\"type\":\"pitfall\",\"key\":\"non-unique-ingredient-ids-across-recipes\",\"insight\":\"Les ids d ingredients \\(ing-1, ing-2...\\) dans le dataset mock de marmiton-agent ne sont pas uniques entre recettes -- le meme id designe des ingredients differents selon la recette. Toute fonctionnalite qui memorise un etat par ingredientId doit utiliser une cle composite recipeId:ingredientId, sinon fuite de donnees entre recettes.\",\"confidence\":9,\"source\":\"observed\",\"files\":[\"packages/marmiton-agent/src/data/mock/recipes.ts\",\"packages/marmiton-agent/src/context/SessionMemoryContext.tsx\"]}')",
+      "Bash(pnpm install *)",
+      "Bash(timeout 20 pnpm --filter @mealz-product-team/form-mealz-planner dev)",
+      "Bash(timeout 20 pnpm --filter @mealz-product-team/assistant-shopping dev)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3002/category)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3002/panier)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3001/people)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3001/personnes)"
     ]
   }
 }

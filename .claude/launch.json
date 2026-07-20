@@ -35,6 +35,20 @@
       "runtimeArgs": ["--filter", "@mealz-product-team/marmiton-agent", "dev"],
       "port": 3003,
       "autoPort": true
+    },
+    {
+      "name": "home-dev",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@mealz-product-team/home", "dev"],
+      "port": 3004,
+      "autoPort": true
+    },
+    {
+      "name": "marmiton-prototype-dev",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@mealz-product-team/marmiton-prototype", "dev"],
+      "port": 3005,
+      "autoPort": true
     }
   ]
 }

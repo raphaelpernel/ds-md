@@ -38,7 +38,7 @@ export default function Home() {
 
             <div className="entry-banner__actions">
               <Stepper value={state.people} onChange={setPeople} min={1} max={12} size="M" label="Nombre de personnes" suffix="pers." />
-              <Button variant="primary" size="L" onClick={() => router.push('/personnes')}>
+              <Button variant="primary" size="L" onClick={() => router.push('/people')}>
                 C&rsquo;est parti !
               </Button>
             </div>

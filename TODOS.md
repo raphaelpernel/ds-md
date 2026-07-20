@@ -102,3 +102,19 @@
 **Context:** Design doc source : `~/.gstack/projects/raphaelpernel-ds-md/rapha-dev-design-20260720-114501.md` (mode Startup, adapté intrapreneuriat).
 
 **Depends on:** Réponse du PO Marmiton sur l'accès technique et le go budgétaire, dans la fenêtre Q3 2026 (pas de deadline contractuelle).
+
+---
+
+## Intégrer les réponses d'ingrédient mémorisées au matching de recherche (marmiton-agent)
+
+**What:** Faire influencer les résultats de `/recherche` par les réponses d'ingrédient déjà données sur une fiche recette (ex. « pas de crème » mémorisé devrait pondérer ou filtrer les futures recommandations), au lieu de garder les deux mémoires (tags de contrainte de recherche et réponses d'ingrédient) complètement séparées comme c'est le cas aujourd'hui.
+
+**Why:** La mémoire de session (`SessionMemoryContext`, ajoutée en revue `/plan-design-review` du 2026-07-20) couvre déjà le cas « contrainte apprise en recherche → appliquée à une nouvelle recherche » (`nlu.applyMemory`). Le sens inverse — une réponse d'ingrédient sur une fiche recette qui influence une recherche future — demanderait de mapper du texte libre (« pas de crème ») vers le vocabulaire de tags fermé de `TAG_KEYWORDS` dans `nlu.ts`, ce qui n'est pas trivial et sortait du périmètre de cette revue de design.
+
+**Pros:** Complèterait la promesse du brief (« ce que la conversation collecte sans le demander ») dans les deux sens plutôt qu'un seul.
+
+**Cons:** Nécessite soit un vocabulaire de tags étendu, soit une heuristique de mapping texte-libre → tag — travail non trivial, à ne pas deviner sans données d'usage réelles sur ce que les utilisateurs demandent effectivement.
+
+**Context:** Découvert en `/plan-design-review` du 2026-07-20 en construisant `SessionMemoryContext` (`packages/marmiton-agent/src/context/SessionMemoryContext.tsx`) et `nlu.applyMemory` (`packages/marmiton-agent/src/lib/nlu.ts`).
+
+**Depends on:** Aucune dépendance externe — travail purement produit/algorithme, peut être repris à tout moment.
