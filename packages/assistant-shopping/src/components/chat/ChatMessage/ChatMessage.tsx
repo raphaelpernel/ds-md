@@ -1,11 +1,12 @@
-import { ChatCircleDots } from '@phosphor-icons/react'
+import Image from 'next/image'
 import type { ChatMessage as ChatMessageModel } from '@/data/types/chat'
 import { RecipeCarousel } from '@/components/widgets/RecipeCarousel/RecipeCarousel'
-import { RecipeDetail } from '@/components/widgets/RecipeDetail/RecipeDetail'
 import { ShoppingList } from '@/components/widgets/ShoppingList/ShoppingList'
 import { ProductCarousel } from '@/components/widgets/ProductCarousel/ProductCarousel'
 import { StoreLocatorWidget } from '@/components/widgets/StoreLocatorWidget/StoreLocatorWidget'
 import { CartWidget } from '@/components/widgets/CartWidget/CartWidget'
+import { AssistantIntro } from '../AssistantIntro/AssistantIntro'
+import botAvatar from '@/assets/bot-avatar.png'
 import './ChatMessage.css'
 
 function ChatWidgetRenderer({ message }: { message: ChatMessageModel }) {
@@ -14,8 +15,6 @@ function ChatWidgetRenderer({ message }: { message: ChatMessageModel }) {
   switch (message.widget.type) {
     case 'recipe-carousel':
       return <RecipeCarousel recipeIds={message.widget.payload.recipeIds} />
-    case 'recipe-detail':
-      return <RecipeDetail recipeId={message.widget.payload.recipeId} />
     case 'shopping-list':
       return <ShoppingList productIds={message.widget.payload.productIds} requestId={message.widget.payload.requestId} />
     case 'product-carousel':
@@ -30,13 +29,17 @@ function ChatWidgetRenderer({ message }: { message: ChatMessageModel }) {
 }
 
 export function ChatMessage({ message }: { message: ChatMessageModel }) {
+  if (message.intro) {
+    return <AssistantIntro text={message.text ?? ''} />
+  }
+
   const isAssistant = message.role === 'assistant'
 
   return (
     <div className={`chat-message ${isAssistant ? 'chat-message--assistant' : 'chat-message--user'}`}>
       {isAssistant && (
         <span className="chat-message__avatar" aria-hidden="true">
-          <ChatCircleDots size={16} weight="fill" />
+          <Image src={botAvatar} alt="" width={32} height={32} />
         </span>
       )}
 

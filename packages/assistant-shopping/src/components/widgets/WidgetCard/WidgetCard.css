@@ -7,4 +7,12 @@
   box-shadow: var(--elevation-100);
   padding: var(--spacing-16);
   width: 100%;
+  overflow: hidden;
+}
+
+/** Widgets composés d'un `WidgetHeader`/`WidgetFooter` (eux-mêmes paddés,
+ *  bordés edge-to-edge) — le card ne doit pas ajouter son propre padding. */
+.widget-card--flush {
+  padding: 0;
+  gap: 0;
 }

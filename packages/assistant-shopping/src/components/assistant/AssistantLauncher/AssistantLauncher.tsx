@@ -2,23 +2,24 @@
 
 import { useState } from 'react'
 import { Sparkle } from '@phosphor-icons/react'
-import { FAB, Drawer } from '@mealz-product-team/design-system'
+import { Button, Drawer } from '@mealz-product-team/design-system'
 import { ChatShell } from '@/components/chat/ChatShell/ChatShell'
-import './AssistantLauncher.css'
 
+/** Nav entry that opens the assistant drawer — a filled brand-color pill so
+ *  it stands out from the plain nav links around it (Accueil / Catégorie / Panier). */
 export function AssistantLauncher() {
   const [open, setOpen] = useState(false)
 
   return (
     <>
-      <div className="assistant-launcher__fab">
-        <FAB
-          size="M"
-          icon={<Sparkle size={24} weight="fill" />}
-          aria-label="Ouvrir l'assistant shopping"
-          onClick={() => setOpen(true)}
-        />
-      </div>
+      <Button
+        variant="primary"
+        size="S"
+        lIcon={<Sparkle size={16} weight="fill" />}
+        label="Assistant"
+        aria-label="Ouvrir l'assistant shopping"
+        onClick={() => setOpen(true)}
+      />
 
       <Drawer
         open={open}

@@ -1,24 +1,27 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { ArrowsClockwise, Check } from '@phosphor-icons/react'
-import { Button, Checkbox } from '@mealz-product-team/design-system'
 import { useAssistant } from '@/context/AssistantContext'
 import { MOCK_PRODUCTS } from '@/data/mock/products'
 import type { Product } from '@/data/types/product'
 import { formatPrice } from '@/lib/format'
 import { WidgetCard } from '../WidgetCard/WidgetCard'
+import { WidgetHeader } from '../WidgetHeader/WidgetHeader'
+import { WidgetFooter } from '../WidgetFooter/WidgetFooter'
+import { ProductRow } from '../ProductRow/ProductRow'
 import './ShoppingList.css'
 
-function findAlternative(product: Product, excludeIds: string[]): Product | null {
-  const candidates = MOCK_PRODUCTS.filter(
-    (p) => p.id !== product.id && !excludeIds.includes(p.id) && p.tags.some((tag) => product.tags.includes(tag)),
-  )
-  return candidates[0] ?? null
+const INLINE_ROW_CAP = 9
+
+interface ShoppingListProps {
+  productIds: string[]
+  requestId: string
+  /** Rendu par `FullViewRenderer` — pas de cap à 9 lignes, pas de bouton "agrandir". */
+  fullView?: boolean
 }
 
-export function ShoppingList({ productIds, requestId }: { productIds: string[]; requestId: string }) {
-  const { isListRequestAdded, requestAddProducts, getEffectiveProductId, replaceProduct } = useAssistant()
+export function ShoppingList({ productIds, requestId, fullView = false }: ShoppingListProps) {
+  const { isListRequestAdded, requestAddProducts, getEffectiveProductId, openProductSwap, openFullView } = useAssistant()
   const [checked, setChecked] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(productIds.map((id) => [id, true])),
   )
@@ -37,63 +40,49 @@ export function ShoppingList({ productIds, requestId }: { productIds: string[]; 
     [productIds, getEffectiveProductId],
   )
 
-  const selectedIds = rows.filter((row) => checked[row.originalId]).map((row) => row.product.id)
+  const visibleRows = fullView ? rows : rows.slice(0, INLINE_ROW_CAP)
+  const overflowRows = fullView ? [] : rows.slice(INLINE_ROW_CAP)
 
-  const handleReplace = (originalId: string, product: Product) => {
-    const alternative = findAlternative(product, rows.map((r) => r.product.id))
-    if (alternative) replaceProduct(originalId, alternative.id)
-  }
+  const selectedIds = rows.filter((row) => checked[row.originalId]).map((row) => row.product.id)
+  const total = rows.filter((row) => checked[row.originalId]).reduce((sum, row) => sum + row.product.price, 0)
+
+  const expandToFullView = () => openFullView({ type: 'shopping-list', requestId, productIds })
 
   return (
-    <WidgetCard className="shopping-list">
-      <ul className="shopping-list__items">
-        {rows.map(({ originalId, product }) => (
-          <li key={originalId} className="shopping-list__item">
-            <div className="shopping-list__item-main">
-              <span className="shopping-list__item-emoji" aria-hidden="true">{product.emoji}</span>
-              <div className="shopping-list__item-info">
-                <p className="shopping-list__item-name">{product.name}</p>
-                <p className="shopping-list__item-brand">{product.brand}{product.unit ? ` · ${product.unit}` : ''}</p>
-                <p className="shopping-list__item-price">{formatPrice(product.price)}</p>
-              </div>
-            </div>
+    <WidgetCard className="shopping-list widget-card--flush">
+      <WidgetHeader onExpand={fullView ? undefined : expandToFullView} />
 
-            <div className="shopping-list__item-actions">
-              {added ? (
-                <span className="shopping-list__item-added">
-                  <Check size={14} weight="bold" aria-hidden="true" /> Ajouté
-                </span>
-              ) : (
-                <>
-                  <Button
-                    variant="tertiary"
-                    size="XS"
-                    lIcon={<ArrowsClockwise size={14} aria-hidden="true" />}
-                    label="Remplacer"
-                    aria-label={`Remplacer ${product.name}`}
-                    onClick={() => handleReplace(originalId, product)}
-                  />
-                  <Checkbox
-                    checked={!!checked[originalId]}
-                    onChange={(e) => setChecked((prev) => ({ ...prev, [originalId]: e.target.checked }))}
-                    aria-label={`Inclure ${product.name} dans le panier`}
-                  />
-                </>
-              )}
-            </div>
+      <ul className="shopping-list__items">
+        {visibleRows.map(({ originalId, product }) => (
+          <li key={originalId}>
+            <ProductRow
+              variant="selectable"
+              product={product}
+              checked={!!checked[originalId]}
+              onToggle={(value) => setChecked((prev) => ({ ...prev, [originalId]: value }))}
+              added={added}
+              onReplace={() => openProductSwap(originalId)}
+            />
           </li>
         ))}
       </ul>
 
-      <Button
-        variant={added ? 'secondary' : 'primary'}
-        size="M"
-        disabled={added || selectedIds.length === 0}
-        onClick={() => requestAddProducts(requestId, selectedIds)}
-        className="shopping-list__submit"
-      >
-        {added ? 'Produits déjà ajoutés au panier' : 'Ajouter la sélection au panier'}
-      </Button>
+      {overflowRows.length > 0 ? (
+        <WidgetFooter
+          type="more-products"
+          count={overflowRows.length}
+          emojis={overflowRows.map((r) => r.product.emoji)}
+          onShowAll={expandToFullView}
+        />
+      ) : (
+        <WidgetFooter
+          type="default"
+          label={added ? 'Produits déjà ajoutés au panier' : `Ajouter la sélection au panier (${formatPrice(total)})`}
+          disabled={added || selectedIds.length === 0}
+          onSubmit={() => requestAddProducts(requestId, selectedIds)}
+          secondaryAction={added}
+        />
+      )}
     </WidgetCard>
   )
 }

@@ -19,14 +19,14 @@ function isDrawerOpen() {
 }
 
 describe('AssistantLauncher', () => {
-  it('renders the FAB with the drawer closed by default', () => {
+  it('renders the nav trigger with the drawer closed by default', () => {
     renderLauncher()
 
     expect(screen.getByRole('button', { name: "Ouvrir l'assistant shopping" })).toBeInTheDocument()
     expect(isDrawerOpen()).toBe(false)
   })
 
-  it('opens the drawer with the ChatShell header content when the FAB is clicked', async () => {
+  it('opens the drawer with the ChatShell header content when the nav trigger is clicked', async () => {
     const user = userEvent.setup()
     renderLauncher()
 

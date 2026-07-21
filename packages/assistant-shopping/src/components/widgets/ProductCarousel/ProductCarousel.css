@@ -23,6 +23,10 @@
   align-items: center;
   justify-content: center;
   background: var(--color-surface-brand-light);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  width: 100%;
 }
 
 .product-card__emoji {
@@ -37,6 +41,11 @@
 }
 
 .product-card__name {
+  border: none;
+  background: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
   font-family: var(--font-family-heading);
   font-weight: var(--font-weight-heading);
   font-size: var(--font-size-body-sm);
@@ -45,6 +54,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.product-card__name:hover {
+  color: var(--color-interactive-content);
 }
 
 .product-card__brand {

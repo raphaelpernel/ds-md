@@ -1,9 +1,6 @@
-.recipe-carousel {
-  display: flex;
-  gap: var(--spacing-16);
-  overflow-x: auto;
+.recipe-carousel .slider__track {
+  padding: var(--spacing-16);
   padding-bottom: var(--spacing-8);
-  scroll-snap-type: x proximity;
 }
 
 .recipe-card {
@@ -12,24 +9,22 @@
   display: flex;
   flex-direction: column;
   background: var(--color-surface-primary);
+  border: 1px solid var(--color-border-weak);
   border-radius: var(--shape-card);
-  box-shadow: var(--elevation-100);
   overflow: hidden;
 }
 
 .recipe-card__media {
+  position: relative;
   border: none;
   cursor: pointer;
   padding: 0;
   height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background: var(--color-surface-brand-light);
 }
 
-.recipe-card__emoji {
-  font-size: 48px;
+.recipe-card__image {
+  object-fit: cover;
 }
 
 .recipe-card__body {

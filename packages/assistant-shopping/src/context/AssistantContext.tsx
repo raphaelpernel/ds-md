@@ -1,11 +1,13 @@
 'use client'
 
 import { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useIsRetailerBrand } from '@/lib/brand'
 import { interpretMessage } from '@/lib/nlu'
 import { mergeRecipeIntoCart, resolveRecipeProducts } from '@/lib/recipeProducts'
+import { addProductIdsToCart } from '@/lib/cart'
 import { MOCK_PRODUCTS } from '@/data/mock/products'
 import { MOCK_RECIPES } from '@/data/mock/recipes'
-import type { ChatMessage, PendingAction } from '@/data/types/chat'
+import type { ChatMessage, FullViewState, PendingAction } from '@/data/types/chat'
 import type { Store } from '@/data/types/store'
 import type { CartState } from '@/data/types/cart'
 
@@ -16,14 +18,24 @@ interface AssistantState {
   addedListRequests: string[]
   replacements: Record<string, string>
   loading: boolean
+  /** Vue plein cadre active (remplace `.chat-shell__history`), ou `null` pour le fil normal. */
+  fullView: FullViewState | null
 }
 
 interface AssistantContextValue extends AssistantState {
+  /** True on a retailer's own site (e.g. CoursesU) — that site already has its
+   *  own store picker, so the assistant skips its store-selection requirement
+   *  and hides the store bandeau entirely. See `BrandOption.isRetailer`. */
+  isRetailerBrand: boolean
   cartItemsCount: number
   sendMessage: (text: string) => void
   openStoreLocator: () => void
   openCart: () => void
-  openRecipeDetail: (recipeId: string) => void
+  openRecipeDetail: (recipeId: string, recipeIds: string[]) => void
+  openFullView: (state: FullViewState) => void
+  closeFullView: () => void
+  openProductSwap: (originalId: string) => void
+  openProductChoice: (productIds: string[], focusedProductId: string) => void
   confirmStore: (store: Store) => void
   cancelStoreLocator: () => void
   requestAddRecipe: (recipeId: string, guests?: number) => void
@@ -47,11 +59,13 @@ function welcomeMessage(): ChatMessage {
   return {
     id: makeId(),
     role: 'assistant',
-    text: 'Bonjour \u{1F44B} Je suis votre assistant shopping. Je peux vous suggérer des recettes ou préparer une liste de courses \u2014 dites-moi ce dont vous avez besoin !',
+    intro: true,
+    text: 'Je suis ton assistant shopping, je suis là pour te simplifier les courses. Dis-moi ce dont tu as besoin, et je m’occupe du reste !',
   }
 }
 
 export function AssistantProvider({ children }: { children: ReactNode }) {
+  const isRetailerBrand = useIsRetailerBrand()
   const [messages, setMessages] = useState<ChatMessage[]>([welcomeMessage()])
   const [store, setStore] = useState<Store | null>(null)
   const [cart, setCart] = useState<CartState>({ products: [] })
@@ -62,6 +76,7 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
   const [addedListRequests, setAddedListRequests] = useState<string[]>([])
   const [replacements, setReplacements] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(false)
+  const [fullView, setFullView] = useState<FullViewState | null>(null)
 
   const pushMessage = useCallback((message: Omit<ChatMessage, 'id'>) => {
     setMessages((prev) => [...prev, { ...message, id: makeId() }])
@@ -125,18 +140,25 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
     pushMessage({ role: 'assistant', text: 'Voici le contenu de votre panier.', widget: { type: 'cart' } })
   }, [pushMessage])
 
-  const openRecipeDetail = useCallback(
-    (recipeId: string) => {
-      const recipe = MOCK_RECIPES.find((r) => r.id === recipeId)
-      if (!recipe) return
-      pushMessage({
-        role: 'assistant',
-        text: `Voici le détail de « ${recipe.name} ».`,
-        widget: { type: 'recipe-detail', payload: { recipeId } },
-      })
-    },
-    [pushMessage],
-  )
+  const openFullView = useCallback((state: FullViewState) => {
+    setFullView(state)
+  }, [])
+
+  const closeFullView = useCallback(() => {
+    setFullView(null)
+  }, [])
+
+  const openRecipeDetail = useCallback((recipeId: string, recipeIds: string[]) => {
+    setFullView({ type: 'recipe-detail', recipeId, recipeIds })
+  }, [])
+
+  const openProductSwap = useCallback((originalId: string) => {
+    setFullView({ type: 'product-swap', originalId })
+  }, [])
+
+  const openProductChoice = useCallback((productIds: string[], focusedProductId: string) => {
+    setFullView({ type: 'product-choice', productIds, focusedProductId })
+  }, [])
 
   const confirmStore = useCallback(
     (selected: Store) => {
@@ -157,15 +179,7 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
         })
       } else if (current?.type === 'add-products') {
         const { productIds, requestId } = current
-        setCart((prev) => ({
-          ...prev,
-          products: [
-            ...prev.products,
-            ...productIds
-              .filter((id) => !prev.products.some((p) => p.productId === id))
-              .map((productId) => ({ productId, quantity: 1 })),
-          ],
-        }))
+        setCart((prev) => addProductIdsToCart(prev, productIds))
         setAddedListRequests((prev) => (prev.includes(requestId) ? prev : [...prev, requestId]))
         pushMessage({
           role: 'assistant',
@@ -195,7 +209,7 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
     // `guests` n'ajuste pas encore les quantités des produits ajoutés (limitation MVP
     // documentée : pas de modification de convives via l'UI).
     (recipeId: string, guests?: number) => {
-      if (!store) {
+      if (!store && !isRetailerBrand) {
         pendingActionRef.current = { type: 'add-recipe', recipeId, guests }
         pushMessage({
           role: 'assistant',
@@ -207,7 +221,7 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
       const recipe = MOCK_RECIPES.find((r) => r.id === recipeId)
       if (recipe) setCart((prev) => mergeRecipeIntoCart(prev, recipe))
     },
-    [store, pushMessage],
+    [store, isRetailerBrand, pushMessage],
   )
 
   const removeRecipeFromCart = useCallback((recipeId: string) => {
@@ -222,7 +236,7 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
     (requestId: string, productIds: string[]) => {
       if (productIds.length === 0) return
 
-      if (!store) {
+      if (!store && !isRetailerBrand) {
         pendingActionRef.current = { type: 'add-products', productIds, requestId }
         pushMessage({
           role: 'assistant',
@@ -232,18 +246,10 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
         return
       }
 
-      setCart((prev) => ({
-        ...prev,
-        products: [
-          ...prev.products,
-          ...productIds
-            .filter((id) => !prev.products.some((p) => p.productId === id))
-            .map((productId) => ({ productId, quantity: 1 })),
-        ],
-      }))
-      setAddedListRequests((prev) => [...prev, requestId])
+      setCart((prev) => addProductIdsToCart(prev, productIds))
+      setAddedListRequests((prev) => (prev.includes(requestId) ? prev : [...prev, requestId]))
     },
-    [store, pushMessage],
+    [store, isRetailerBrand, pushMessage],
   )
 
   const updateProductQuantity = useCallback((productId: string, quantity: number) => {
@@ -272,15 +278,21 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
     () => ({
       messages,
       store,
+      isRetailerBrand,
       cart,
       addedListRequests,
       replacements,
       loading,
+      fullView,
       cartItemsCount,
       sendMessage,
       openStoreLocator,
       openCart,
       openRecipeDetail,
+      openFullView,
+      closeFullView,
+      openProductSwap,
+      openProductChoice,
       confirmStore,
       cancelStoreLocator,
       requestAddRecipe,
@@ -296,15 +308,21 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
     [
       messages,
       store,
+      isRetailerBrand,
       cart,
       addedListRequests,
       replacements,
       loading,
+      fullView,
       cartItemsCount,
       sendMessage,
       openStoreLocator,
       openCart,
       openRecipeDetail,
+      openFullView,
+      closeFullView,
+      openProductSwap,
+      openProductChoice,
       confirmStore,
       cancelStoreLocator,
       requestAddRecipe,

@@ -1,22 +1,9 @@
 export type ChatRole = 'user' | 'assistant'
 
-export type WidgetType =
-  | 'recipe-carousel'
-  | 'recipe-detail'
-  | 'shopping-list'
-  | 'product-carousel'
-  | 'store-locator'
-  | 'cart'
-  | 'offtopic'
+export type WidgetType = 'recipe-carousel' | 'shopping-list' | 'product-carousel' | 'store-locator' | 'cart' | 'offtopic'
 
 export interface RecipeCarouselPayload {
   recipeIds: string[]
-}
-
-/** Détail d'une recette rendu inline dans le chat (widget `recipe-detail-inline` —
- *  cf. `docs/docs/04-architecture-technique.md`), et non plus dans une modale. */
-export interface RecipeDetailPayload {
-  recipeId: string
 }
 
 export interface ShoppingListPayload {
@@ -36,7 +23,6 @@ export interface StoreLocatorPayload {
 
 export type ChatWidget =
   | { type: 'recipe-carousel'; payload: RecipeCarouselPayload }
-  | { type: 'recipe-detail'; payload: RecipeDetailPayload }
   | { type: 'shopping-list'; payload: ShoppingListPayload }
   | { type: 'product-carousel'; payload: ProductCarouselPayload }
   | { type: 'store-locator'; payload: StoreLocatorPayload }
@@ -49,9 +35,22 @@ export interface ChatMessage {
   text?: string
   widget?: ChatWidget
   pending?: boolean
+  /** Message d'accueil affiché à l'ouverture du drawer — rendu via `AssistantIntro`
+   *  (illustration + salutation) plutôt que la bulle de chat standard. */
+  intro?: boolean
 }
 
 /** Action reportée en attendant la sélection d'un magasin. */
 export type PendingAction =
   | { type: 'add-recipe'; recipeId: string; guests?: number }
   | { type: 'add-products'; productIds: string[]; requestId: string }
+
+/** Vue plein cadre qui remplace tout `.chat-shell__history` (jamais une modale) —
+ *  un seul état actif à la fois, partagé entre tous les widgets. */
+export type FullViewState =
+  | { type: 'shopping-list'; requestId: string; productIds: string[] }
+  | { type: 'recipes'; recipeIds: string[] }
+  | { type: 'cart' }
+  | { type: 'recipe-detail'; recipeId: string; recipeIds: string[] }
+  | { type: 'product-swap'; originalId: string }
+  | { type: 'product-choice'; productIds: string[]; focusedProductId: string }

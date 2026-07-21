@@ -12,7 +12,7 @@ import './ProductCarousel.css'
  *  widget `product-carousel` : chaque carte s'ajoute individuellement, contrairement
  *  à la liste de courses (`shopping-list`) qui valide une sélection en une fois. */
 export function ProductCarousel({ productIds }: { productIds: string[] }) {
-  const { cart, requestAddProducts, getEffectiveProductId } = useAssistant()
+  const { cart, requestAddProducts, getEffectiveProductId, openProductChoice } = useAssistant()
 
   const products = productIds.map((id) => MOCK_PRODUCTS.find((p) => p.id === id)).filter(Boolean) as typeof MOCK_PRODUCTS
 
@@ -24,12 +24,19 @@ export function ProductCarousel({ productIds }: { productIds: string[] }) {
 
           return (
             <article key={product.id} className="product-card" role="listitem">
-              <div className="product-card__media">
+              <button
+                type="button"
+                className="product-card__media"
+                onClick={() => openProductChoice(productIds, product.id)}
+                aria-label={`Voir le détail de ${product.name}`}
+              >
                 <span className="product-card__emoji" aria-hidden="true">{product.emoji}</span>
-              </div>
+              </button>
 
               <div className="product-card__body">
-                <p className="product-card__name">{product.name}</p>
+                <button type="button" className="product-card__name" onClick={() => openProductChoice(productIds, product.id)}>
+                  {product.name}
+                </button>
                 <p className="product-card__brand">{product.brand}{product.unit ? ` · ${product.unit}` : ''}</p>
                 <p className="product-card__price">{formatPrice(product.price)}</p>
 

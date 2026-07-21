@@ -12,10 +12,16 @@
 export interface BrandOption {
   value: string
   label: string
+  /** True when this brand represents a retailer's own site (vs. a Mealz-owned
+   *  surface like Marmiton or the neutral demo). Set once when the brand is
+   *  onboarded — drives retailer-specific UI decisions (e.g. hiding a store
+   *  picker the retailer's site already provides) without coupling that
+   *  business logic to the visual theme itself. */
+  isRetailer?: boolean
 }
 
 export const BRANDS: BrandOption[] = [
   { value: 'neutral', label: 'Neutral' },
   { value: 'marmiton', label: 'Marmiton' },
-  { value: 'coursesu', label: 'CoursesU' },
+  { value: 'coursesu', label: 'CoursesU', isRetailer: true },
 ]
