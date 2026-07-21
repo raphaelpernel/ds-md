@@ -110,7 +110,9 @@
       "Bash(node scripts/verify-design-docs.mjs)",
       "Bash(pnpm -v)",
       "Bash(git check-ignore *)",
-      "Bash(pnpm run *)"
+      "Bash(pnpm run *)",
+      "Bash(git checkout *)",
+      "Bash(git pull *)"
     ]
   }
 }
