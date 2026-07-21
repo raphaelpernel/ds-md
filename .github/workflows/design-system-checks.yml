@@ -1,0 +1,43 @@
+name: Design system checks
+
+on:
+  push:
+    branches: [main, dev]
+    paths:
+      - 'packages/design-system/**'
+      - '.github/workflows/design-system-checks.yml'
+  pull_request:
+    paths:
+      - 'packages/design-system/**'
+      - '.github/workflows/design-system-checks.yml'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Generates src/styles/dist/*.generated.css (gitignored) from tokens/*.tokens.json
+      # — required before verify-tokens can compare hand-written vs generated output.
+      - name: Build tokens
+        run: pnpm --filter @mealz-product-team/design-system run tokens
+
+      - name: Verify token overlap (hand-written vs generated)
+        run: pnpm --filter @mealz-product-team/design-system run verify-tokens
+
+      # Fails if any component with a *.stories.tsx is missing its sibling
+      # *.design.md — see packages/design-system/docs/DESIGN.md §4.
+      - name: Verify per-component design docs coverage
+        run: pnpm --filter @mealz-product-team/design-system run verify-design-docs
+
+      - name: Run tests
+        run: pnpm --filter @mealz-product-team/design-system run test

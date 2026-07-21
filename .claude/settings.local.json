@@ -96,7 +96,21 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3002/category)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3002/panier)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3001/people)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3001/personnes)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3001/personnes)",
+      "WebFetch(domain:hermes-agent.nousresearch.com)",
+      "Bash(npx vitest *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:57832/ --max-time 10)",
+      "mcp__cb1d0994-e083-46b2-803b-de72cf93afc0__get_metadata",
+      "Bash(jq -r '.[0].text' \"C:\\\\Users\\\\rapha\\\\.claude\\\\projects\\\\F--Workspace-Mealz-CLAUDE-Projects-DS-MD\\\\de95407c-f21d-4a9a-ad3f-40e3fd5d5973\\\\tool-results\\\\mcp-cb1d0994-e083-46b2-803b-de72cf93afc0-get_metadata-1784642450624.txt\")",
+      "Bash(python3 -c ' *)",
+      "Read(//c/Users/rapha/.claude/projects/F--Workspace-Mealz-CLAUDE-Projects-DS-MD/de95407c-f21d-4a9a-ad3f-40e3fd5d5973/tool-results/**)",
+      "Bash(jq -r .[0].text /c/Users/rapha/.claude/projects/F--Workspace-Mealz-CLAUDE-Projects-DS-MD/de95407c-f21d-4a9a-ad3f-40e3fd5d5973/tool-results/mcp-cb1d0994-e083-46b2-803b-de72cf93afc0-get_metadata-1784642450624.txt)",
+      "Read(//c/Users/rapha/AppData/Local/Temp/claude/F--Workspace-Mealz-CLAUDE-Projects-DS-MD/de95407c-f21d-4a9a-ad3f-40e3fd5d5973/scratchpad/**)",
+      "Bash(FILE=\"/c/Users/rapha/AppData/Local/Temp/claude/F--Workspace-Mealz-CLAUDE-Projects-DS-MD/de95407c-f21d-4a9a-ad3f-40e3fd5d5973/scratchpad/meta1.xml\" *)",
+      "Bash(node scripts/verify-design-docs.mjs)",
+      "Bash(pnpm -v)",
+      "Bash(git check-ignore *)",
+      "Bash(pnpm run *)"
     ]
   }
 }

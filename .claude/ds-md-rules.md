@@ -1,6 +1,7 @@
 # DS.MD — Règles de travail pour la création de composants
 
 > Ce fichier définit le comportement attendu de tout agent (Claude ou autre) travaillant sur le design system DS.MD, du composant Figma jusqu'au code Storybook.
+> Point d'entrée général (quel composant choisir, architecture, Do/Don't) : [`packages/design-system/docs/DESIGN.md`](../packages/design-system/docs/DESIGN.md).
 
 ---
 
@@ -413,13 +414,17 @@ export const PrimaryDefault: Story = {
    └─ Documenter le mapping Figma → code
 
 5. DESIGN.MD
-   └─ Créer [ComponentName].design.md avec structure §4
+   ├─ Créer [ComponentName].design.md avec structure §4
+   └─ Ajouter une ligne dans packages/design-system/docs/DESIGN.md §3 (table de décision "quel composant pour quel besoin") — sans ça le composant reste invisible d'un agent qui compare ses options
 
 6. STORYBOOK
    ├─ Créer les stories (toutes combinaisons)
    ├─ Activer autodocs + a11y
    ├─ Lier les stories au node Figma
    └─ Vérifier la checklist §5.2
+
+7. VÉRIFICATION
+   └─ Lancer `npm run verify-design-docs` (package design-system) — échoue si un composant Storybook n'a pas de .design.md
 ```
 
 ---
@@ -439,3 +444,4 @@ export const PrimaryDefault: Story = {
   - Nouveau composant UI dans `src/components/ui/` → ajouter une ligne en section 7 Component Registry
   - Modification des variants/props d'un composant existant (stories ou `.tsx`) → mettre à jour la ligne correspondante en section 7
   - Pour les tokens Figma : re-extraire via `use_figma` avec le script de lecture de variables (cf. workflow §6), puis mettre à jour la date de synchronisation en en-tête
+- **Mettre à jour `packages/design-system/docs/DESIGN.md` §3** (table de décision "quel composant pour quel besoin") pour tout nouveau composant — en plus de son propre `.design.md`, pas à la place. Lancer `npm run verify-design-docs` avant de considérer un composant terminé.

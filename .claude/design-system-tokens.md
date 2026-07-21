@@ -2,6 +2,7 @@
 
 > Référence exhaustive pour les agents Cursor. Dernière synchronisation Figma : 2026-06-22.
 > Complément de `ds-md-rules.md` (règles de workflow) — ce fichier documente les **valeurs**.
+> Point d'entrée général (quel composant choisir, architecture, Do/Don't) : [`packages/design-system/docs/DESIGN.md`](../packages/design-system/docs/DESIGN.md).
 
 > **Maintenance — obligation de l'agent :** ce fichier DOIT être mis à jour immédiatement après toute modification du design system :
 > - **Variable Figma ajoutée/modifiée** (Semantics, Typography) → mettre à jour les sections 2–5 et la date de sync ci-dessus

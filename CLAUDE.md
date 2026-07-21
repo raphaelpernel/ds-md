@@ -8,6 +8,16 @@ Quand je commence à travailler dans un dossier `packages/<nom>` (ou équivalent
 4. Ce cadrage est **par package et par session** : une fois fait pour un package donné, ne pas reposer les mêmes questions à chaque message suivant dans la même session — seulement le refaire si on entre dans un nouveau package non encore exploré, ou si le contexte change fondamentalement.
 5. Ce cadrage ne s'applique pas aux tâches triviales ou déjà précises (fix de bug ciblé, typo, tâche entièrement spécifiée par l'utilisateur) — seulement quand une nouvelle feature ou un nouveau flow UX est en jeu.
 
+# Composants design-system — consultation obligatoire avant usage (tous packages)
+
+Dès qu'un agent utilise, ajoute, ou modifie un composant importé depuis `@mealz-product-team/design-system` (`Button`, `Modal`, `ChipTag`, etc.) — **dans n'importe quel package consommateur** (`assistant-shopping`, `marmiton-prototype`, `marmiton-agent`, `home`, `form-mealz-planner`, ou tout futur package Next.js) — consulter **`packages/design-system/docs/DESIGN.md`** avant de choisir ou d'implémenter, même si le package courant a son propre `docs/`.
+
+Cette règle est **indépendante** de la règle de cadrage "Démarrage de travail dans un package" ci-dessus, qui ne couvre que le package où l'on travaille (`packages/<nom>/docs/`) — `design-system/docs/DESIGN.md` documente l'usage cross-package des composants et doit être vérifié en plus, pas à la place.
+
+`docs/DESIGN.md` contient : la cascade de tokens, la table de décision "quel composant pour quel besoin" (§3 — pour éviter d'utiliser `Modal` là où `Drawer` convient, `Badge` là où `ChipTag` convient, etc.), et les Do/Don't système. Chaque composant a aussi son propre `<Component>.design.md` à côté de son code (variants, states, tokens, accessibilité).
+
+**Si un nouveau composant est ajouté au design system** (dans `packages/design-system/src/components/ui/`) : suivre le workflow complet de `.claude/ds-md-rules.md` (qui inclut la création du `<Component>.design.md`), **et** ajouter une ligne correspondante dans la table de décision `docs/DESIGN.md` §3 — un composant qui n'apparaît que dans son propre `.design.md` sans entrée dans la table de décision reste invisible pour un agent qui compare plusieurs options. Lancer `npm run verify-design-docs` (package `design-system`) avant de considérer la tâche terminée — le script échoue si un composant Storybook n'a pas de `.design.md`.
+
 # Sélecteur de thème client — intégration automatique sur les nouveaux packages Next.js
 
 Quand un **nouveau package Next.js** est créé sous `packages/<nom>` (a un `next.config.ts` + `app/layout.tsx` qui définit `<html>/<body>`) et que `<nom>` **ne commence pas par `marmiton-`**, intégrer automatiquement le sélecteur de thème client (`BrandThemeSwitcher`) dans son `app/layout.tsx`, dès la création du layout — sans attendre que l'utilisateur le redemande. Ne pas appliquer cette règle aux packages `marmiton-*` (déjà brandés par nature) ni aux packages qui ne sont pas des apps Next.js (ex. `design-system`, `marmiton-agent`).

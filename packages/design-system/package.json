@@ -8,6 +8,7 @@
   "scripts": {
     "tokens": "node sd.config.js",
     "verify-tokens": "node scripts/verify-tokens.mjs",
+    "verify-design-docs": "node scripts/verify-design-docs.mjs",
     "prestorybook": "npm run tokens",
     "storybook": "storybook dev -p 6006",
     "prebuild-storybook": "npm run tokens",
