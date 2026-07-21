@@ -77,6 +77,10 @@ Quand l'utilisateur dit **"fin de journée"** (ou variante proche : "c'est la fi
 3. **Push** : pousser la branche de travail courante (typiquement `dev`) — `git push -u origin <branche>`
 4. **Merge** : `git checkout main` → `git pull origin main` → `git merge dev` → `git push origin main`
 5. Revenir sur `dev` et confirmer working tree propre
+6. **Boucle de fermeture — `dev` et `main` doivent finir strictement alignés, pas juste "working tree propre" sur `dev`.** Les commandes git elles-mêmes (`checkout`, `merge`, `stash`, `fetch`...) déclenchent des ajouts automatiques dans `.claude/settings.local.json` (permissions locales de l'agent) **pendant** l'exécution des étapes 4-5, ce qui fait diverger `dev` de `main` juste après le merge. Après l'étape 5 :
+   - Vérifier l'alignement : `git rev-list --left-right --count origin/main...origin/dev` doit renvoyer `0	0`.
+   - Si `dev` est encore devant (typiquement `.claude/settings.local.json` modifié par les commandes qui viennent d'être lancées) : committer ce reliquat, puis refaire `git checkout main → git pull → git merge dev → git push origin main → git checkout dev`.
+   - Répéter jusqu'à convergence (`0	0`) — en pratique un seul tour supplémentaire suffit, aucune nouvelle commande n'étant introduite au second passage.
 
 Respecter le Git Safety Protocol (pas de force push, pas de `--no-verify`, pas d'amend sauf conditions). Si rien à committer, faire quand même push/merge si nécessaire.
 
