@@ -19,3 +19,8 @@ debug-storybook.log
 # Tools
 .gstack/
 ~/
+
+# Impeccable skills (installed locally per harness, not versioned)
+.claude/skills/
+.cursor/skills/
+.github/skills/
