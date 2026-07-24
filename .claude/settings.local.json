@@ -118,7 +118,12 @@
       "Bash(git fetch *)",
       "Bash(git rev-list *)",
       "Bash(npx impeccable *)",
-      "Bash(git status *)"
+      "Bash(git status *)",
+      "Bash(node -e ' *)",
+      "Bash(grep -o 'data-name=\\\\\\\\\"Banner\\\\\\\\\".\\\\{1800\\\\}' \"C:\\\\Users\\\\rapha\\\\.claude\\\\projects\\\\F--Workspace-Mealz-CLAUDE-Projects-DS-MD\\\\a2d1bef1-8a9d-41d2-a0ab-42c2f5896d6d\\\\tool-results\\\\toolu_01CsdXN5Cp29qHiEwH5Jvdm4.json\")",
+      "Bash(grep -o 'data-name=\\\\\\\\\"Catalog Navigation\\\\\\\\\".\\\\{2500\\\\}' \"C:\\\\Users\\\\rapha\\\\.claude\\\\projects\\\\F--Workspace-Mealz-CLAUDE-Projects-DS-MD\\\\a2d1bef1-8a9d-41d2-a0ab-42c2f5896d6d\\\\tool-results\\\\toolu_01CsdXN5Cp29qHiEwH5Jvdm4.json\")",
+      "Skill(artifact-design)",
+      "Skill(artifact-design:*)"
     ]
   },
   "hooks": {

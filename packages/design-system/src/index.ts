@@ -35,6 +35,14 @@ export { ChipTag } from './components/ui/display/ChipTag/ChipTag'
 
 // ── Layout ──
 export { Drawer } from './components/ui/layout/Drawer/Drawer'
+export { StoreHeader } from './components/ui/layout/StoreHeader/StoreHeader'
+export { BottomNav } from './components/ui/layout/BottomNav/BottomNav'
+
+// ── Product ──
+export { RecipeCard } from './components/ui/product/RecipeCard/RecipeCard'
+export { CatalogNavigationItem } from './components/ui/product/CatalogNavigationItem/CatalogNavigationItem'
+export { CatalogNavigation } from './components/ui/product/CatalogNavigation/CatalogNavigation'
+export { PlannerBanner } from './components/ui/product/PlannerBanner/PlannerBanner'
 
 // ── Typography ──
 export { Heading } from './components/ui/typography/Heading/Heading'

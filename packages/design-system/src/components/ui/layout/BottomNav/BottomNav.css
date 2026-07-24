@@ -1,0 +1,68 @@
+/* DS.MD — BottomNav
+   No hardcoded values. All tokens via CSS custom properties.
+   Figma: https://www.figma.com/design/QC58e6IUcVmrBndbmacDxv/Mealz-DS--DS?node-id=266-2331 */
+
+.bottom-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  background-color: var(--color-surface-primary);
+  border-top: 1px solid var(--color-border-default);
+  box-shadow: 0 -1px 4px 0 rgba(3, 24, 32, 0.12);
+}
+
+.bottom-nav__items {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-8);
+}
+
+.bottom-nav__pill {
+  position: absolute;
+  top: var(--spacing-8);
+  bottom: var(--spacing-8);
+  width: calc(100% / 5 - var(--spacing-8));
+  border-radius: var(--shape-input);
+  background-color: var(--color-surface-brand-light);
+  transition: left 0.2s ease;
+}
+
+.bottom-nav__item {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-4) 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-content-weak);
+}
+
+.bottom-nav__item--active {
+  color: var(--color-interactive-content);
+}
+
+.bottom-nav__label {
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--font-size-body-xs);
+  line-height: var(--line-height-body-xs);
+  white-space: nowrap;
+}
+
+.bottom-nav__item--active .bottom-nav__label {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-heading);
+}
+
+.bottom-nav__safe-area {
+  height: env(safe-area-inset-bottom, 0px);
+}

@@ -13,6 +13,7 @@
   border-radius: var(--shape-input);
   outline: none;
   transition: border-color 0.15s ease;
+  max-height: 40px;
 }
 .input-field__input::placeholder { color: var(--color-content-weak); }
 .input-field__input:focus { border-color: var(--color-border-brand); }

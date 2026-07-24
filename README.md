@@ -1,6 +1,6 @@
 # DS.MD — Design System
 
-Monorepo pnpm pour Mealz : un design system multi-brand pur (`packages/design-system`) et un premier prototype qui le consomme (`packages/marmiton-prototype`), construits avec React 19, TypeScript, Tailwind CSS v4 et Storybook 10.
+Monorepo pnpm pour Mealz : un design system multi-brand pur (`packages/design-system`) et plusieurs apps Next.js qui le consomment (prototypes, démos, outils internes), construits avec React 19, TypeScript, Tailwind CSS v4 et Storybook 10.
 
 ## Stack technique
 
@@ -10,7 +10,7 @@ Monorepo pnpm pour Mealz : un design system multi-brand pur (`packages/design-sy
 | React | 19 | UI |
 | TypeScript | 5.6 | Typage |
 | Tailwind CSS | v4 | Utilitaires CSS |
-| Next.js | 16 | App du prototype Marmiton |
+| Next.js | 16 | Apps consommatrices (prototypes, démos) |
 | Storybook | 10 | Documentation interactive du design system |
 | Style Dictionary | 5 | Génération des tokens CSS depuis Figma |
 | CVA | 0.7 | Variants de composants |
@@ -19,7 +19,21 @@ Monorepo pnpm pour Mealz : un design system multi-brand pur (`packages/design-sy
 
 ## Pourquoi un monorepo
 
-Le design system (`packages/design-system`) est indépendant de tout produit : composants UI purs, tokens, Storybook. Chaque prototype (Marmiton aujourd'hui, d'autres demain) vit dans son propre package sous `packages/`, et consomme le design system via `@mealz-product-team/design-system` (lien `workspace:*`, pas de publication sur un registre pour l'instant). Séparer les deux permet d'ajouter de nouveaux prototypes sans jamais toucher au design system, et inversement.
+Le design system (`packages/design-system`) est indépendant de tout produit : composants UI purs, tokens, Storybook. Chaque app (prototype, démo, outil interne) vit dans son propre package sous `packages/`, et consomme le design system via `@mealz-product-team/design-system` (lien `workspace:*`, pas de publication sur un registre pour l'instant). Séparer les deux permet d'ajouter de nouvelles apps sans jamais toucher au design system, et inversement.
+
+## Packages du monorepo
+
+| Package | Port dev | Rôle | Doc |
+|---|---|---|---|
+| `design-system` | 6006 (Storybook) | Design system multi-brand pur : tokens, composants UI, thèmes | `docs/DESIGN.md` |
+| `marmiton-prototype` | 3000 (défaut Next.js) | Premier prototype : parcours courses/panier Marmiton × Carrefour | — |
+| `assistant-shopping` | 3002 | Prototype UI de l'Assistant Shopping ChatGPT (commerce agentique, Carrefour Belgique) | `docs/docs/00-index.md` |
+| `form-mealz-planner` | 3001 | "Quick Features" côté déploiement Netlify — features rapides / tests UI ponctuels (nom de code conservé côté repo) | — |
+| `marmiton-agent` | 3003 | Wireframe d'exploration « Marmiton agentique » (agent culinaire piloté par IA) | `docs/Brief projet — Marmiton Agentique.md` |
+| `home` | 3004 | Hub de navigation entre les prototypes déployés (liens vers les sites Netlify indépendants) | `docs/BRIEF.md` |
+| `supermarket` | 3006 | Démo drive (catalogue + wizard planner) illustrant la réutilisation cross-package du design system (`RecipeCard`, `StoreHeader`, `BottomNav`) | `docs/BRIEF.md` |
+
+Chaque app consommatrice a son propre `docs/` (brief, contexte produit, décisions) — à lire avant d'y travailler, voir `CLAUDE.md` à la racine.
 
 ## Démarrage rapide
 
@@ -36,7 +50,17 @@ pnpm storybook
 pnpm build
 ```
 
-Les scripts `dev`/`build`/`storybook` régénèrent automatiquement les CSS de tokens avant de s'exécuter (hooks `predev`/`prebuild`/`prestorybook`) — pas besoin de lancer `tokens` à la main, sauf pour vérifier un changement de tokens Figma isolément.
+Pour lancer une autre app que `marmiton-prototype`, cibler le package directement :
+
+```bash
+pnpm --filter @mealz-product-team/assistant-shopping dev    # port 3002
+pnpm --filter @mealz-product-team/form-mealz-planner dev    # port 3001
+pnpm --filter @mealz-product-team/marmiton-agent dev        # port 3003
+pnpm --filter @mealz-product-team/home dev                  # port 3004
+pnpm --filter @mealz-product-team/supermarket dev           # port 3006
+```
+
+Les scripts `dev`/`build`/`storybook` de chaque package régénèrent automatiquement les CSS de tokens avant de s'exécuter (hooks `predev`/`prebuild`/`prestorybook`) — pas besoin de lancer `tokens` à la main, sauf pour vérifier un changement de tokens Figma isolément.
 
 ---
 
@@ -51,13 +75,16 @@ DS.MD/
     ├── design-system/                # @mealz-product-team/design-system
     │   ├── tokens/                   # Fichiers de tokens Figma (W3C JSON)
     │   ├── sd.config.js              # Configuration Style Dictionary
-    │   ├── scripts/verify-tokens.mjs # Vérifie l'absence de collision hand-written / généré
+    │   ├── scripts/verify-tokens.mjs       # Vérifie l'absence de collision hand-written / généré
+    │   ├── scripts/verify-design-docs.mjs  # Vérifie qu'un composant Storybook a bien son .design.md
+    │   ├── docs/DESIGN.md            # Guide de design system pour agents (cascade tokens, quel composant pour quel besoin)
     │   ├── .storybook/                # Configuration Storybook
     │   ├── postcss.config.mjs
     │   ├── tsconfig.json
     │   └── src/
     │       ├── index.ts               # Barrel — tous les composants ui/ exportés
-    │       ├── components/ui/         # Composants primitifs réutilisables
+    │       ├── components/ui/         # Composants primitifs réutilisables (display, feedback, form, layout, navigation, product, typography)
+    │       ├── devtools/               # BrandThemeSwitcher, script anti-FOUC (pas des composants DS "produit")
     │       ├── hooks/useMediaQuery.ts
     │       └── styles/
     │           ├── index.css          # Entry point global (Tailwind + tokens + reset)
@@ -65,23 +92,21 @@ DS.MD/
     │           ├── dist/              # Généré par `tokens`, gitignored
     │           └── tokens/
     │               ├── base.css       # Spacing/Shape/Elevation/Font Family/Font Weight (jamais générés)
+    │               ├── layout.css     # Grille layout (colonnes/marge/gutter par breakpoint), hand-written
     │               ├── color-light.css # Exceptions brand-indirection — mode clair
     │               ├── color-dark.css  # Exceptions brand-indirection — mode sombre
-    │               ├── brands/         # neutral.css, marmiton.css, coursesu.css
-    │               └── partners/       # carrefour.css
+    │               ├── brands/         # neutral.css, marmiton.css, coursesu.css + brands.ts (registre)
+    │               └── partners/       # carrefour.css — overrides via [data-partner]
     │
-    └── marmiton-prototype/           # @mealz-product-team/marmiton-prototype
-        ├── app/                      # App Next.js (prototype Marmiton)
-        ├── public/
-        ├── next.config.ts            # transpilePackages: design-system
-        ├── tsconfig.json
-        └── src/
-            ├── components/product/   # Composants métier (Cart, ProductCard, RecipeIngredientWidget, ...)
-            ├── context/               # CartContext
-            ├── data/                  # Mock data + types
-            ├── themes/                # ThemeProvider (wrapper de confort sur data-brand/data-color-scheme)
-            └── assets/
+    ├── marmiton-prototype/            # @mealz-product-team/marmiton-prototype — prototype Marmiton × Carrefour
+    ├── assistant-shopping/            # @mealz-product-team/assistant-shopping — Assistant Shopping ChatGPT
+    ├── form-mealz-planner/            # @mealz-product-team/form-mealz-planner — "Quick Features"
+    ├── marmiton-agent/                # @mealz-product-team/marmiton-agent — wireframe Marmiton agentique
+    ├── home/                          # @mealz-product-team/home — hub de navigation entre prototypes
+    └── supermarket/                   # @mealz-product-team/supermarket — démo drive catalogue + planner
 ```
+
+Chaque app consommatrice Next.js suit la même convention interne : `app/` (routes), `src/components/` (composants métier), `src/data/` (mock data + types), `docs/` (brief produit). Voir le détail de `marmiton-prototype` en fin de section « Composants ».
 
 ---
 
@@ -95,6 +120,8 @@ Le design system supporte le **multi-brand** et le **dark/light mode** via des a
 <!-- Brand + color scheme définis sur <html> -->
 <html data-brand="neutral" data-color-scheme="light">
 ```
+
+Un attribut `data-partner` optionnel permet en plus d'appliquer des overrides propres à un partenaire retailer (ex. `carrefour`), au-dessus de la couche brand.
 
 ### ThemeProvider (côté app, ex. marmiton-prototype)
 
@@ -121,13 +148,17 @@ function MyComponent() {
 }
 ```
 
+Les autres apps Next.js du monorepo (`assistant-shopping`, `form-mealz-planner`, `marmiton-agent`, `home`, `supermarket`) utilisent à la place `BrandThemeSwitcher` (`devtools/BrandThemeSwitcher`), un sélecteur de thème client intégré au `layout.tsx` — voir la règle d'intégration dans `CLAUDE.md` racine.
+
 ### Brands disponibles
 
 | Valeur | Description |
 |---|---|
 | `neutral` | Brand neutre (défaut) |
 | `marmiton` | Marmiton |
-| `coursesu` | CoursesU |
+| `coursesu` | CoursesU (retailer) |
+
+Le partenaire `carrefour` s'applique via `data-partner`, en overlay d'une brand, plutôt que comme une brand à part entière (voir `styles/tokens/partners/carrefour.css`).
 
 ---
 
@@ -148,7 +179,7 @@ pnpm --filter @mealz-product-team/design-system verify-tokens   # vérifie l'abs
 
 Un transform de nommage personnalisé (`figma/name-css`) reproduit la convention déjà utilisée partout (`--color-surface-page`, `--font-size-heading-xl`, ...). Le transform couleur reconstruit un `rgba(...)` quand une couleur Figma a une alpha < 1 (le champ `hex` de Figma est toujours opaque).
 
-Une poignée de variables restent **volontairement hand-written** dans `color-light.css`/`color-dark.css`/`base.css` : les indirections vers la couche brand (`--color-interactive-bg: var(--brand-500)`, etc. — Figma ne connaît pas cette indirection et la remplacerait par un hex figé), et `Spacing`/`Shape`/`Elevation`/`Font Family`/`Font Weight`/`label-badge` qui n'ont pas (encore) de source Figma. `verify-tokens.mjs` vérifie en continu que ces exceptions et les fichiers générés ne définissent jamais la même variable.
+Une poignée de variables restent **volontairement hand-written** dans `color-light.css`/`color-dark.css`/`base.css`/`layout.css` : les indirections vers la couche brand (`--color-interactive-bg: var(--brand-500)`, etc. — Figma ne connaît pas cette indirection et la remplacerait par un hex figé), et `Spacing`/`Shape`/`Elevation`/`Font Family`/`Font Weight`/`label-badge`/grille de layout qui n'ont pas (encore) de source Figma. `verify-tokens.mjs` vérifie en continu que ces exceptions et les fichiers générés ne définissent jamais la même variable.
 
 ### Catégories de tokens
 
@@ -158,6 +189,7 @@ Une poignée de variables restent **volontairement hand-written** dans `color-li
 | Spacing | `--spacing-*` | Hand-written |
 | Formes (border-radius) | `--shape-*` | Hand-written |
 | Élévation (ombres) | `--elevation-*` | Hand-written |
+| Grille layout (colonnes/marge/gutter par breakpoint) | `--layout-*` | Hand-written |
 | Typographie (taille, interligne) | `--font-size-*`, `--line-height-*` | Généré (sauf label-badge) |
 | Typographie (famille, poids) | `--font-family-*`, `--font-weight-*` | Hand-written |
 
@@ -171,7 +203,8 @@ Chaque composant suit la structure :
 ComponentName/
 ├── ComponentName.tsx      # Composant React + types exportés
 ├── ComponentName.css      # Styles (classes BEM + Tailwind)
-└── ComponentName.stories.tsx  # Stories Storybook
+├── ComponentName.stories.tsx  # Stories Storybook
+└── ComponentName.design.md    # Doc d'usage : variants, states, tokens, accessibilité
 ```
 
 ### Conventions
@@ -180,6 +213,7 @@ ComponentName/
 - **Styles** : classes BEM dans un `.css` dédié, tokens CSS via Tailwind v4 `@theme inline`
 - **Types** : props exportées explicitement (`ButtonProps`, `ButtonVariant`, etc.)
 - **Accessibilité** : attributs `aria-*` systématiques, `:focus-visible` global
+- **Doc** : chaque composant Storybook doit avoir son `<Component>.design.md` (`verify-design-docs` fait échouer le build sinon) et une entrée dans la table de décision `docs/DESIGN.md` §3
 
 ### Composants du design system (`packages/design-system`)
 
@@ -221,6 +255,8 @@ Tous exportés depuis le barrel `@mealz-product-team/design-system`.
 | Composant | Description |
 |---|---|
 | `Drawer` | Panneau latéral coulissant |
+| `StoreHeader` | Barre de navigation principale d'un site marchand (logo, navigation, recherche, favoris, compte, panier) — plateforme Desktop |
+| `BottomNav` | Barre de navigation fixée en bas de viewport (5 onglets) — équivalent `StoreHeader` pour Mobile/App |
 
 #### Navigation
 | Composant | Description |
@@ -233,10 +269,26 @@ Tous exportés depuis le barrel `@mealz-product-team/design-system`.
 | `SegmentedControl` | Sélecteur segmenté |
 | `Tab` | Onglets |
 
-### Composants métier (`packages/marmiton-prototype`)
+#### Product
+Composants modélisant une entité produit/feature métier (recette, catalogue, planner), distincts des primitives UI génériques ci-dessus.
 
-Spécifiques au prototype, ne font pas partie du design system :
+| Composant | Description |
+|---|---|
+| `RecipeCard` | Carte recette de grille (catalogue, collection, rayon) : visuel, titre, portions, badges, prix, favori, action panier |
+| `CatalogNavigation` | Barre d'outils du catalogue de recettes : recherche, promo, favoris, filtres, préférences |
+| `CatalogNavigationItem` | Pastille individuelle de `CatalogNavigation` (icône + libellé + badge optionnels) |
+| `PlannerBanner` | Bannière de mise en avant du Mealz Planner (badge, accroche, avatars de recettes suggérées, CTA, sélecteur de personnes) |
 
+#### Typography
+| Composant | Description |
+|---|---|
+| `Heading` | Titre de section, 4 tailles visuelles avec balise HTML par défaut surchargeable via `as` |
+
+### Composants métier des apps consommatrices
+
+Spécifiques à chaque app, ne font pas partie du design system.
+
+**`packages/marmiton-prototype/src/components/product`**
 | Dossier | Rôle |
 |---|---|
 | `CarrefourLogin` | Modale de connexion partenaire |
@@ -248,11 +300,20 @@ Spécifiques au prototype, ne font pas partie du design system :
 | `StoreLocator` | Sélection de magasin |
 | `TimeslotPicker` | Sélection de créneau de livraison |
 
+**`packages/supermarket/src`**
+| Dossier | Rôle |
+|---|---|
+| `components/CollectionView` | Rendu d'une collection de recettes (catalogue) |
+| `components/QuestionCard` | Carte question du wizard planner (diète, équipement, repas, personnes) |
+| `context/WizardContext` | État partagé du flow planner multi-étapes |
+
+D'autres apps (`assistant-shopping`, `form-mealz-planner`, `marmiton-agent`, `home`) ont leurs propres composants métier dans `src/components/` — voir leur `docs/` respectif pour le contexte produit.
+
 ---
 
 ## Storybook
 
-Storybook documente uniquement le design system (`packages/design-system`) — les composants métier du prototype n'y apparaissent pas, par choix (le prototype pourra avoir son propre Storybook plus tard si besoin).
+Storybook documente uniquement le design system (`packages/design-system`) — les composants métier des apps consommatrices n'y apparaissent pas, par choix (chaque app pourra avoir son propre Storybook plus tard si besoin).
 
 Configuré avec :
 - **`@storybook/addon-a11y`** : audit d'accessibilité en temps réel
@@ -285,13 +346,22 @@ Convention npm : tout script `pre<X>` se lance automatiquement avant `<X>`.
 |---|---|
 | `pnpm --filter @mealz-product-team/design-system tokens` | Génère les CSS depuis les tokens Figma |
 | `pnpm --filter @mealz-product-team/design-system verify-tokens` | Vérifie l'absence de collision hand-written/généré |
+| `pnpm --filter @mealz-product-team/design-system verify-design-docs` | Vérifie qu'un composant Storybook a bien son `.design.md` |
 | `pnpm --filter @mealz-product-team/design-system storybook` | Storybook en dev |
 | `pnpm --filter @mealz-product-team/design-system build-storybook` | Build statique de Storybook |
+| `pnpm --filter @mealz-product-team/design-system test` | Tests unitaires (Vitest) |
 
-### `packages/marmiton-prototype`
+### Apps consommatrices
 
-| Commande | Description |
-|---|---|
-| `pnpm --filter @mealz-product-team/marmiton-prototype dev` | Next.js en dev (régénère les tokens du design system avant) |
-| `pnpm --filter @mealz-product-team/marmiton-prototype build` | Build de production Next.js |
-| `pnpm --filter @mealz-product-team/marmiton-prototype start` | Sert le build de production |
+Chaque app suit le même trio `dev`/`build`/`start` (Next.js), avec régénération automatique des tokens avant `dev`/`build` :
+
+| Package | Port | Commande dev |
+|---|---|---|
+| `marmiton-prototype` | 3000 | `pnpm --filter @mealz-product-team/marmiton-prototype dev` |
+| `form-mealz-planner` | 3001 | `pnpm --filter @mealz-product-team/form-mealz-planner dev` |
+| `assistant-shopping` | 3002 | `pnpm --filter @mealz-product-team/assistant-shopping dev` |
+| `marmiton-agent` | 3003 | `pnpm --filter @mealz-product-team/marmiton-agent dev` |
+| `home` | 3004 | `pnpm --filter @mealz-product-team/home dev` |
+| `supermarket` | 3006 | `pnpm --filter @mealz-product-team/supermarket dev` |
+
+`assistant-shopping` et `marmiton-agent` exposent en plus un script `test` (Vitest).

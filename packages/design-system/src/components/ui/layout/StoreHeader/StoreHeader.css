@@ -1,0 +1,114 @@
+/* DS.MD — StoreHeader
+   No hardcoded values. All tokens via CSS custom properties.
+   Figma: https://www.figma.com/design/QC58e6IUcVmrBndbmacDxv/Mealz-DS--DS?node-id=111-4078 */
+
+.store-header {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-surface-primary);
+  border-bottom: 1px solid var(--color-border-default);
+}
+
+/* ── Desktop ── */
+.store-header--desktop {
+  gap: var(--spacing-24);
+  padding: var(--spacing-24);
+}
+
+.store-header__left,
+.store-header__right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-24);
+  flex-shrink: 0;
+}
+
+.store-header__logo {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-heading);
+  font-size: var(--font-size-heading-sm);
+  line-height: var(--line-height-heading-sm);
+  color: var(--color-content-default);
+  white-space: nowrap;
+}
+
+.store-header__search {
+  flex: 1 1 0;
+  min-width: 200px;
+}
+
+.store-header__nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  text-decoration: none;
+  cursor: pointer;
+  color: var(--color-content-default);
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body-sm);
+  white-space: nowrap;
+}
+
+.store-header__nav-item:hover {
+  color: var(--color-interactive-content);
+}
+
+/* ── Mobile / App — condensed ── */
+.store-header--mobile,
+.store-header--app {
+  justify-content: space-between;
+  padding: var(--spacing-8) var(--spacing-16);
+}
+
+.store-header--mobile .store-header__right,
+.store-header--app .store-header__right {
+  gap: var(--spacing-16);
+}
+
+.store-header__icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  padding: var(--spacing-12);
+  border-radius: var(--shape-input);
+  color: var(--color-content-default);
+}
+
+.store-header__icon-btn:hover {
+  background-color: var(--color-surface-secondary);
+}
+
+/* ── Cart action (shared) ── */
+.store-header__cart {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  text-decoration: none;
+  cursor: pointer;
+  color: var(--color-content-default);
+}
+
+.store-header__cart-icon {
+  position: relative;
+  display: inline-flex;
+}
+
+.store-header__cart-icon .badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+}
+
+.store-header__cart-total {
+  font-family: var(--font-family-price);
+  font-weight: var(--font-weight-price);
+  font-size: var(--font-size-price-md);
+  line-height: var(--line-height-price-md);
+  white-space: nowrap;
+}

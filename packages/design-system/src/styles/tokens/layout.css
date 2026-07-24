@@ -1,0 +1,60 @@
+/**
+ * DS.MD — Layout tokens
+ * Grid columns / margin / gutter per breakpoint, from the "Layout Grid"
+ * styles saved in the Figma DS.MD file (Foundations page).
+ * Mode-agnostic and brand-agnostic — same values in light/dark, all brands.
+ *
+ * Breakpoint thresholds (min-width) can't be expressed as CSS custom
+ * properties (not usable inside @media conditions), so they're hard-coded
+ * in the wrapper classes below and documented here instead:
+ *   Mobile  : < 768px
+ *   Tablet  : 768px – 1023px
+ *   Desktop : ≥ 1024px — Fluid valid 1024px → 1600px, Containered caps at 1200px
+ */
+
+:root {
+  --layout-mobile-columns: 4;
+  --layout-mobile-margin: 16px;
+  --layout-mobile-gutter: 8px;
+
+  --layout-tablet-columns: 8;
+  --layout-tablet-margin: 24px;
+  --layout-tablet-gutter: 16px;
+
+  --layout-desktop-columns: 12;
+  --layout-desktop-margin: 32px;
+  --layout-desktop-gutter: 24px;
+
+  --layout-container-max-width: 1200px;
+}
+
+/* ─────────────────────────────────────────
+   WRAPPER CLASSES
+   Apply directly to a page-level element — no Container component needed.
+   `.layout-container` behaves exactly like `.layout-fluid` below the
+   Desktop breakpoint: Figma only defines a Containered variant at Desktop.
+───────────────────────────────────────── */
+.layout-fluid,
+.layout-container {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--layout-mobile-margin);
+}
+
+@media (min-width: 768px) {
+  .layout-fluid,
+  .layout-container {
+    padding-inline: var(--layout-tablet-margin);
+  }
+}
+
+@media (min-width: 1024px) {
+  .layout-fluid,
+  .layout-container {
+    padding-inline: var(--layout-desktop-margin);
+  }
+
+  .layout-container {
+    max-width: var(--layout-container-max-width);
+  }
+}

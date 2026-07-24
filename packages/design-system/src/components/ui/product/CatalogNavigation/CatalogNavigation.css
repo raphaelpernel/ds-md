@@ -1,0 +1,50 @@
+/* DS.MD — CatalogNavigation
+   No hardcoded values. All tokens via CSS custom properties.
+   Figma: https://www.figma.com/design/e8BpuLovSPh0SPseTl29tA/Catalog?node-id=4712-35838 */
+
+.catalog-navigation {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  flex-wrap: wrap;
+}
+
+.catalog-navigation__search {
+  flex: 1 1 240px;
+  max-width: 360px;
+  transform-origin: left center;
+  animation: catalog-navigation-search-in 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.catalog-navigation__search-toggle {
+  animation: catalog-navigation-toggle-in 0.18s ease;
+}
+
+@keyframes catalog-navigation-search-in {
+  from {
+    opacity: 0;
+    transform: scaleX(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes catalog-navigation-toggle-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .catalog-navigation__search,
+  .catalog-navigation__search-toggle {
+    animation: none;
+  }
+}

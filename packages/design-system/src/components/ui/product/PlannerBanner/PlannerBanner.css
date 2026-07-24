@@ -1,0 +1,137 @@
+/* DS.MD — PlannerBanner
+   No hardcoded values. All tokens via CSS custom properties.
+   Extrait de la page d'entrée form-mealz-planner (pas de node Figma source dédié). */
+
+.planner-banner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-16);
+  border-radius: var(--shape-card);
+  overflow: hidden;
+  background-image: var(--planner-banner-bg-mobile);
+  background-size: cover;
+  background-position: center;
+  aspect-ratio: 375 / 340;
+}
+
+@media (min-width: 768px) {
+  .planner-banner {
+    background-image: var(--planner-banner-bg-desktop);
+    aspect-ratio: 1200 / 272;
+    padding: var(--spacing-24);
+  }
+}
+
+.planner-banner__card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--color-surface-page);
+  border-radius: var(--shape-sheet);
+  box-shadow: var(--elevation-400);
+  padding: var(--spacing-20);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+}
+
+.planner-banner__left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-8);
+}
+
+.planner-banner__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-heading-md);
+  line-height: var(--line-height-heading-md);
+  color: var(--color-content-default);
+  text-align: center;
+}
+
+.planner-banner__title-accent {
+  color: var(--color-interactive-content);
+}
+
+.planner-banner__right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-12);
+}
+
+.planner-banner__subtitle {
+  margin: 0;
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body-sm);
+  color: var(--color-content-default);
+  text-align: center;
+}
+
+.planner-banner__thumbs {
+  display: flex;
+}
+
+.planner-banner__thumb {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--color-surface-secondary);
+  border: 2px solid var(--color-surface-page);
+  margin-left: -10px;
+}
+
+.planner-banner__thumb:first-child {
+  margin-left: 0;
+}
+
+.planner-banner__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-12);
+  flex-wrap: wrap;
+}
+
+.planner-banner__actions .btn {
+  flex: 1;
+}
+
+@media (min-width: 768px) {
+  .planner-banner__card {
+    max-width: 840px;
+    flex-direction: row;
+    align-items: center;
+    padding: var(--spacing-24) var(--spacing-32);
+    gap: var(--spacing-32);
+  }
+
+  .planner-banner__left {
+    flex: 0 0 auto;
+  }
+
+  .planner-banner__right {
+    flex: 1;
+  }
+
+  .planner-banner__title {
+    font-size: var(--font-size-heading-lg);
+    line-height: var(--line-height-heading-lg);
+  }
+
+  .planner-banner__thumb {
+    width: 80px;
+    height: 80px;
+    margin-left: -12px;
+  }
+
+  .planner-banner__actions {
+    flex-wrap: nowrap;
+  }
+
+  .planner-banner__actions .btn {
+    flex: 0 0 auto;
+  }
+}

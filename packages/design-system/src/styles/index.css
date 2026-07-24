@@ -12,6 +12,9 @@
 /* Base tokens (spacing, shape, elevation, font family/weight) */
 @import './tokens/base.css';
 
+/* Layout tokens (breakpoints, grid columns/margin/gutter) + wrapper classes */
+@import './tokens/layout.css';
+
 /* Style Dictionary output, generated from tokens/*.tokens.json via
    `npm run tokens`. Covers color light/dark and typography desktop/mobile —
    the token categories that already have a Figma export. */

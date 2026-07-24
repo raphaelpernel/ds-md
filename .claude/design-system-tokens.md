@@ -365,7 +365,7 @@ Scope Figma : `CORNER_RADIUS` — alias vers les Primitives Radius.
 - `secondary` — CTA secondaire (outlined)
 - `tertiary` — action tertiaire (ghost)
 - `danger` — actions destructives uniquement
-- `alpha` — sur image/fond coloré (semi-transparent avec blur)
+- `alpha` — **obligatoire** pour tout CTA (`Button`/`FAB`) posé directement sur une image ou une vidéo, quel que soit son état actif/inactif — jamais `primary`/`secondary`/`tertiary`/`danger` sur un media (règle système, voir `DESIGN.md` §3 "Actions (cliquable)"). L'état se porte sur l'icône, pas sur la couleur du bouton.
 
 ### 7.3b Product
 
@@ -373,6 +373,15 @@ Scope Figma : `CORNER_RADIUS` — alias vers les Primitives Radius.
 |---|---|---|---|
 | `ProductCard` | `import { ProductCard } from '@/components'` | `context`: catalog\|cart · `orientation`: vertical\|horizontal · `product`: Product · `onAdd`: callback (catalog) · `quantity` / `onQuantityChange` / `onRemove` / `onReplace` (cart) | [Figma](https://www.figma.com/design/ES4RxHAafQbIwWLTzHnyFF/DS.MD?node-id=461-211) |
 | `PromoSection` | `import { PromoSection } from '@/components'` | `products`: Product[] · `onAdd`: callback · `onViewAll`: callback | — |
+| `RecipeCard` | `import { RecipeCard } from '@mealz-product-team/design-system'` | `size`: default\|small (small non stylé) · `guests` · `price` · `mealIdea` · `promo` · `sponsor` · `favorite`/`onFavoriteToggle` · `added`/`onAddToggle` · `loading` · `onClick` | [Figma](https://www.figma.com/design/YDFZDIbtM9w9F5pWftkbUR/Recipes?node-id=378-53604) |
+| `CatalogNavigation` | `import { CatalogNavigation } from '@mealz-product-team/design-system'` | `searchPlaceholder`/`onSearchChange` · `promoHref`/`promoLabel` · `favoritesHref` · `filterCount`/`onFilterClick` · `preferencesCount`/`onPreferencesClick` | [Figma](https://www.figma.com/design/e8BpuLovSPh0SPseTl29tA/Catalog?node-id=4712-35838) |
+| `CatalogNavigationItem` | `import { CatalogNavigationItem } from '@mealz-product-team/design-system'` | `icon` · `label`/`ariaLabel` · `count` · `tone`: default\|promo · `href` (→ `<a>`) ou `onClick` (→ `<button>`) | [Figma](https://www.figma.com/design/e8BpuLovSPh0SPseTl29tA/Catalog?node-id=4712-35838) |
+| `PlannerBanner` | `import { PlannerBanner } from '@mealz-product-team/design-system'` | `badgeLabel` · `title`/`subtitle` · `thumbnails`: string[] · `ctaLabel`/`onCtaClick` · `peopleCount`/`onPeopleChange` (contrôlé) · `defaultPeopleCount` (non-contrôlé) · `peopleMin`/`peopleMax` · `backgroundImageMobile`/`backgroundImageDesktop` | — (extrait de l'app `form-mealz-planner`, pas de node Figma source) |
+
+**Notes RecipeCard :**
+- Seul composant du package design-system pour l'instant dans `product/` — variante Desktop/Catalog uniquement (voir `RecipeCard.design.md` pour le détail du périmètre).
+- Badge "Idée repas" composé via `ChipTag type="toned"` (pas de nouvelle `category` — la palette `toned` existante correspond déjà à `Surface/Brand Light` + `Content/Brand`).
+- Bouton favori toujours rendu, `Button variant="alpha"` fixe (posé sur le media recette) — état favori porté par l'icône (`weight="fill"`/`"regular"`), pas par la couleur.
 
 **Notes ProductCard :**
 - `vertical` — carte portrait : image pleine largeur en haut, contenu + prix en bas. Largeur fixe 140px, idéale pour les grilles.
@@ -385,11 +394,23 @@ Scope Figma : `CORNER_RADIUS` — alias vers les Primitives Radius.
 - Utilise `ProductCard` en mode `vertical` (min 160px, max 200px) en interne.
 - `onViewAll` optionnel — si absent, le CTA "Voir tout" n'est pas affiché.
 
+**Notes PlannerBanner :**
+- Extrait du markup `entry-banner*` de la page d'entrée `form-mealz-planner` — devenu composant partagé entre `form-mealz-planner` et `supermarket`, chacun avec son propre `WizardContext` local (mode contrôlé), CTA fonctionnel redirigeant vers le wizard (`/people` côté `form-mealz-planner`, `/planner/people` côté `supermarket`). Le wizard complet (routes people/meals/equipment/diet/results, `QuestionCard`, mock data) a été porté dans `supermarket/src` et `supermarket/app/planner/*` pour y être testé comme "quick feature" ; `form-mealz-planner` reste disponible en parallèle en attendant sa dépréciation.
+- `peopleCount` non fourni ⇒ état interne géré par le composant (`defaultPeopleCount`), comme un input React non-contrôlé.
+- `backgroundImageMobile`/`backgroundImageDesktop` résolus depuis le `public/img/` de l'app consommatrice (même pattern que les fonts Satoshi) — copier `planner-banner-bg-{mobile,desktop}.png` dans toute nouvelle app consommatrice.
+- `thumbnails` par défaut : 6 URLs TheMealDB déjà utilisées ailleurs dans le repo (pas d'appel réseau tiers en direct).
+
 ### 7.4 Layout
 
 | Composant | Import | Variants / Props clés | Figma |
 |---|---|---|---|
 | `Drawer` | `import { Drawer } from '@/components'` | `open` · `onClose` · `title` · `placement`: right\|left\|bottom · `mobilePlacement`: right\|left\|bottom · `footer` (ReactNode) | [Figma](https://www.figma.com/design/ES4RxHAafQbIwWLTzHnyFF/DS.MD?node-id=381-442) |
+| `StoreHeader` | `import { StoreHeader } from '@mealz-product-team/design-system'` | `platform`: Desktop\|Mobile\|App · `cartCount` · `cartTotal` · `userName` · handlers par item de nav | [Figma](https://www.figma.com/design/QC58e6IUcVmrBndbmacDxv/Mealz-DS--DS?node-id=111-4078) |
+| `BottomNav` | `import { BottomNav } from '@mealz-product-team/design-system'` | `activeTab`: home\|aisles\|recipes\|favorites\|account · `onTabChange` · `accountLabel` | [Figma](https://www.figma.com/design/QC58e6IUcVmrBndbmacDxv/Mealz-DS--DS?node-id=266-2331) |
+
+**Notes StoreHeader / BottomNav :**
+- `platform` n'est pas auto-détecté (pas de `useMediaQuery` interne) — au consommateur de choisir selon le viewport, pour rester SSR-safe.
+- `BottomNav` s'utilise uniquement avec `StoreHeader platform="Mobile"` ou `"App"` — la navigation Desktop vit dans le header.
 
 ### 7.5 Navigation
 
@@ -438,3 +459,30 @@ Scope Figma : `CORNER_RADIUS` — alias vers les Primitives Radius.
 | Spacing | https://www.figma.com/design/ES4RxHAafQbIwWLTzHnyFF/DS.MD?node-id=345-695 |
 | Shape | https://www.figma.com/design/ES4RxHAafQbIwWLTzHnyFF/DS.MD?node-id=345-696 |
 | Elevation | https://www.figma.com/design/ES4RxHAafQbIwWLTzHnyFF/DS.MD?node-id=345-697 |
+| Layout Guide | https://www.figma.com/design/ES4RxHAafQbIwWLTzHnyFF/DS.MD?node-id=174-3409 |
+
+---
+
+## 10. Layout — Grille & breakpoints
+
+Scope Figma : styles "Layout Grid" (page *Foundations*). Pas de collection Figma dédiée — valeurs
+saisies manuellement depuis les styles Layout Grid enregistrés (pas d'export Style Dictionary pour ce
+type de style). CSS : [`src/styles/tokens/layout.css`](../packages/design-system/src/styles/tokens/layout.css).
+Détail d'usage et règle de choix Fluid/Containered : [`packages/design-system/docs/DESIGN.md`](../packages/design-system/docs/DESIGN.md) §6.
+
+| CSS var | Valeur | Breakpoint |
+|---|---|---|
+| `--layout-mobile-columns` | 4 | < 768px |
+| `--layout-mobile-margin` | 16px | < 768px |
+| `--layout-mobile-gutter` | 8px | < 768px |
+| `--layout-tablet-columns` | 8 | 768px – 1023px |
+| `--layout-tablet-margin` | 24px | 768px – 1023px |
+| `--layout-tablet-gutter` | 16px | 768px – 1023px |
+| `--layout-desktop-columns` | 12 | ≥ 1024px |
+| `--layout-desktop-margin` | 32px | ≥ 1024px |
+| `--layout-desktop-gutter` | 24px | ≥ 1024px |
+| `--layout-container-max-width` | 1200px | ≥ 1024px (variante Containered) |
+
+Classes wrapper : `.layout-fluid`, `.layout-container` (padding-inline responsive ; `.layout-container` cape à
+`max-width: 1200px` centré au-delà de 1024px). Seuils 768px/1024px non issus de Figma — convention standard
+alignée sur la borne basse Desktop Fluid (1024px) donnée dans le style.

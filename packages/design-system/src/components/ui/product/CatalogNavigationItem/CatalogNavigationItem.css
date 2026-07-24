@@ -1,0 +1,50 @@
+/* DS.MD — CatalogNavigationItem
+   No hardcoded values. All tokens via CSS custom properties.
+   Figma: https://www.figma.com/design/e8BpuLovSPh0SPseTl29tA/Catalog?node-id=4712-35838 */
+
+.catalog-nav-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-4);
+  height: var(--spacing-40);
+  padding: var(--spacing-12) var(--spacing-16);
+  border-radius: var(--shape-pill);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-label);
+  font-size: var(--font-size-label-md);
+  line-height: var(--line-height-label-md);
+  white-space: nowrap;
+}
+
+.catalog-nav-item--default {
+  background-color: var(--color-surface-primary);
+  border-color: var(--color-border-default);
+  color: var(--color-content-default);
+}
+
+.catalog-nav-item--default:hover {
+  background-color: var(--color-surface-secondary);
+}
+
+.catalog-nav-item--promo {
+  background-color: var(--color-category-promo-bg);
+  color: var(--color-content-inversed);
+}
+
+.catalog-nav-item--promo:hover {
+  opacity: 0.9;
+}
+
+.catalog-nav-item__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.catalog-nav-item__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

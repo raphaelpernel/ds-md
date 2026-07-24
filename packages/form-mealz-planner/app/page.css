@@ -1,0 +1,7 @@
+.entry-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-24) var(--spacing-16);
+}

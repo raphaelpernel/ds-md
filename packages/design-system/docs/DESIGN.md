@@ -52,6 +52,8 @@ Les tokens se résolvent en cascade CSS (voir `src/styles/index.css`) : `tokens/
 | Icône seule sans label visible (close, menu burger) | `Button` avec `iconOnly` | — | — |
 | Action flottante hors du flux normal | `FAB` | **Par défaut, préférer `Button`** en nav ou en bas de flux — le FAB n'a aujourd'hui aucun usage produit et l'assistant a explicitement remplacé son FAB flottant par un lien de nav (décision du 2026-07-21, voir `assistant-shopping/docs/docs/UIUX-DECISIONS.MD`). Ne l'introduire qu'en cas de besoin explicitement validé, pas par défaut. | `Button` |
 
+**Règle système — CTA posé sur un media (image/vidéo) :** tout `Button` (plein, `iconOnly` ou non), `FAB` (`alpha`) placé directement au-dessus d'une image ou d'une vidéo doit utiliser la variante **`alpha`** (`variant="alpha"` sur `Button`, `alpha` sur `FAB`) — jamais `primary`/`secondary`/`tertiary`/`danger` en direct sur un media, quel que soit son état (actif/inactif). `alpha` est le seul rendu garanti lisible sur un visuel dont le contenu/luminosité n'est pas contrôlé (fond semi-transparent + blur, cf. `Interactive/Alpha BG`). L'état (ex. favori actif) se porte alors sur l'icône (`weight="fill"` vs `"regular"`), jamais sur la couleur du bouton. Exemple d'application : bouton favori de `RecipeCard`, posé sur le visuel recette.
+
 ### Feedback & overlays
 
 | Besoin | Composant | Ne pas utiliser pour | Voir aussi |
@@ -82,6 +84,34 @@ Distinction par **forme vs mouvement** — les trois ne sont pas interchangeable
 | Compteur numérique ou indicateur de statut (point coloré) | `Badge` | Étiquette produit (promo/new/healthy/express/low-cost) → `ChipTag` (prop `category`) |
 | Tag produit, filtre, catégorie merchandising | `ChipTag` | Compteur numérique → `Badge` |
 
+### Cartes produit / recette
+
+| Besoin | Composant | Ne pas utiliser pour | Voir aussi |
+|---|---|---|---|
+| Carte recette en grille (catalogue, collection, rayon) — visuel, titre, portions, prix, favori, ajout panier | `RecipeCard` (catégorie `product`) | Un produit non-recette (rayon grocery classique) → `ProductCard` (app-level, `marmiton-prototype`) | — |
+
+### Barre d'outils catalogue (recherche, promo, filtres…)
+
+| Besoin | Composant | Ne pas utiliser pour | Voir aussi |
+|---|---|---|---|
+| Barre complète recherche/promo/favoris/filtres/préférences au-dessus d'une grille de recettes | `CatalogNavigation` (catégorie `product`, groupe Storybook "Catalog") | Un item isolé hors de cette barre → `CatalogNavigationItem` seul | `CatalogNavigationItem` |
+| Item individuel de cette barre (icône + libellé optionnel + badge de compte optionnel), navigation **ou** action selon `href` | `CatalogNavigationItem` | Un tag produit/filtre à cocher classique → `ChipTag` ; un compteur seul sans action → `Badge` | `ChipTag`, `Badge` |
+
+### Bannières de mise en avant (cross-sell feature)
+
+| Besoin | Composant | Ne pas utiliser pour | Voir aussi |
+|---|---|---|---|
+| Mettre en avant une feature interne (ex. Mealz Planner) au sein d'un catalogue/liste de recettes, avec CTA optionnellement décoratif selon le contexte | `PlannerBanner` (catégorie `product`, groupe Storybook "Catalog") | Une bannière promo générique sans lien avec le Planner (à concevoir séparément) ; un message permanent d'info/erreur → `Alert` | `Alert` |
+
+**Rappel `<a>` vs `<button>` (s'applique partout, pas seulement à ces deux composants)** : le choix se fait sur la destination, jamais sur l'apparence — `<a href>` si l'action change d'URL/de page (navigation), `<button>` si elle agit sur place (ouvrir un panneau, déployer une recherche, soumettre). Un `<a>` peut visuellement être identique à un `<button>` ; ça ne change pas la sémantique à utiliser. Ne jamais utiliser `<a href="#">` comme substitut permanent à `<button>` — seulement comme placeholder temporaire vers une page qui existera (cf. `StoreHeader.design.md`, `CatalogNavigationItem.design.md`).
+
+### Chrome de navigation (site-wide)
+
+| Besoin | Composant | Ne pas utiliser pour | Voir aussi |
+|---|---|---|---|
+| Barre de navigation principale en tête de page (logo, recherche, panier) | `StoreHeader` (catégorie `layout`, prop `platform`: Desktop\|Mobile\|App) | Navigation intra-page (onglets, fil d'ariane) → `Tab`/`Breadcrumb` | `BottomNav` |
+| Navigation principale fixée en bas de viewport (Mobile/App) | `BottomNav` (catégorie `layout`) | Desktop — la nav y vit dans `StoreHeader` | `StoreHeader` |
+
 ### Sélection binaire / multiple
 
 | Besoin | Composant | Ne pas utiliser pour |
@@ -96,7 +126,9 @@ Distinction par **forme vs mouvement** — les trois ne sont pas interchangeable
 
 Chaque composant a son `<Component>.design.md` à côté de son code (template complet dans `.claude/ds-md-rules.md` §4 : description, variants, states, props, tokens utilisés, accessibilité, Do/Don't, liens Figma/Storybook).
 
-**Couverture : 29/29** — tous les composants du package `design-system` ayant un `.stories.tsx` (les seuls dans le périmètre de cette convention ; `ProductCard`/`PromoSection` vivent dans `marmiton-prototype`, hors du package design-system).
+**Couverture : 35/35** — tous les composants du package `design-system` ayant un `.stories.tsx` (les seuls dans le périmètre de cette convention ; `ProductCard`/`PromoSection` vivent dans `marmiton-prototype`, hors du package design-system).
+
+Depuis 2026-07-24, une nouvelle catégorie de dossier **`product/`** existe sous `src/components/ui/` (parallèle à `form/`, `navigation/`, `feedback/`, `display/`, `layout/`, `typography/`), pour les composants qui modélisent une entité produit/commerce (recette, à terme peut-être produit catalogue) plutôt qu'une primitive UI générique. Premier composant : `RecipeCard`. Titre Storybook associé : `DS.MD/Product/*`.
 
 À chaque nouveau composant ajouté au package :
 1. Créer son `.design.md` dans la même PR (template `.claude/ds-md-rules.md` §4).
@@ -109,6 +141,7 @@ Plusieurs `.design.md` documentent des **gaps d'implémentation découverts en r
 - `Checkbox` : `indeterminate` n'est pas exposé aux lecteurs d'écran (`aria-checked="mixed"` absent, propriété DOM native non posée).
 - `InputTextarea` et `Select` : pas de `aria-describedby` liant le helper/error text au champ (contrairement à `InputField`, qui le fait).
 - `Pagination` : `aria-label` Précédent/Suivant en anglais ("Previous"/"Next") alors que l'app est en français ; même remarque pour `Alert`/`Loading`/`Toast` (`"Dismiss"`, `"Loading…"`).
+- `InputField` : le fallback `id ?? \`input-${Math.random()...}\`` génère un id différent à chaque rendu SSR vs client quand `id` n'est pas fourni explicitement, ce qui déclenche un hydration mismatch React (découvert en intégrant `StoreHeader`, qui contourne en passant un `id` explicite). Idéalement remplacer par `useId()` de React.
 
 ---
 
@@ -119,9 +152,45 @@ Plusieurs `.design.md` documentent des **gaps d'implémentation découverts en r
 - Toujours lire ce fichier + le `.design.md` du composant (s'il existe) avant de l'utiliser ou de l'étendre.
 - En cas d'ambiguïté entre deux variables ou deux composants proches, vérifier §3 ci-dessus puis, si toujours incertain, poser la question.
 - Mettre à jour `.claude/design-system-tokens.md` après toute modification de token ou de composant (cf. `ds-md-rules.md` §7).
+- Toujours utiliser `variant="alpha"` (`Button`/`FAB`) pour tout CTA posé directement sur une image ou une vidéo — voir §3 "Actions (cliquable)".
 
 ### Don't
 - Ne jamais coder une valeur hex/px en dur dans un composant, en dehors de `tokens/*.css` et `tokens/brands/*.css`.
 - Ne jamais binder une Primitive directement — toujours passer par l'alias Semantics.
 - Ne jamais modifier `brands.ts` ou `tokens/brands/*.css` en dehors de l'ajout d'un nouveau brand, sauf dérogation explicitement actée par l'utilisateur (voir précédent documenté dans `assistant-shopping/docs/docs/UIUX-DECISIONS.MD`).
 - Ne jamais introduire un nouveau composant quand un existant couvre le besoin — vérifier §3 d'abord.
+- Ne jamais poser un `Button`/`FAB` `primary`/`secondary`/`tertiary`/`danger` directement sur une image/vidéo — toujours `alpha` (lisibilité non garantie sinon).
+
+---
+
+## 6. Grille de layout (breakpoints)
+
+Source : styles "Layout Grid" enregistrés dans le fichier Figma DS.MD (page *Foundations*).
+Portée en tokens CSS dans [`tokens/layout.css`](../src/styles/tokens/layout.css) (mode/brand-agnostic, comme
+`tokens/base.css`) — pas de composant `Container`/`Grid` : deux classes wrapper à appliquer directement sur
+un élément de page.
+
+| Breakpoint | Layout | Colonnes | Marges | Gutter | Plage / contrainte |
+|---|---|---|---|---|---|
+| Mobile (< 768px) | Fluid | 4 | 16px | 8px | — |
+| Tablet (768px – 1023px) | Fluid | 8 | 24px | 16px | — |
+| Desktop (≥ 1024px) | **Fluid** | 12 | 32px | 24px | Viewport 1024px → 1600px |
+| Desktop (≥ 1024px) | **Containered** | 12 (héritée du Fluid) | auto (centré) | 24px | `max-width: 1200px` |
+
+**Usage** : appliquer `.layout-fluid` ou `.layout-container` sur le wrapper de page (padding-inline responsive
+mobile→tablet→desktop ; `.layout-container` ajoute le `max-width: 1200px` centré au-delà de 1024px, identique
+à `.layout-fluid` en dessous). Les tokens `--layout-{mobile,tablet,desktop}-{columns,margin,gutter}` et
+`--layout-container-max-width` restent disponibles pour construire une vraie grille de colonnes à l'intérieur
+(ex. `grid-template-columns: repeat(var(--layout-desktop-columns), 1fr); gap: var(--layout-desktop-gutter);`).
+
+Seuils de breakpoint (768px / 1024px) non documentés dans le style Figma lui-même — alignés sur la convention
+standard qui colle à la borne basse Desktop Fluid donnée (1024px), à confirmer si un usage produit diverge.
+
+### Desktop : Fluid vs Containered — quand utiliser laquelle
+
+| Besoin | Layout | Ne pas utiliser pour |
+|---|---|---|
+| Exploiter toute la largeur disponible : grids produits/recettes, dashboards, listings, tableaux de données | `Fluid` (`.layout-fluid`) | Contenu de lecture longue → `Containered` (une ligne trop large nuit à la lisibilité) |
+| Contenu orienté lecture/formulaire : pages éditoriales, formulaires, flows de checkout/onboarding — largeur de ligne stable au-delà de 1200px d'écran | `Containered` (`.layout-container`) | Layouts qui doivent occuper tout l'écran → `Fluid` |
+
+**Note** : cette règle de choix est une proposition par défaut (le fichier Figma ne documente que les specs de grille, pas le critère d'usage) — à corriger si l'usage produit diverge.

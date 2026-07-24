@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DS.MD — Présentation</title>
+<style>
+  /* Palette = les tokens réels de packages/design-system (neutral brand + color-{light,dark}.generated.css) */
+  :root{
+    --surface-page:#FFFFFF;
+    --surface-secondary:#F9F7F4;      /* Sand/50 */
+    --surface-inverse:#131526;
+    --content-default:#131526;
+    --content-weak:rgba(19,21,38,0.6);
+    --border-default:rgba(19,21,38,0.1);
+    --border-weak:rgba(19,21,38,0.06);
+    --interactive-bg:#3861FF;         /* neutral brand-500 */
+    --interactive-bg-hover:#1426E1;   /* neutral brand-700 */
+    --interactive-bg-subtle:#EEF2FF;  /* neutral brand-50 */
+    --semantic-success:#00A63E;
+    --semantic-warning:#E27400;
+    --brand-marmiton:#FF6F61;
+    --brand-marmiton-ink:#3F3735;
+    --brand-coursesu:#007D8F;
+    --brand-neutral:#3861FF;
+    --shadow:0 1px 2px rgba(19,21,38,0.06), 0 10px 28px rgba(19,21,38,0.08);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --surface-page:#131526;
+      --surface-secondary:#F9F7F4;
+      --surface-inverse:#FFFFFF;
+      --content-default:#FFFFFF;
+      --content-weak:rgba(255,255,255,0.6);
+      --border-default:rgba(255,255,255,0.12);
+      --border-weak:rgba(255,255,255,0.07);
+      --interactive-bg:#5C7CFF;
+      --interactive-bg-hover:#8EB0FF;
+      --interactive-bg-subtle:rgba(56,97,255,0.16);
+      --semantic-success:#3DDC84;
+      --semantic-warning:#FFB020;
+      --shadow:0 1px 2px rgba(0,0,0,0.35), 0 14px 32px rgba(0,0,0,0.4);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --surface-page:#131526;
+    --surface-secondary:#F9F7F4;
+    --surface-inverse:#FFFFFF;
+    --content-default:#FFFFFF;
+    --content-weak:rgba(255,255,255,0.6);
+    --border-default:rgba(255,255,255,0.12);
+    --border-weak:rgba(255,255,255,0.07);
+    --interactive-bg:#5C7CFF;
+    --interactive-bg-hover:#8EB0FF;
+    --interactive-bg-subtle:rgba(56,97,255,0.16);
+    --semantic-success:#3DDC84;
+    --semantic-warning:#FFB020;
+    --shadow:0 1px 2px rgba(0,0,0,0.35), 0 14px 32px rgba(0,0,0,0.4);
+    color-scheme: dark;
+  }
+  :root[data-theme="light"]{
+    --surface-page:#FFFFFF;
+    --surface-secondary:#F9F7F4;
+    --surface-inverse:#131526;
+    --content-default:#131526;
+    --content-weak:rgba(19,21,38,0.6);
+    --border-default:rgba(19,21,38,0.1);
+    --border-weak:rgba(19,21,38,0.06);
+    --interactive-bg:#3861FF;
+    --interactive-bg-hover:#1426E1;
+    --interactive-bg-subtle:#EEF2FF;
+    --semantic-success:#00A63E;
+    --semantic-warning:#E27400;
+    --shadow:0 1px 2px rgba(19,21,38,0.06), 0 10px 28px rgba(19,21,38,0.08);
+    color-scheme: light;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--surface-page);
+    color:var(--content-default);
+    font-family:-apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .mono{ font-family:"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; }
+
+  #deck{
+    height:100vh;
+    overflow-y:scroll;
+    scroll-snap-type:y mandatory;
+    scroll-behavior:smooth;
+  }
+  @media (prefers-reduced-motion: reduce){ #deck{ scroll-behavior:auto; } }
+
+  .slide{
+    height:100vh;
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding: clamp(28px, 6vw, 96px);
+    position:relative;
+  }
+  .slide-inner{ max-width:920px; width:100%; }
+
+  .kicker{
+    font-family:"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size:12.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--interactive-bg);
+    font-weight:700;
+    margin:0 0 18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .kicker::before{ content:""; width:20px; height:2px; background:var(--interactive-bg); display:inline-block; border-radius:1px; }
+
+  h1{
+    font-size:clamp(32px, 5vw, 56px);
+    line-height:1.08;
+    letter-spacing:-0.02em;
+    font-weight:800;
+    margin:0 0 20px;
+    text-wrap:balance;
+  }
+  h2{
+    font-size:clamp(25px, 3.4vw, 40px);
+    line-height:1.14;
+    letter-spacing:-0.015em;
+    font-weight:750;
+    margin:0 0 26px;
+    text-wrap:balance;
+    max-width:19ch;
+  }
+  .lede{
+    font-size:clamp(16px, 1.6vw, 19px);
+    line-height:1.55;
+    color:var(--content-weak);
+    max-width:54ch;
+    margin:0 0 8px;
+  }
+
+  ul.points{ list-style:none; margin:8px 0 0; padding:0; display:flex; flex-direction:column; gap:15px; max-width:64ch; }
+  ul.points li{ position:relative; padding-left:22px; font-size:clamp(15.5px, 1.3vw, 17px); line-height:1.5; }
+  ul.points li::before{
+    content:""; position:absolute; left:0; top:0.55em;
+    width:7px; height:7px; border-radius:1.5px;
+    background:var(--interactive-bg); transform:rotate(45deg);
+  }
+  ul.points code{
+    font-family:"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    background:var(--interactive-bg-subtle);
+    color:var(--content-default);
+    padding:1px 6px; border-radius:4px; font-size:0.9em;
+  }
+
+  .meta-row{
+    display:flex; gap:24px; margin-top:34px;
+    font-family:"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size:13px; color:var(--content-weak);
+  }
+
+  /* brand swatches — le vrai bouton, 3 marques, 3 tokens */
+  .swatches{ display:flex; gap:18px; flex-wrap:wrap; margin:8px 0 32px; }
+  .swatch{ display:flex; flex-direction:column; align-items:flex-start; gap:9px; }
+  .swatch-pill{
+    font-family:-apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-weight:700; font-size:14.5px;
+    padding:12px 22px; border-radius:999px;
+    color:#FFFFFF;
+    box-shadow:var(--shadow);
+    white-space:nowrap;
+  }
+  .swatch-tag{
+    font-family:"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size:11.5px; color:var(--content-weak); letter-spacing:0.02em;
+  }
+  .swatch-tag b{ color:var(--content-default); }
+
+  /* flow (token -> alias -> composant) */
+  .flow{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:26px 0 30px; }
+  .flow-step{
+    font-family:"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size:13px;
+    background:var(--surface-secondary);
+    color:#1F2420;
+    border:1px solid var(--border-weak);
+    padding:10px 16px;
+    border-radius:8px;
+  }
+  .flow-arrow{ color:var(--content-weak); font-size:16px; }
+
+  /* comparison — Figma statique vs prototype fonctionnel */
+  .compare{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0 32px;
+    margin:22px 0 30px;
+    max-width:68ch;
+  }
+  .compare-head{
+    font-family:"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size:12px; letter-spacing:0.08em; text-transform:uppercase;
+    padding-bottom:12px; margin-bottom:10px;
+    border-bottom:1px solid var(--border-default);
+  }
+  .compare-head.muted{ color:var(--content-weak); }
+  .compare-head.accent{ color:var(--interactive-bg); font-weight:700; }
+  .compare-row{
+    display:flex; align-items:baseline; gap:9px;
+    padding:10px 0; border-bottom:1px solid var(--border-weak);
+    font-size:clamp(14.5px, 1.2vw, 16px); line-height:1.4;
+  }
+  .compare-row .mark{ font-weight:700; flex-shrink:0; }
+  .compare-row.no .mark{ color:var(--content-weak); }
+  .compare-row.yes .mark{ color:var(--interactive-bg); }
+  .compare-row.no{ color:var(--content-weak); }
+
+  /* skill chips */
+  .skill-chips{ display:flex; flex-wrap:wrap; gap:10px; margin:24px 0 30px; }
+  .skill-chip{
+    font-family:"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size:13px;
+    border:1px solid var(--border-default);
+    color:var(--interactive-bg);
+    padding:7px 14px;
+    border-radius:999px;
+  }
+
+  /* diagram (screen structure) */
+  .diagram{ display:flex; flex-direction:column; align-items:center; gap:0; margin:30px 0 6px; }
+  .diagram-center{
+    font-family:"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-weight:700; font-size:15px;
+    background:var(--interactive-bg); color:#FFFFFF;
+    padding:12px 22px; border-radius:8px; box-shadow:var(--shadow);
+  }
+  .diagram-stem{ width:1px; height:26px; background:var(--border-default); }
+  .diagram-row{ display:flex; flex-wrap:wrap; justify-content:center; gap:12px; position:relative; padding-top:26px; }
+  .diagram-row::before{ content:""; position:absolute; top:0; left:8%; right:8%; height:1px; background:var(--border-default); }
+  .diagram-node{
+    font-family:"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size:12.5px;
+    background:var(--surface-page); border:1px solid var(--border-default);
+    color:var(--content-default); padding:9px 14px; border-radius:7px; position:relative;
+  }
+  .diagram-node::before{ content:""; position:absolute; top:-26px; left:50%; width:1px; height:26px; background:var(--border-default); }
+  .diagram-node.new{ border-color:var(--interactive-bg); background:var(--interactive-bg-subtle); font-weight:700; }
+
+  /* tree */
+  .tree{
+    font-family:"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size:clamp(12px, 1.2vw, 14px);
+    line-height:1.85;
+    background:var(--surface-page);
+    border:1px solid var(--border-default);
+    border-radius:10px;
+    padding:20px 26px;
+    box-shadow:var(--shadow);
+    white-space:pre;
+    overflow-x:auto;
+    max-width:70ch;
+  }
+  .tree .dir{ color:var(--interactive-bg); font-weight:700; }
+  .tree .new{ color:var(--semantic-warning); font-weight:700; }
+  .tree .dim{ color:var(--content-weak); }
+
+  #navdots{
+    position:fixed; right:22px; top:50%; transform:translateY(-50%);
+    display:flex; flex-direction:column; gap:10px; z-index:10;
+  }
+  .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--border-default); border:none; cursor:pointer; padding:0;
+    transition:background 0.2s, transform 0.2s;
+  }
+  .dot:hover{ transform:scale(1.3); }
+  .dot.active{ background:var(--interactive-bg); transform:scale(1.35); }
+
+  #hud{
+    position:fixed; left:22px; bottom:20px;
+    font-family:"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size:12px; color:var(--content-weak); letter-spacing:0.04em;
+    z-index:10; display:flex; gap:10px; align-items:center;
+  }
+  #hud .sep{ opacity:0.5; }
+  #hud .count b{ color:var(--content-default); }
+
+  .cta-line{
+    margin-top:28px;
+    font-family:"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size:14px; color:var(--interactive-bg); font-weight:700;
+  }
+
+  .title-mark{
+    font-family:"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size:14px; color:var(--content-weak); letter-spacing:0.1em; margin-bottom:26px;
+  }
+  .title-mark b{ color:var(--interactive-bg); }
+
+  @media (max-width: 640px){
+    #navdots{ display:none; }
+    h2{ max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="deck">
+
+  <section class="slide" id="s0">
+    <div class="slide-inner">
+      <div class="title-mark mono">DS.MD <b>·</b> DESIGN SYSTEM MEALZ</div>
+      <h1>Un même produit, deux mondes de marque : une seule manière de les construire</h1>
+      <p class="lede">Comment le design a prototypé, avec Claude Code et gstack, un monorepo multi-marques en conditions réelles, plus vite qu'un Figma statique.</p>
+      <div class="meta-row">
+        <span>24 juillet 2026</span>
+        <span>·</span>
+        <span>packages/design-system</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" id="s1">
+    <div class="slide-inner">
+      <p class="kicker">01 · Pourquoi</p>
+      <h2>Un prototype qui tourne vaut mieux qu'un Figma qui décrit</h2>
+      <div class="compare">
+        <div class="compare-head muted">Figma statique</div>
+        <div class="compare-head accent">Prototype fonctionnel</div>
+
+        <div class="compare-row no"><span class="mark">×</span> Une frame par écran, par marque</div>
+        <div class="compare-row yes"><span class="mark">✓</span> Un attribut, trois marques testées en direct</div>
+
+        <div class="compare-row no"><span class="mark">×</span> Le responsive est simulé dans un cadre</div>
+        <div class="compare-row yes"><span class="mark">✓</span> Le responsive est le vrai comportement du navigateur</div>
+
+        <div class="compare-row no"><span class="mark">×</span> Un clic ne fait rien</div>
+        <div class="compare-row yes"><span class="mark">✓</span> Un clic ajoute vraiment au panier</div>
+      </div>
+      <p class="lede">Le design ne décrit plus l'intention : il la construit, et voit tout de suite ce qui marche ou pas.</p>
+    </div>
+  </section>
+
+  <section class="slide" id="s2">
+    <div class="slide-inner">
+      <p class="kicker">02 · Comment</p>
+      <h2>Le design pilote directement le code</h2>
+      <ul class="points">
+        <li><b>Claude Code</b> comme partenaire de code, pas réservé aux ingénieurs : utilisable directement par le design pour construire de vrais écrans</li>
+        <li><b>gstack</b> structure le travail avant, pendant et après : cadrer une idée, challenger un parti pris, fiabiliser avant de livrer</li>
+        <li>Un cadrage systématique avant de coder (brief, table de décision du design system), pas du code jetable sans garde-fou</li>
+      </ul>
+      <div class="skill-chips">
+        <span class="skill-chip">/office-hours</span>
+        <span class="skill-chip">/design-consultation</span>
+        <span class="skill-chip">/plan-design-review</span>
+        <span class="skill-chip">/qa</span>
+        <span class="skill-chip">/review</span>
+        <span class="skill-chip">/ship</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" id="s4">
+    <div class="slide-inner">
+      <p class="kicker">03 · Idée</p>
+      <h2>Et si la couleur n'était plus écrite en dur ?</h2>
+      <div class="swatches">
+        <div class="swatch">
+          <span class="swatch-pill" style="background:var(--brand-marmiton)">Ajouter au panier</span>
+          <span class="swatch-tag"><b>data-brand="marmiton"</b></span>
+        </div>
+        <div class="swatch">
+          <span class="swatch-pill" style="background:var(--brand-coursesu)">Ajouter au panier</span>
+          <span class="swatch-tag"><b>data-brand="coursesu"</b></span>
+        </div>
+        <div class="swatch">
+          <span class="swatch-pill" style="background:var(--brand-neutral)">Ajouter au panier</span>
+          <span class="swatch-tag"><b>data-brand="neutral"</b></span>
+        </div>
+      </div>
+      <ul class="points">
+        <li>Le même bouton, la même carte, écrits une seule fois, mais leur couleur est une <b>variable</b>, pas une valeur</li>
+        <li>Cette variable change selon un seul attribut posé sur la page (<code>data-brand="marmiton"</code>), jamais dans le composant lui-même</li>
+        <li>Le composant ne connaît jamais la marque : il lit un alias (« couleur d'action principale »), qui pointe vers la bonne valeur selon l'attribut actif</li>
+        <li>Changer de thème (marque, ou même mode clair/sombre) devient un attribut à poser, pas un nouveau design à produire</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="slide" id="s5">
+    <div class="slide-inner">
+      <p class="kicker">04 · Solution</p>
+      <h2><code class="mono" style="background:var(--interactive-bg-subtle);padding:2px 10px;border-radius:6px;font-size:0.85em">design-system</code><br>le langage commun</h2>
+      <div class="flow">
+        <span class="flow-step">couleur de marque</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">alias sémantique</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">composant</span>
+      </div>
+      <ul class="points">
+        <li>Un seul package que toutes les applications importent, jamais l'inverse</li>
+        <li>32 composants déjà résolus une fois pour toutes : carte recette, en-tête, navigation, boutons, alertes…</li>
+        <li>Trois identités branchées aujourd'hui : <code>neutral</code> (bleu, défaut), <code>marmiton</code> (corail), <code>coursesu</code> (teal), plus un partenaire : <code>carrefour</code></li>
+        <li>Une doc dédiée dit quoi utiliser, pas juste ce qui existe (<code>Badge</code> vs <code>ChipTag</code>, <code>Modal</code> vs <code>Drawer</code>), pour que personne ne redevine à chaque écran</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="slide" id="s6">
+    <div class="slide-inner">
+      <p class="kicker">05 · Comment ça marche</p>
+      <h2>Le design system fait vivre tout le reste</h2>
+      <div class="diagram">
+        <div class="diagram-center">design-system</div>
+        <div class="diagram-stem"></div>
+        <div class="diagram-row">
+          <div class="diagram-node">assistant-shopping</div>
+          <div class="diagram-node">marmiton-agent</div>
+          <div class="diagram-node">marmiton-prototype</div>
+          <div class="diagram-node">home</div>
+          <div class="diagram-node">form-mealz-planner</div>
+          <div class="diagram-node new">supermarket ↩ aujourd'hui</div>
+        </div>
+      </div>
+      <ul class="points" style="margin-top:30px">
+        <li>Six applications tournent aujourd'hui sur les mêmes briques : <code>StoreHeader</code>, <code>BottomNav</code>, <code>RecipeCard</code>, <code>Button</code>…</li>
+        <li>Ce n'est pas un habillage optionnel : sans le design system, aucune de ces applications ne fonctionne</li>
+        <li>Une seule source de vérité pour l'interface ; chaque appli n'ajoute que sa propre logique métier</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="slide" id="s7">
+    <div class="slide-inner">
+      <p class="kicker">06 · Repo</p>
+      <h2>Comment c'est rangé, en bref</h2>
+      <div class="tree">DS.MD/
+├─ <span class="dir">packages/</span>
+│  ├─ <span class="dir">design-system/</span>   <span class="dim">← le package partagé</span>
+│  ├─ <span class="dir">assistant-shopping/</span>
+│  ├─ <span class="dir">marmiton-agent/</span>
+│  ├─ <span class="dir">marmiton-prototype/</span>
+│  ├─ <span class="dir">home/</span>
+│  ├─ <span class="dir">form-mealz-planner/</span>
+│  └─ <span class="new">supermarket/</span>          <span class="dim">← construit en direct aujourd'hui</span></div>
+      <p class="lede" style="margin-top:22px">pnpm workspaces : une seule installation, un seul lockfile, zéro duplication de dépendances entre apps.</p>
+    </div>
+  </section>
+
+  <section class="slide" id="s7b">
+    <div class="slide-inner">
+      <p class="kicker">07 · Stack technique</p>
+      <h2>Une stack simple, pensée pour itérer vite</h2>
+      <div class="skill-chips">
+        <span class="skill-chip">Next.js</span>
+        <span class="skill-chip">React</span>
+        <span class="skill-chip">TypeScript</span>
+        <span class="skill-chip">Tailwind CSS v4</span>
+        <span class="skill-chip">Style Dictionary</span>
+        <span class="skill-chip">Storybook</span>
+        <span class="skill-chip">pnpm workspaces</span>
+      </div>
+      <ul class="points">
+        <li>Tailwind CSS v4 consomme directement les tokens du design system : pas de valeur dupliquée</li>
+        <li>Style Dictionary synchronise les couleurs automatiquement depuis Figma</li>
+        <li>Storybook documente chaque composant, variante par variante</li>
+        <li>pnpm workspaces relie toutes les applications en un seul monorepo</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="slide" id="s8">
+    <div class="slide-inner">
+      <p class="kicker">08 · Demo live</p>
+      <h2>On construit un écran, en direct, avec ces mêmes briques</h2>
+      <ul class="points">
+        <li><code>packages/supermarket</code> : un catalogue de recettes façon drive, parti de zéro il y a quelques heures</li>
+        <li>Assemblé uniquement avec des composants déjà existants : aucun CSS dupliqué, aucun composant réécrit</li>
+        <li>Bascule desktop / mobile automatique, sans code spécifique à l'appli</li>
+        <li>Périmètre volontairement réduit à la page catalogue, le reste est la suite logique</li>
+      </ul>
+      <p class="cta-line">→ bascule vers le navigateur</p>
+    </div>
+  </section>
+
+  <section class="slide" id="s9">
+    <div class="slide-inner">
+      <p class="kicker">09 · Prochaines étapes</p>
+      <h2>Personnaliser encore plus, client par client</h2>
+      <ul class="points">
+        <li>Une <code>RecipeCard</code> adaptée au merchandising propre à chaque client, par exemple un badge prix façon partenaire</li>
+        <li>Le même principe, appliqué à de nouveaux écrans à mesure que de nouveaux clients arrivent</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="slide" id="s10">
+    <div class="slide-inner">
+      <p class="kicker">Merci</p>
+      <h1>Questions ?</h1>
+      <p class="lede">DS.MD · packages/design-system</p>
+    </div>
+  </section>
+
+</div>
+
+<div id="navdots"></div>
+<div id="hud">
+  <span class="count"><b id="hud-current">01</b> / <span id="hud-total">11</span></span>
+  <span class="sep">·</span>
+  <span>↑↓ pour naviguer</span>
+</div>
+
+<script>
+(function(){
+  var deck = document.getElementById('deck');
+  var slides = Array.prototype.slice.call(deck.querySelectorAll('.slide'));
+  var dotsWrap = document.getElementById('navdots');
+  var hudCurrent = document.getElementById('hud-current');
+  document.getElementById('hud-total').textContent = String(slides.length).padStart(2,'0');
+
+  slides.forEach(function(s, i){
+    var b = document.createElement('button');
+    b.className = 'dot' + (i===0 ? ' active' : '');
+    b.setAttribute('aria-label', 'Aller à la slide ' + (i+1));
+    b.addEventListener('click', function(){
+      slides[i].scrollIntoView({behavior:'smooth', block:'start'});
+    });
+    dotsWrap.appendChild(b);
+  });
+  var dots = Array.prototype.slice.call(dotsWrap.querySelectorAll('.dot'));
+
+  var currentIndex = 0;
+  function setActive(i){
+    currentIndex = i;
+    dots.forEach(function(d, idx){ d.classList.toggle('active', idx===i); });
+    hudCurrent.textContent = String(i+1).padStart(2,'0');
+  }
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting && entry.intersectionRatio > 0.6){
+        var idx = slides.indexOf(entry.target);
+        if(idx > -1) setActive(idx);
+      }
+    });
+  }, {root: deck, threshold: [0.6]});
+  slides.forEach(function(s){ io.observe(s); });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown'){
+      e.preventDefault();
+      var next = Math.min(currentIndex + 1, slides.length - 1);
+      slides[next].scrollIntoView({behavior:'smooth', block:'start'});
+    } else if(e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp'){
+      e.preventDefault();
+      var prev = Math.max(currentIndex - 1, 0);
+      slides[prev].scrollIntoView({behavior:'smooth', block:'start'});
+    } else if(e.key === 'Home'){
+      e.preventDefault();
+      slides[0].scrollIntoView({behavior:'smooth', block:'start'});
+    } else if(e.key === 'End'){
+      e.preventDefault();
+      slides[slides.length-1].scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
