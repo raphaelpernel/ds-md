@@ -1,12 +1,11 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { Suspense, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { RecipeIngredientWidget, ViewToggle } from '@/components/product/RecipeIngredientWidget/RecipeIngredientWidget'
 import type { ViewMode } from '@/components/product/RecipeIngredientWidget/RecipeIngredientWidget'
 import { RecipeOrderBanner } from '@/components/product/RecipeIngredientWidget/RecipeOrderBanner'
-import { ShoppingCart, Heart, ShareNetwork } from '@phosphor-icons/react'
+import { Heart, ShareNetwork } from '@phosphor-icons/react'
 import { Button, Stepper, Drawer } from '@mealz-product-team/design-system'
 import { Cart } from '@/components/product/Cart/Cart'
 import { CartFooter } from '@/components/product/Cart/CartFooter'
@@ -15,11 +14,21 @@ import { getRecipeById } from '@/data/mock/recipes'
 import { getProductsByRecipe } from '@/data/mock/products'
 import '@mealz-product-team/design-system/styles/index.css'
 
-const RECIPE = getRecipeById('r-tarte-abricots')!
-const PRODUCTS = getProductsByRecipe('r-tarte-abricots')
+const DEFAULT_RECIPE_ID = 'r-tarte-abricots'
 
 export default function RecettePage() {
+  return (
+    <Suspense fallback={null}>
+      <RecetteContent />
+    </Suspense>
+  )
+}
+
+function RecetteContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const RECIPE = getRecipeById(searchParams.get('recipe') ?? '') ?? getRecipeById(DEFAULT_RECIPE_ID)!
+  const PRODUCTS = getProductsByRecipe(RECIPE.id)
   const { addItem, itemCount, total, sections, state } = useCart()
   const [liked, setLiked] = useState(false)
   const [servings, setServings] = useState(RECIPE.servings)
@@ -49,42 +58,6 @@ export default function RecettePage() {
 
   return (
     <div className="recipe-page">
-      {/* ── Site header (global nav, sticky) ── */}
-      <header className="site-header">
-        <Link href="/" className="site-header__back" aria-label="Retour">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M19 12H5M12 5l-7 7 7 7"/>
-          </svg>
-        </Link>
-        <span className="site-header__logo">
-          <img
-            src="/logos/logo-marmiton.svg"
-            alt="Marmiton"
-            className="site-header__brand"
-            width={120}
-            height={19}
-          />
-        </span>
-        <div className="site-header__cart">
-          <Button
-            variant="secondary"
-            size="M"
-            label={
-              itemCount > 0
-                ? `Panier, ${itemCount} article${itemCount > 1 ? 's' : ''}`
-                : 'Panier'
-            }
-            iconOnly={<ShoppingCart size={16} weight="bold" aria-hidden="true" />}
-            onClick={() => setDrawerOpen(true)}
-          />
-          {itemCount > 0 && (
-            <span className="site-header__cart-count" aria-hidden="true">
-              {itemCount}
-            </span>
-          )}
-        </div>
-      </header>
-
       <div className="recipe-wrapper">
         {/* ── Fil d'Ariane + titre + rating ── */}
         <div className="recipe-header">
@@ -239,40 +212,6 @@ export default function RecettePage() {
           color: var(--color-content-default);
         }
 
-        /* Site header — global nav, not part of the recipe card */
-        .site-header {
-          position: sticky; top: 0; z-index: 20;
-          background: #fff;
-          border-bottom: 1px solid var(--color-border-default);
-          display: flex; align-items: center; justify-content: space-between;
-          padding: 10px 16px;
-          height: 52px;
-        }
-        .site-header__back {
-          color: var(--color-content-default);
-          display: flex; align-items: center;
-          text-decoration: none;
-          width: 36px;
-        }
-        .site-header__logo { flex: 1; text-align: center; }
-        .site-header__brand {
-          display: block;
-          height: 19px;
-          width: auto;
-          margin: 0 auto;
-        }
-        .site-header__cart {
-          position: relative;
-          display: flex; justify-content: flex-end; align-items: center;
-        }
-        .site-header__cart-count {
-          position: absolute; top: -5px; right: -4px;
-          background: var(--color-interactive-bg); color: #fff;
-          border-radius: 50%; font-size: 10px; font-weight: 700;
-          width: 17px; height: 17px;
-          display: flex; align-items: center; justify-content: center;
-        }
-
         /* Recipe wrapper — the card holding this recipe's own content */
         .recipe-wrapper {
           width: 100%;
@@ -365,8 +304,7 @@ export default function RecettePage() {
         }
 
         /* Desktop — fluid container capped at 1200px, starts floating on the gray backdrop.
-           Below 1024 the container stays full width, no side margin. The site header stays
-           full-bleed at every breakpoint — it's global nav, not part of the recipe card. */
+           Below 1024 the container stays full width, no side margin. */
         @media (min-width: 1024px) {
           .recipe-wrapper {
             width: 100%;

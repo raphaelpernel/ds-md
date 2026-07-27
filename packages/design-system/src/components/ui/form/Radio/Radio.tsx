@@ -1,4 +1,4 @@
-import { type InputHTMLAttributes } from 'react'
+import { type InputHTMLAttributes, useId } from 'react'
 import { cva } from 'class-variance-authority'
 import './Radio.css'
 
@@ -9,7 +9,8 @@ export interface RadioProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export function Radio({ label, id, className, ...props }: RadioProps) {
-  const radioId = id ?? `radio-${Math.random().toString(36).slice(2)}`
+  const generatedId = useId()
+  const radioId = id ?? generatedId
   return (
     <label className={radio({ class: className })} htmlFor={radioId}>
       <input type="radio" id={radioId} className="radio__input" {...props} />

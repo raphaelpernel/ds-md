@@ -1,4 +1,4 @@
-import { type SelectHTMLAttributes } from 'react'
+import { type SelectHTMLAttributes, useId } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import './Select.css'
 
@@ -26,8 +26,9 @@ export interface SelectProps
 }
 
 export function Select({ label, options = [], placeholder, helperText, errorText, state, id, className, ...props }: SelectProps) {
+  const generatedId = useId()
   const hasError = state === 'error' || !!errorText
-  const selectId = id ?? `select-${Math.random().toString(36).slice(2)}`
+  const selectId = id ?? generatedId
   return (
     <div className={select({ state: hasError ? 'error' : state, class: className })}>
       {label && <label className="select__label" htmlFor={selectId}>{label}</label>}

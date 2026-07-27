@@ -1,4 +1,4 @@
-import { type TextareaHTMLAttributes } from 'react'
+import { type TextareaHTMLAttributes, useId } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import './InputTextarea.css'
 
@@ -22,8 +22,9 @@ export interface InputTextareaProps
 }
 
 export function InputTextarea({ label, helperText, errorText, state, id, className, ...props }: InputTextareaProps) {
+  const generatedId = useId()
   const hasError = state === 'error' || !!errorText
-  const fieldId = id ?? `textarea-${Math.random().toString(36).slice(2)}`
+  const fieldId = id ?? generatedId
   return (
     <div className={inputTextarea({ state: hasError ? 'error' : state, class: className })}>
       {label && <label className="input-textarea__label" htmlFor={fieldId}>{label}</label>}

@@ -1,4 +1,4 @@
-import { type InputHTMLAttributes, type ReactNode } from 'react'
+import { type InputHTMLAttributes, type ReactNode, useId } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import './InputField.css'
 
@@ -24,8 +24,9 @@ export interface InputFieldProps
 }
 
 export function InputField({ label, helperText, errorText, lIcon, rIcon, state, className, id, ...props }: InputFieldProps) {
+  const generatedId = useId()
   const hasError = state === 'error' || !!errorText
-  const fieldId = id ?? `input-${Math.random().toString(36).slice(2)}`
+  const fieldId = id ?? generatedId
 
   return (
     <div className={inputField({

@@ -1,4 +1,4 @@
-import { type InputHTMLAttributes } from 'react'
+import { type InputHTMLAttributes, useId } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { Check, Minus } from '@phosphor-icons/react'
 import './Checkbox.css'
@@ -21,7 +21,8 @@ export interface CheckboxProps
 }
 
 export function Checkbox({ label, indeterminate = false, state, id, className, ...props }: CheckboxProps) {
-  const cbId = id ?? `checkbox-${Math.random().toString(36).slice(2)}`
+  const generatedId = useId()
+  const cbId = id ?? generatedId
   return (
     <label className={checkbox({ state, class: className })} htmlFor={cbId}>
       <input type="checkbox" id={cbId} className="checkbox__input" data-indeterminate={indeterminate} {...props} />

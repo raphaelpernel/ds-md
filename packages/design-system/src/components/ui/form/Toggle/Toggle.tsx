@@ -1,4 +1,4 @@
-import { type InputHTMLAttributes } from 'react'
+import { type InputHTMLAttributes, useId } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import './Toggle.css'
 
@@ -16,7 +16,8 @@ export interface ToggleProps
 }
 
 export function Toggle({ label, size, id, className, ...props }: ToggleProps) {
-  const toggleId = id ?? `toggle-${Math.random().toString(36).slice(2)}`
+  const generatedId = useId()
+  const toggleId = id ?? generatedId
   return (
     <label className={toggle({ size, class: className })} htmlFor={toggleId}>
       <input type="checkbox" id={toggleId} role="switch" className="toggle__input" {...props} />

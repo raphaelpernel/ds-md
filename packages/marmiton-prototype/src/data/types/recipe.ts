@@ -15,4 +15,6 @@ export interface Recipe {
   duration: number
   ingredients: Ingredient[]
   estimatedPricePerServing: number
+  /** Mots-clés de matching pour le classificateur scripté de l'agent conversationnel (Lot 1) — pas affiché en UI. */
+  tags?: string[]
 }
