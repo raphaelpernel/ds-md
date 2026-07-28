@@ -49,6 +49,16 @@ export function Drawer({ open, onClose, title, headerContent, onBack, children, 
     return () => document.removeEventListener('keydown', onKey)
   }, [open, onClose])
 
+  // Empêche le scroll de la page derrière le drawer pendant qu'il est ouvert.
+  useEffect(() => {
+    if (!open) return
+    const original = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = original
+    }
+  }, [open])
+
   return (
     <>
       <div className={drawerOverlay({ open })} onClick={onClose} aria-hidden="true" />

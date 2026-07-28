@@ -1,5 +1,5 @@
 import { MOCK_RECIPES } from '../data/mock/recipes'
-import type { Recipe } from '../data/types/recipe'
+import type { Recipe, Season } from '../data/types/recipe'
 
 /**
  * Classificateur scripté local à marmiton-prototype (Lot 1 — prototype de simulation,
@@ -15,6 +15,90 @@ export interface AgentSlots {
   servings?: number
   constraint?: Constraint
   ingredients: string[]
+  /** Signale un intérêt pour les infos nutritionnelles (indépendant de `constraint`) — affiche calories/protéines sur la carte. */
+  healthFocus?: boolean
+}
+
+export interface PantryMatch {
+  matchedIngredientNames: string[]
+  missingCount: number
+}
+
+/** Alias entre les mots-clés extraits de la conversation et les noms d'ingrédients affichés dans les recettes. */
+const INGREDIENT_ALIASES: Record<string, string[]> = {
+  pates: ['pâtes', 'pates', 'spaghetti'],
+}
+
+/**
+ * Croise ce que l'utilisateur a déclaré avoir (`AgentSlots.ingredients`) avec la liste
+ * complète des ingrédients de la recette, pour afficher un écart panier concret sur la
+ * carte recette de l'agent (ex. « Utilise vos lardons et vos œufs · il manque 2 produits »).
+ * Les produits de base (`staple: true`, ex. huile, sel) sont exclus du calcul — ni comptés
+ * comme correspondance ni comme manquants, pour ne pas diluer le signal avec des banalités.
+ * Retourne `null` si l'utilisateur n'a mentionné aucun ingrédient — pas de bandeau à afficher.
+ */
+export function pantryMatch(recipe: Recipe, slots: AgentSlots): PantryMatch | null {
+  if (slots.ingredients.length === 0) return null
+
+  const shoppable = recipe.ingredients.filter((ingredient) => !ingredient.staple)
+
+  const matched: string[] = []
+  for (const ingredient of shoppable) {
+    const normName = normalize(ingredient.name)
+    const hit = slots.ingredients.some((key) => {
+      const aliases = INGREDIENT_ALIASES[key] ?? [key]
+      return aliases.some((alias) => normName.includes(normalize(alias)))
+    })
+    if (hit) matched.push(ingredient.name)
+  }
+
+  if (matched.length === 0) return null
+  return { matchedIngredientNames: matched, missingCount: shoppable.length - matched.length }
+}
+
+/**
+ * Choisit l'astuce la plus pertinente pour le contexte de la conversation. `tipForKids`
+ * prend le pas sur `tip` quand la contrainte détectée est « enfant » — les autres contextes
+ * de risque (ex. débutant) ne sont pas encore détectables par le classificateur (Lot 1).
+ */
+export function selectTip(recipe: Recipe, slots: AgentSlots): string | undefined {
+  if (slots.constraint === 'enfant' && recipe.tipForKids) return recipe.tipForKids
+  return recipe.tip
+}
+
+const CONSTRAINT_LABELS: Record<Exclude<Constraint, 'allergie'>, string> = {
+  enfant: 'Adapté aux enfants',
+  'sans-sauce': 'Sans sauce',
+  vegetarien: 'Végétarien',
+  'sans-gluten': 'Sans gluten',
+  'sans-lactose': 'Sans lactose',
+}
+
+/**
+ * Label de correspondance à afficher sur la carte quand la contrainte exprimée est
+ * réellement satisfaite par la recette recommandée (présente dans `recipe.tags`).
+ * `matched` doit être `false` sur un résultat `relaxed` (contrainte abandonnée) — sinon
+ * on afficherait une confirmation trompeuse. `allergie` n'a volontairement pas de label
+ * ici : `Recipe.tags` n'y est qu'un mot-clé approximatif, pas un champ d'allergènes
+ * vérifié — voir `allergens` sur la carte, seule sortie honnête pour ce cas.
+ */
+export function constraintLabel(recipe: Recipe, slots: AgentSlots, matched: boolean): string | undefined {
+  if (!matched || !slots.constraint || slots.constraint === 'allergie') return undefined
+  if (!(recipe.tags ?? []).includes(slots.constraint)) return undefined
+  return CONSTRAINT_LABELS[slots.constraint]
+}
+
+function seasonFor(date: Date): Season {
+  const month = date.getMonth()
+  if (month === 11 || month <= 1) return 'hiver'
+  if (month <= 4) return 'printemps'
+  if (month <= 7) return 'ete'
+  return 'automne'
+}
+
+/** Vrai si la recette est explicitement marquée comme "de saison" au mois courant. Pas de `season` déclaré = jamais affichée comme telle. */
+export function isInSeason(recipe: Recipe, date: Date = new Date()): boolean {
+  return !!recipe.season?.includes(seasonFor(date))
 }
 
 export type AgentTurnResult =
@@ -43,6 +127,8 @@ const CONSTRAINT_WORDS: Array<[RegExp, Constraint]> = [
   [/sans lactose/i, 'sans-lactose'],
   [/allerg/i, 'allergie'],
 ]
+
+const HEALTH_WORDS = /léger|healthy|calories?|régime|diète|minceur/i
 
 const INGREDIENT_WORDS: string[] = [
   'poulet',
@@ -93,6 +179,10 @@ export function extractSlots(text: string, prev: AgentSlots): AgentSlots {
     }
   }
 
+  if (HEALTH_WORDS.test(text)) {
+    next.healthFocus = true
+  }
+
   for (const word of INGREDIENT_WORDS) {
     const key = normalize(word).replace('pâtes', 'pates')
     if (norm.includes(key) && !next.ingredients.includes('pates') && !next.ingredients.includes(key)) {
@@ -134,6 +224,11 @@ function reasonFor(recipe: Recipe, slots: AgentSlots): string {
   return bits.join(', ')
 }
 
+/** Message complet côté agent, sans tiret cadratin (règle produit : jamais de « — » visible). */
+export function recommendationMessage(recipe: Recipe, reason: string): string {
+  return `Je vous propose ${recipe.name}, ${reason}.`
+}
+
 export function hasEnoughSignal(slots: AgentSlots): boolean {
   return slots.ingredients.length > 0 || slots.time !== undefined || slots.servings !== undefined || slots.constraint !== undefined
 }
@@ -153,7 +248,7 @@ export function processTurn(text: string, prevSlots: AgentSlots, clarifyAttempts
         result: {
           kind: 'not_understood',
           message:
-            "Je ne suis pas sûr de comprendre. Vous pouvez parcourir la sélection ci-dessous, ou utiliser la recherche classique — je reste disponible dès que vous avez une envie ou une contrainte à me donner.",
+            "Je ne suis pas sûr de comprendre. Vous pouvez piocher dans la sélection ci-dessous, ou utiliser la recherche classique. Je reste disponible dès que vous avez une envie ou une contrainte à me donner.",
         },
       }
     }

@@ -9,6 +9,15 @@ export const MOCK_RECIPES: Recipe[] = [
     duration: 25,
     estimatedPricePerServing: 3.60,
     tags: ['poulet', 'rapide', 'sans-sauce', 'enfant', 'citron', 'ce-soir'],
+    rating: 4.7,
+    reviewCount: 312,
+    difficulty: 'facile',
+    tip: "Ajoutez le jus de citron hors du feu : à trop forte chaleur, il devient amer.",
+    tipForKids: "Coupez le poulet en petits morceaux avant de servir : plus facile à manger pour les enfants.",
+    allergens: [],
+    calories: 320,
+    protein: 34,
+    season: ['printemps', 'ete'],
     ingredients: [
       {
         id: 'i-poulet',
@@ -33,6 +42,7 @@ export const MOCK_RECIPES: Recipe[] = [
         unit: 'c. à soupe',
         emoji: '🫒',
         productId: null,
+        staple: true,
       },
       {
         id: 'i-persil',
@@ -52,6 +62,14 @@ export const MOCK_RECIPES: Recipe[] = [
     duration: 35,
     estimatedPricePerServing: 2.95,
     tags: ['courgette', 'ricotta', 'vegetarien', 'frigo', 'gratin'],
+    rating: 4.5,
+    reviewCount: 189,
+    difficulty: 'facile',
+    tip: "Égouttez bien les courgettes après la cuisson : sinon le gratin rend de l'eau.",
+    allergens: ['Lait', 'Œufs'],
+    calories: 285,
+    protein: 16,
+    season: ['ete'],
     ingredients: [
       {
         id: 'i-courgettes',
@@ -95,6 +113,14 @@ export const MOCK_RECIPES: Recipe[] = [
     duration: 20,
     estimatedPricePerServing: 2.40,
     tags: ['pates', 'rapide', 'enfant', 'lardons', 'ce-soir'],
+    rating: 4.6,
+    reviewCount: 203,
+    difficulty: 'facile',
+    tip: "Mélangez les œufs hors du feu : sur une poêle trop chaude, ils coagulent en grumeaux.",
+    tipForKids: "Pas de piment ni d'épice forte dans cette recette : elle convient telle quelle aux palais des enfants.",
+    allergens: ['Œufs', 'Lait', 'Gluten'],
+    calories: 610,
+    protein: 28,
     ingredients: [
       {
         id: 'i-pates',
@@ -137,6 +163,14 @@ export const MOCK_RECIPES: Recipe[] = [
     servings: 6,
     duration: 45,
     estimatedPricePerServing: 3.25,
+    rating: 4.6,
+    reviewCount: 97,
+    difficulty: 'moyen',
+    tip: "Piquez le fond de pâte à la fourchette pour éviter qu'il ne gonfle à la cuisson.",
+    allergens: ['Gluten', 'Lait', 'Œufs'],
+    calories: 340,
+    protein: 5,
+    season: ['ete'],
     ingredients: [
       {
         id: 'i-abricots',
@@ -187,6 +221,14 @@ export const MOCK_RECIPES: Recipe[] = [
     servings: 4,
     duration: 20,
     estimatedPricePerServing: 4.10,
+    rating: 4.4,
+    reviewCount: 156,
+    difficulty: 'facile',
+    tip: 'Salez les tomates cerises juste avant de servir, sinon elles rendent leur eau.',
+    allergens: ['Poisson'],
+    calories: 245,
+    protein: 22,
+    season: ['ete'],
     ingredients: [
       {
         id: 'i-tomates',
@@ -221,6 +263,14 @@ export const MOCK_RECIPES: Recipe[] = [
     servings: 4,
     duration: 90,
     estimatedPricePerServing: 2.80,
+    rating: 4.7,
+    reviewCount: 421,
+    difficulty: 'moyen',
+    tip: 'Ne rincez pas les pommes de terre après les avoir coupées : leur amidon lie la sauce.',
+    allergens: ['Lait'],
+    calories: 390,
+    protein: 9,
+    season: ['automne', 'hiver'],
     ingredients: [
       {
         id: 'i-lait',

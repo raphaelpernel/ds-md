@@ -2,17 +2,42 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { PaperPlaneRight } from '@phosphor-icons/react'
+import { PaperPlaneRight, Star, CheckCircle, Lightbulb, Warning, Flame } from '@phosphor-icons/react'
 import { Drawer, Button, InputField, ChipTag } from '@mealz-product-team/design-system'
-import { EMPTY_SLOTS, processTurn, type AgentSlots } from '@/lib/agentScript'
-import type { Recipe } from '@/data/types/recipe'
+import {
+  EMPTY_SLOTS,
+  processTurn,
+  recommendationMessage,
+  pantryMatch,
+  selectTip,
+  constraintLabel,
+  isInSeason,
+  type AgentSlots,
+  type PantryMatch,
+} from '@/lib/agentScript'
+import type { Recipe, RecipeDifficulty } from '@/data/types/recipe'
 import './AgentConversation.css'
+
+const DIFFICULTY_LABEL: Record<RecipeDifficulty, string> = {
+  facile: 'Facile',
+  moyen: 'Moyen',
+  difficile: 'Difficile',
+}
 
 interface Message {
   id: string
   role: 'user' | 'agent'
   text: string
   recipe?: Recipe
+  pantryMatch?: PantryMatch | null
+  tip?: string
+  /** Affichés seulement quand la conversation a signalé une contrainte allergie — transparence, pas de filtrage automatique. */
+  allergens?: string[]
+  health?: { calories?: number; protein?: number }
+  /** Label de contrainte confirmée (ex. "Végétarien"), absent sur un résultat `relaxed` ou pour `allergie`. */
+  constraintLabel?: string
+  inSeason?: boolean
+  servings?: number
 }
 
 interface Chip {
@@ -42,6 +67,18 @@ function nextChips(slots: AgentSlots): Chip[] {
     ]
   }
   return []
+}
+
+function cardExtras(recipe: Recipe, slots: AgentSlots, matched: boolean) {
+  return {
+    pantryMatch: pantryMatch(recipe, slots),
+    tip: selectTip(recipe, slots),
+    allergens: slots.constraint === 'allergie' ? recipe.allergens : undefined,
+    health: slots.healthFocus ? { calories: recipe.calories, protein: recipe.protein } : undefined,
+    constraintLabel: constraintLabel(recipe, slots, matched),
+    inSeason: isInSeason(recipe),
+    servings: slots.servings,
+  }
 }
 
 interface AgentConversationProps {
@@ -98,12 +135,27 @@ export function AgentConversation({ open, onClose, initialMessage }: AgentConver
       setResolvedRecipe(result.recipe)
       setMessages((prev) => [
         ...prev,
-        { id: newId(), role: 'agent', text: `${result.recipe.name} — ${result.reason}.`, recipe: result.recipe },
+        {
+          id: newId(),
+          role: 'agent',
+          text: recommendationMessage(result.recipe, result.reason),
+          recipe: result.recipe,
+          ...cardExtras(result.recipe, nextSlots, true),
+        },
       ])
     } else if (result.kind === 'relaxed') {
       setClarifyAttempts(0)
       setResolvedRecipe(result.recipe)
-      setMessages((prev) => [...prev, { id: newId(), role: 'agent', text: result.message, recipe: result.recipe }])
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: newId(),
+          role: 'agent',
+          text: result.message,
+          recipe: result.recipe,
+          ...cardExtras(result.recipe, nextSlots, false),
+        },
+      ])
     }
   }
 
@@ -129,22 +181,77 @@ export function AgentConversation({ open, onClose, initialMessage }: AgentConver
 
   return (
     <Drawer open={open} onClose={handleClose} title="Une idée pour ce soir" placement="right" mobilePlacement="bottom">
-      <div className="agent-conv">
-        <div className="agent-conv__thread">
+      <div className="chat-shell">
+        <div className="chat-thread">
           {messages.map((m) => (
-            <div key={m.id} className={`agent-conv__turn agent-conv__turn--${m.role}`}>
-              <p className="agent-conv__text">{m.text}</p>
+            <div key={m.id} className={`chat-message chat-message--${m.role}`}>
+              <p className="chat-bubble">{m.text}</p>
               {m.recipe && (
                 <button
                   type="button"
-                  className="agent-conv__result-card"
+                  className="chat-card"
                   onClick={() => router.push(`/recipe?recipe=${m.recipe!.id}`)}
                 >
-                  <img src={m.recipe.imageUrl} alt="" className="agent-conv__result-img" />
-                  <span className="agent-conv__result-meta">
-                    <span className="agent-conv__result-title">{m.recipe.name}</span>
-                    <span className="agent-conv__result-sub">{m.recipe.duration} min · {m.recipe.servings} pers.</span>
+                  <span className="chat-card__top">
+                    <img src={m.recipe.imageUrl} alt="" className="chat-card__image" />
+                    <span className="chat-card__meta">
+                      <span className="chat-card__title">{m.recipe.name}</span>
+                      <span className="chat-card__meta-row">
+                        {m.recipe.rating !== undefined && (
+                          <span className="chat-card__meta-item chat-card__rating">
+                            <Star size={14} weight="fill" aria-hidden="true" />
+                            {m.recipe.rating.toFixed(1)}
+                            {m.recipe.reviewCount !== undefined && ` (${m.recipe.reviewCount} avis)`}
+                          </span>
+                        )}
+                        <span className="chat-card__meta-item">{m.recipe.duration} min</span>
+                        {m.servings !== undefined && (
+                          <span className="chat-card__meta-item">Pour {m.servings}</span>
+                        )}
+                        {m.recipe.difficulty && (
+                          <span className="chat-card__meta-item">{DIFFICULTY_LABEL[m.recipe.difficulty]}</span>
+                        )}
+                        {m.health?.calories !== undefined && (
+                          <span className="chat-card__meta-item">
+                            <Flame size={14} aria-hidden="true" />
+                            {m.health.calories} kcal
+                            {m.health.protein !== undefined && ` · ${m.health.protein} g prot.`}
+                          </span>
+                        )}
+                      </span>
+                    </span>
                   </span>
+
+                  {(m.constraintLabel || m.inSeason) && (
+                    <span className="chat-card__chips">
+                      {m.constraintLabel && <ChipTag type="toned" size="S" label={m.constraintLabel} />}
+                      {m.inSeason && <ChipTag type="toned" size="S" label="De saison" />}
+                    </span>
+                  )}
+
+                  {m.allergens && m.allergens.length > 0 && (
+                    <span className="chat-card__highlight chat-card__highlight--warning">
+                      <Warning size={16} weight="fill" aria-hidden="true" />
+                      Contient : {m.allergens.join(', ').toLowerCase()}
+                    </span>
+                  )}
+
+                  {m.pantryMatch && (
+                    <span className="chat-card__highlight chat-card__highlight--success">
+                      <CheckCircle size={16} weight="fill" aria-hidden="true" />
+                      Utilise vos {m.pantryMatch.matchedIngredientNames.join(', ').toLowerCase()}
+                      {m.pantryMatch.missingCount > 0
+                        ? ` · il manque ${m.pantryMatch.missingCount} produit${m.pantryMatch.missingCount > 1 ? 's' : ''}`
+                        : ' · vous avez tout'}
+                    </span>
+                  )}
+
+                  {m.tip && (
+                    <span className="chat-card__highlight chat-card__highlight--info">
+                      <Lightbulb size={16} weight="fill" aria-hidden="true" />
+                      Astuce : {m.tip}
+                    </span>
+                  )}
                 </button>
               )}
             </div>
@@ -153,7 +260,7 @@ export function AgentConversation({ open, onClose, initialMessage }: AgentConver
         </div>
 
         {resolvedRecipe && (
-          <div className="agent-conv__cta">
+          <div className="chat-cta">
             <Button
               variant="primary"
               size="M"
@@ -163,32 +270,34 @@ export function AgentConversation({ open, onClose, initialMessage }: AgentConver
           </div>
         )}
 
-        {chips.length > 0 && (
-          <div className="agent-conv__chips" aria-label="Raccourcis — facultatif, vous pouvez aussi continuer à écrire">
-            {chips.map((chip) => (
-              <ChipTag key={chip.label} type="toned" size="S" label={chip.label} onClick={() => handleChip(chip)} />
-            ))}
-          </div>
-        )}
+        <div className="chat-composer">
+          {chips.length > 0 && (
+            <div className="chat-composer__suggestions" aria-label="Raccourcis facultatifs, vous pouvez aussi continuer à écrire">
+              {chips.map((chip) => (
+                <ChipTag key={chip.label} type="toned" size="S" label={chip.label} onClick={() => handleChip(chip)} />
+              ))}
+            </div>
+          )}
 
-        <div className="agent-conv__composer">
-          <InputField
-            id="agent-conv-input"
-            aria-label="Continuer la conversation"
-            placeholder="Continuez à écrire — « et sans lactose ? », « plutôt pour 4 »…"
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') handleSend()
-            }}
-          />
-          <Button
-            variant="primary"
-            size="M"
-            iconOnly={<PaperPlaneRight size={18} weight="bold" aria-hidden="true" />}
-            label="Envoyer"
-            onClick={handleSend}
-          />
+          <div className="chat-composer__row">
+            <InputField
+              id="chat-composer-input"
+              aria-label="Continuer la conversation"
+              placeholder="Continuez à écrire, par exemple « et sans lactose ? »"
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleSend()
+              }}
+            />
+            <Button
+              variant="primary"
+              size="M"
+              iconOnly={<PaperPlaneRight size={18} weight="bold" aria-hidden="true" />}
+              label="Envoyer"
+              onClick={handleSend}
+            />
+          </div>
         </div>
       </div>
     </Drawer>

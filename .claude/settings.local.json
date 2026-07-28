@@ -123,7 +123,12 @@
       "Bash(grep -o 'data-name=\\\\\\\\\"Banner\\\\\\\\\".\\\\{1800\\\\}' \"C:\\\\Users\\\\rapha\\\\.claude\\\\projects\\\\F--Workspace-Mealz-CLAUDE-Projects-DS-MD\\\\a2d1bef1-8a9d-41d2-a0ab-42c2f5896d6d\\\\tool-results\\\\toolu_01CsdXN5Cp29qHiEwH5Jvdm4.json\")",
       "Bash(grep -o 'data-name=\\\\\\\\\"Catalog Navigation\\\\\\\\\".\\\\{2500\\\\}' \"C:\\\\Users\\\\rapha\\\\.claude\\\\projects\\\\F--Workspace-Mealz-CLAUDE-Projects-DS-MD\\\\a2d1bef1-8a9d-41d2-a0ab-42c2f5896d6d\\\\tool-results\\\\toolu_01CsdXN5Cp29qHiEwH5Jvdm4.json\")",
       "Skill(artifact-design)",
-      "Skill(artifact-design:*)"
+      "Skill(artifact-design:*)",
+      "Bash(powershell -Command \"Get-NetTCPConnection -LocalPort 3005 -ErrorAction SilentlyContinue\")",
+      "Bash(powershell -Command \"Get-Process node -ErrorAction SilentlyContinue | Select-Object Id,ProcessName,StartTime\")",
+      "Bash(pnpm --filter @mealz-product-team/marmiton-prototype dev)",
+      "Bash(jobs -p)",
+      "Bash(claude plugin *)"
     ]
   },
   "hooks": {

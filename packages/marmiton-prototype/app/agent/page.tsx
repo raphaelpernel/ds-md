@@ -1,17 +1,37 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { PaperPlaneRight } from '@phosphor-icons/react'
-import { Button, InputField, RecipeCard } from '@mealz-product-team/design-system'
+import { Button, Heading, InputField, RecipeCard } from '@mealz-product-team/design-system'
 import { AgentConversation } from '@/components/agent/AgentConversation'
 import { MOCK_RECIPES } from '@/data/mock/recipes'
 import { getProductsByRecipe } from '@/data/mock/products'
 import { useCart } from '@/context/CartContext'
 import './page.css'
 
+/** Salutation consciente de l'heure, facultative pour le Lot 1 mais demandée en session. */
+function useGreeting() {
+  const [now, setNow] = useState<Date | null>(null)
+
+  useEffect(() => {
+    setNow(new Date())
+    const id = setInterval(() => setNow(new Date()), 60_000)
+    return () => clearInterval(id)
+  }, [])
+
+  if (!now) return 'On prépare à manger ?'
+
+  const hours = now.getHours()
+  const salutation = hours >= 5 && hours < 18 ? 'Bonjour' : 'Bonsoir'
+  const timeLabel = `${hours}h${String(now.getMinutes()).padStart(2, '0')}`
+
+  return `${salutation}, il est ${timeLabel}, on prépare à manger ?`
+}
+
 export default function AgentPage() {
   const router = useRouter()
+  const greetingTitle = useGreeting()
   const { addItem, state } = useCart()
   const [heroText, setHeroText] = useState('')
   const [conversationOpen, setConversationOpen] = useState(false)
@@ -44,9 +64,9 @@ export default function AgentPage() {
   return (
     <main className="agent-page">
       <section className="agent-hero">
-        <h1 className="agent-hero__title">Qu'est-ce qu'on mange ce soir ?</h1>
+        <Heading size="xl" className="agent-hero__title">{greetingTitle}</Heading>
         <p className="agent-hero__subtitle">
-          Dites-moi ce que vous avez, le temps qu'il vous reste, ou juste une envie — je m'occupe du tri.
+          Un ingrédient dans le frigo, une envie du moment, le temps que vous avez, je trouve la recette qu'il vous faut.
         </p>
 
         <form
@@ -59,7 +79,7 @@ export default function AgentPage() {
           <InputField
             id="agent-hero-input"
             aria-label="Décrivez ce que vous cherchez à manger"
-            placeholder="« j'ai du poulet, 25 minutes, un enfant difficile » ou « j'ai des courgettes dans le frigo »…"
+            placeholder="« j'ai du poulet, 25 minutes, un enfant difficile »…"
             value={heroText}
             onChange={(e) => setHeroText(e.target.value)}
             className="agent-hero__input"
@@ -68,14 +88,15 @@ export default function AgentPage() {
             type="submit"
             variant="primary"
             size="L"
-            label="Discuter"
-            rIcon={<PaperPlaneRight size={20} weight="bold" aria-hidden="true" />}
+            label="Discuter avec l'agent"
+            iconOnly={<PaperPlaneRight size={20} weight="bold" aria-hidden="true" />}
+            className="agent-hero__submit"
           />
         </form>
       </section>
 
       <section className="agent-editorial" aria-label="La sélection Marmiton du moment">
-        <h2 className="agent-editorial__title">La sélection du moment</h2>
+        <Heading size="md" className="agent-editorial__title">La sélection du moment</Heading>
         <div className="agent-editorial__grid">
           {MOCK_RECIPES.map((recipe) => {
             const availableProducts = getProductsByRecipe(recipe.id).filter((p) => p.available)
