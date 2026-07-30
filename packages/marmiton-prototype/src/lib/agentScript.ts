@@ -75,17 +75,67 @@ const CONSTRAINT_LABELS: Record<Exclude<Constraint, 'allergie'>, string> = {
 }
 
 /**
+ * Variante accordée en genre de `CONSTRAINT_LABELS`, pour insertion dans une phrase
+ * complète ("une recette {phrase}") côté message `relaxed` — `CONSTRAINT_LABELS` est
+ * un label de chip autonome (accord neutre), pas grammaticalement bindable à "recette".
+ */
+const RELAXED_REASON: Record<Constraint, string> = {
+  enfant: 'adaptée aux enfants',
+  'sans-sauce': 'sans sauce',
+  vegetarien: 'végétarienne',
+  'sans-gluten': 'sans gluten',
+  'sans-lactose': 'sans lactose',
+  allergie: "garantissant l'absence de l'allergène mentionné",
+}
+
+/**
+ * Garde partagée : une contrainte ne doit jamais être présentée comme satisfaite si le
+ * résultat est `relaxed` (contrainte abandonnée, `matched=false`) ou si la contrainte est
+ * `allergie` (mot-clé approximatif dans `recipe.tags`, pas un champ d'allergènes vérifié —
+ * voir `allergens` sur la carte, seule sortie honnête pour ce cas). Partagée entre
+ * `constraintLabel` et `selectCommunityQuote` pour ne pas dupliquer cette règle de sécurité.
+ */
+export function constraintApplies(slots: AgentSlots, matched: boolean): boolean {
+  return matched && !!slots.constraint && slots.constraint !== 'allergie'
+}
+
+/**
  * Label de correspondance à afficher sur la carte quand la contrainte exprimée est
  * réellement satisfaite par la recette recommandée (présente dans `recipe.tags`).
- * `matched` doit être `false` sur un résultat `relaxed` (contrainte abandonnée) — sinon
- * on afficherait une confirmation trompeuse. `allergie` n'a volontairement pas de label
- * ici : `Recipe.tags` n'y est qu'un mot-clé approximatif, pas un champ d'allergènes
- * vérifié — voir `allergens` sur la carte, seule sortie honnête pour ce cas.
  */
 export function constraintLabel(recipe: Recipe, slots: AgentSlots, matched: boolean): string | undefined {
-  if (!matched || !slots.constraint || slots.constraint === 'allergie') return undefined
-  if (!(recipe.tags ?? []).includes(slots.constraint)) return undefined
-  return CONSTRAINT_LABELS[slots.constraint]
+  if (!constraintApplies(slots, matched)) return undefined
+  if (!(recipe.tags ?? []).includes(slots.constraint!)) return undefined
+  return CONSTRAINT_LABELS[slots.constraint as Exclude<Constraint, 'allergie'>]
+}
+
+export interface CommunityQuote {
+  text: string
+  count: number
+}
+
+/**
+ * Sélectionne un avis communautaire contextuel (signal contextuel, pas un résumé générique
+ * de tous les avis — cf. design doc "Signal communautaire contextuel"). Priorité à la
+ * contrainte exprimée (signal le plus décisionnel) sur le temps ; retourne le premier avis
+ * du pool taggé, accompagné d'un compteur dérivé du pool réel (jamais un nombre stocké
+ * séparément, donc jamais désynchronisé). `matched` utilise la même garde que
+ * `constraintLabel` — jamais de quote de contrainte sur un résultat `relaxed`.
+ */
+export function selectCommunityQuote(recipe: Recipe, slots: AgentSlots, matched: boolean): CommunityQuote | undefined {
+  const reviews = recipe.reviews ?? []
+
+  if (constraintApplies(slots, matched)) {
+    const forConstraint = reviews.filter((r) => r.tag === slots.constraint)
+    if (forConstraint.length > 0) return { text: forConstraint[0].text, count: forConstraint.length }
+  }
+
+  if (slots.time !== undefined && recipe.duration <= slots.time) {
+    const forTime = reviews.filter((r) => r.tag === 'time')
+    if (forTime.length > 0) return { text: forTime[0].text, count: forTime.length }
+  }
+
+  return undefined
 }
 
 function seasonFor(date: Date): Season {
@@ -248,7 +298,7 @@ export function processTurn(text: string, prevSlots: AgentSlots, clarifyAttempts
         result: {
           kind: 'not_understood',
           message:
-            "Je ne suis pas sûr de comprendre. Vous pouvez piocher dans la sélection ci-dessous, ou utiliser la recherche classique. Je reste disponible dès que vous avez une envie ou une contrainte à me donner.",
+            "Je ne suis pas sûr de comprendre. Vous pouvez fermer cette fenêtre et piocher dans la sélection du moment, ou continuer à m'écrire avec un ingrédient, un temps, ou une envie. Je reste disponible dès que vous avez de quoi me guider.",
         },
       }
     }
@@ -267,13 +317,17 @@ export function processTurn(text: string, prevSlots: AgentSlots, clarifyAttempts
     if (clarifyAttempts >= 1) {
       // Cas dégradé : aucune recette ne correspond → on relâche la contrainte la plus stricte.
       const fallback = MOCK_RECIPES.find((r) => slots.time === undefined || r.duration <= slots.time + 15) ?? MOCK_RECIPES[0]
+      const droppedConstraint = slots.constraint ?? 'contrainte'
+      const reason = slots.constraint ? RELAXED_REASON[slots.constraint] : undefined
       return {
         slots,
         result: {
           kind: 'relaxed',
           recipe: fallback,
-          droppedConstraint: slots.constraint ?? 'contrainte',
-          message: `Sans cette contrainte précise, voici ce qui s'en rapproche le plus : ${fallback.name}.`,
+          droppedConstraint,
+          message: reason
+            ? `Je n'ai pas trouvé de recette ${reason}, voici ce qui s'en rapproche le plus : ${fallback.name}.`
+            : `Je n'ai pas trouvé de recette qui corresponde exactement, voici ce qui s'en rapproche le plus : ${fallback.name}.`,
         },
       }
     }

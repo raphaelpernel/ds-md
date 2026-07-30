@@ -64,7 +64,7 @@ export default function AgentPage() {
   return (
     <main className="agent-page">
       <section className="agent-hero">
-        <Heading size="xl" className="agent-hero__title">{greetingTitle}</Heading>
+        <Heading size="lg" className="agent-hero__title">{greetingTitle}</Heading>
         <p className="agent-hero__subtitle">
           Un ingrédient dans le frigo, une envie du moment, le temps que vous avez, je trouve la recette qu'il vous faut.
         </p>
@@ -91,6 +91,7 @@ export default function AgentPage() {
             label="Discuter avec l'agent"
             iconOnly={<PaperPlaneRight size={20} weight="bold" aria-hidden="true" />}
             className="agent-hero__submit"
+            disabled={!heroText.trim()}
           />
         </form>
       </section>

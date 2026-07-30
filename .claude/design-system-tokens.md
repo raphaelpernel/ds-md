@@ -119,6 +119,15 @@ Scope Figma : `ALL_FILLS`, `STROKE_COLOR`
 
 > Note : les valeurs Light et Dark sont identiques pour tous les tokens Semantic.
 
+> **Règle de choix `BG` vs `BG Light`** (badges, banners, tags, tout élément à fond sémantique plein) :
+> par défaut, utiliser `BG Light` (teinte 50) — ne pas surcharger visuellement l'interface. Si le
+> contraste entre `Content` (teinte 600) et `BG Light` est insuffisant pour le cas d'usage — le cas le
+> plus courant : l'élément est posé sur une surface qui porte déjà `BG Light` de la même famille
+> sémantique (ex. badge `info` dans un bandeau `Semantic/Info/BG Light` — fond-sur-fond) — passer à
+> `BG` (teinte 500, fond plein) avec `Content/Inversed` (blanc), jamais `Content` (600) sur `BG` (500).
+> Implémenté sur `Badge` via la prop `emphasis: 'light' | 'solid'` (défaut `'light'`) — voir
+> `Badge.design.md`.
+
 ### 2.6 Category (configurable par client)
 
 Scope Figma : `ALL_SCOPES` — valeurs définies par intégration client, non interchangeables.
@@ -317,7 +326,7 @@ Scope Figma : `CORNER_RADIUS` — alias vers les Primitives Radius.
 | Composant | Import | Variants / Props clés | Figma |
 |---|---|---|---|
 | `Avatar` | `import { Avatar } from '@/components'` | `size`: XS\|S\|M\|L\|XL · `shape`: circle\|square · `initials` ou `src`+`alt` | [Figma](https://www.figma.com/design/ES4RxHAafQbIwWLTzHnyFF/DS.MD?node-id=335-638) |
-| `Badge` | `import { Badge } from '@/components'` | `variant`: default\|brand\|success\|danger\|warning\|info · `size`: M\|S · `dot`: boolean | [Figma](https://www.figma.com/design/ES4RxHAafQbIwWLTzHnyFF/DS.MD?node-id=333-618) |
+| `Badge` | `import { Badge } from '@/components'` | `variant`: default\|brand\|success\|danger\|warning\|info · `size`: M\|S\|L · `dot`: boolean · `emphasis`: light\|solid (solid = fond plein, seulement success/danger/warning/info) | [Figma](https://www.figma.com/design/ES4RxHAafQbIwWLTzHnyFF/DS.MD?node-id=333-618) |
 | `ChipTag` | `import { ChipTag } from '@/components'` | `type`: filled\|toned\|neutral-filled\|neutral-outline\|alpha · `category`: promo\|new\|healthy\|express\|low-cost · `appearance`: solid\|toned · `size`: L\|M\|S · `selected` · `onRemove` · `onClick` | [Figma](https://www.figma.com/design/ES4RxHAafQbIwWLTzHnyFF/DS.MD?node-id=380-430) |
 | `ListItem` | `import { ListItem } from '@/components'` | `label` · `description` · `onClick` (rend interactif) · `disabled` | [Figma](https://www.figma.com/design/ES4RxHAafQbIwWLTzHnyFF/DS.MD?node-id=374-1309) |
 

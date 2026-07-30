@@ -58,19 +58,39 @@
   border: 1px solid var(--color-border-default);
   border-radius: var(--radius-card);
   background: var(--color-surface-primary);
-  cursor: pointer;
-  text-align: left;
 }
 
+/* Seule la zone image + titre navigue vers la fiche recette — les bandeaux
+   (allergènes, écart panier, astuce) vivent hors du bouton pour ne pas être
+   noyés dans un unique nom accessible plat (cf. critique agent, P1 a11y). */
 .chat-card__top {
   display: flex;
   align-items: center;
   gap: var(--spacing-12);
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+  border: none;
+  border-radius: var(--shape-sheet);
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.chat-card__top:hover .chat-card__title {
+  text-decoration: underline;
+}
+
+.chat-card__top:focus-visible {
+  outline: 2px solid var(--color-interactive-bg);
+  outline-offset: 2px;
 }
 
 .chat-card__image {
-  width: 56px;
-  height: 56px;
+  width: 96px;
+  height: 96px;
   border-radius: var(--shape-sheet);
   object-fit: cover;
   flex-shrink: 0;
@@ -101,7 +121,7 @@
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  font-size: 12px;
+  font-size: var(--font-size-body-xs);
   color: var(--color-content-weak);
 }
 
@@ -113,7 +133,34 @@
 .chat-card__chips {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: var(--spacing-4);
+}
+
+/* Marqueur du chemin `relaxed` (contrainte abandonnée) — volontairement pas un ChipTag
+   coloré ni une bordure d'alerte : neutre et sobre pour rester honnête (ce n'est pas une
+   erreur) tout en étant visuellement distinct d'une correspondance confirmée. Placé en
+   tête de carte car c'est l'information la plus décisionnelle quand elle existe. */
+.chat-card__compromise {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px var(--spacing-8);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--shape-pill, 999px);
+  background: var(--color-surface-secondary);
+  font-size: var(--font-size-body-xs);
+  font-weight: 600;
+  color: var(--color-content-weak);
+}
+
+/* ChipTag est aussi utilisé, ailleurs dans ce composant, comme raccourci cliquable dans le
+   composer — enveloppe locale pour neutraliser cette affordance quand le même composant sert
+   de simple étiquette de confirmation sur la carte (cf. critique agent, P1 cohérence). */
+.chat-card__chip-static {
+  display: inline-flex;
+  pointer-events: none;
+  cursor: default;
 }
 
 .chat-card__highlight {
@@ -122,7 +169,7 @@
   gap: var(--spacing-8);
   padding: var(--spacing-8);
   border-radius: var(--shape-sheet);
-  font-size: 12px;
+  font-size: var(--font-size-body-xs);
   line-height: 1.4;
 }
 
@@ -144,6 +191,38 @@
 .chat-card__highlight svg {
   flex-shrink: 0;
   margin-top: 1px;
+}
+
+/* Signal communautaire contextuel (avis + compteur) — remplace le bandeau tip quand un avis
+   correspond au slot actif. Badge au-dessus de la quote (pas en ligne avec le texte) pour
+   rester scannable en un coup d'œil, cf. mockup approuvé en /plan-design-review. */
+.chat-card__quote {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-4);
+}
+
+.chat-card__quote-text {
+  font-style: italic;
+}
+
+/* Écart panier + astuce reculent au second plan derrière l'allergène (sécurité) et le
+   marqueur de contrainte/compromis (décision) — cf. classement d'importance du brief produit :
+   même couleur de contenu, mais sans le bloc coloré plein qui leur donnait un poids égal. */
+.chat-card__secondary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.chat-card__highlight--compact {
+  padding: 0;
+  background: none;
+}
+
+.chat-card__highlight--compact svg {
+  width: 14px;
+  height: 14px;
 }
 
 .chat-cta {

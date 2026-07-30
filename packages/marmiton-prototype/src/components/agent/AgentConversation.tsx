@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { PaperPlaneRight, Star, CheckCircle, Lightbulb, Warning, Flame } from '@phosphor-icons/react'
-import { Drawer, Button, InputField, ChipTag } from '@mealz-product-team/design-system'
+import { PaperPlaneRight, Star, CheckCircle, Lightbulb, Warning, Flame, Info } from '@phosphor-icons/react'
+import { Drawer, Button, InputField, ChipTag, Badge } from '@mealz-product-team/design-system'
 import {
   EMPTY_SLOTS,
   processTurn,
@@ -11,9 +11,11 @@ import {
   pantryMatch,
   selectTip,
   constraintLabel,
+  selectCommunityQuote,
   isInSeason,
   type AgentSlots,
   type PantryMatch,
+  type CommunityQuote,
 } from '@/lib/agentScript'
 import type { Recipe, RecipeDifficulty } from '@/data/types/recipe'
 import './AgentConversation.css'
@@ -31,6 +33,8 @@ interface Message {
   recipe?: Recipe
   pantryMatch?: PantryMatch | null
   tip?: string
+  /** Avis communautaire contextuel (contrainte ou temps) — remplace `tip` sur la carte quand présent. */
+  communityQuote?: CommunityQuote
   /** Affichés seulement quand la conversation a signalé une contrainte allergie — transparence, pas de filtrage automatique. */
   allergens?: string[]
   health?: { calories?: number; protein?: number }
@@ -38,6 +42,8 @@ interface Message {
   constraintLabel?: string
   inSeason?: boolean
   servings?: number
+  /** Vrai quand la recette provient du chemin `relaxed` (contrainte abandonnée) — porte son propre marqueur visuel sur la carte, distinct d'une correspondance confirmée. */
+  relaxed?: boolean
 }
 
 interface Chip {
@@ -73,6 +79,7 @@ function cardExtras(recipe: Recipe, slots: AgentSlots, matched: boolean) {
   return {
     pantryMatch: pantryMatch(recipe, slots),
     tip: selectTip(recipe, slots),
+    communityQuote: selectCommunityQuote(recipe, slots, matched),
     allergens: slots.constraint === 'allergie' ? recipe.allergens : undefined,
     health: slots.healthFocus ? { calories: recipe.calories, protein: recipe.protein } : undefined,
     constraintLabel: constraintLabel(recipe, slots, matched),
@@ -153,6 +160,7 @@ export function AgentConversation({ open, onClose, initialMessage }: AgentConver
           role: 'agent',
           text: result.message,
           recipe: result.recipe,
+          relaxed: true,
           ...cardExtras(result.recipe, nextSlots, false),
         },
       ])
@@ -182,17 +190,20 @@ export function AgentConversation({ open, onClose, initialMessage }: AgentConver
   return (
     <Drawer open={open} onClose={handleClose} title="Une idée pour ce soir" placement="right" mobilePlacement="bottom">
       <div className="chat-shell">
-        <div className="chat-thread">
+        <div className="chat-thread" aria-live="polite">
           {messages.map((m) => (
             <div key={m.id} className={`chat-message chat-message--${m.role}`}>
               <p className="chat-bubble">{m.text}</p>
               {m.recipe && (
-                <button
-                  type="button"
-                  className="chat-card"
-                  onClick={() => router.push(`/recipe?recipe=${m.recipe!.id}`)}
-                >
-                  <span className="chat-card__top">
+                <div className="chat-card">
+                  
+
+                  <button
+                    type="button"
+                    className="chat-card__top"
+                    onClick={() => router.push(`/recipe?recipe=${m.recipe!.id}`)}
+                    aria-label={`Voir la recette ${m.recipe.name}`}
+                  >
                     <img src={m.recipe.imageUrl} alt="" className="chat-card__image" />
                     <span className="chat-card__meta">
                       <span className="chat-card__title">{m.recipe.name}</span>
@@ -220,39 +231,65 @@ export function AgentConversation({ open, onClose, initialMessage }: AgentConver
                         )}
                       </span>
                     </span>
-                  </span>
 
-                  {(m.constraintLabel || m.inSeason) && (
+                    {(m.relaxed || m.constraintLabel || m.inSeason) && (
                     <span className="chat-card__chips">
-                      {m.constraintLabel && <ChipTag type="toned" size="S" label={m.constraintLabel} />}
-                      {m.inSeason && <ChipTag type="toned" size="S" label="De saison" />}
+                      {m.relaxed && (
+                        <span className="chat-card__compromise">
+                          <Info size={14} weight="fill" aria-hidden="true" />
+                          Le plus proche, sans cette contrainte
+                        </span>
+                      )}
+                      {m.constraintLabel && (
+                        <span className="chat-card__chip-static">
+                          <ChipTag type="toned" size="S" label={m.constraintLabel} />
+                        </span>
+                      )}
+                      {m.inSeason && (
+                        <span className="chat-card__chip-static">
+                          <ChipTag type="toned" size="S" label="De saison" />
+                        </span>
+                      )}
                     </span>
                   )}
+                    
+                  </button>
 
                   {m.allergens && m.allergens.length > 0 && (
-                    <span className="chat-card__highlight chat-card__highlight--warning">
+                    <p className="chat-card__highlight chat-card__highlight--warning">
                       <Warning size={16} weight="fill" aria-hidden="true" />
                       Contient : {m.allergens.join(', ').toLowerCase()}
-                    </span>
+                    </p>
                   )}
 
-                  {m.pantryMatch && (
-                    <span className="chat-card__highlight chat-card__highlight--success">
-                      <CheckCircle size={16} weight="fill" aria-hidden="true" />
-                      Utilise vos {m.pantryMatch.matchedIngredientNames.join(', ').toLowerCase()}
-                      {m.pantryMatch.missingCount > 0
-                        ? ` · il manque ${m.pantryMatch.missingCount} produit${m.pantryMatch.missingCount > 1 ? 's' : ''}`
-                        : ' · vous avez tout'}
-                    </span>
+                  {m.communityQuote && (
+                    <p className="chat-card__highlight chat-card__highlight--info chat-card__quote">
+                      <Badge variant="info" size="S" emphasis="solid" label={`${m.communityQuote.count} avis`} />
+                      <span className="chat-card__quote-text">« {m.communityQuote.text} »</span>
+                    </p>
                   )}
 
-                  {m.tip && (
-                    <span className="chat-card__highlight chat-card__highlight--info">
-                      <Lightbulb size={16} weight="fill" aria-hidden="true" />
-                      Astuce : {m.tip}
-                    </span>
+                  {(m.pantryMatch || (!m.communityQuote && m.tip)) && (
+                    <div className="chat-card__secondary">
+                      {m.pantryMatch && (
+                        <p className="chat-card__highlight chat-card__highlight--success chat-card__highlight--compact">
+                          <CheckCircle size={14} weight="fill" aria-hidden="true" />
+                          Utilise vos {m.pantryMatch.matchedIngredientNames.join(', ').toLowerCase()}
+                          {m.pantryMatch.missingCount > 0
+                            ? ` · il manque ${m.pantryMatch.missingCount} produit${m.pantryMatch.missingCount > 1 ? 's' : ''}`
+                            : ' · vous avez tout'}
+                        </p>
+                      )}
+
+                      {!m.communityQuote && m.tip && (
+                        <p className="chat-card__highlight chat-card__highlight--info chat-card__highlight--compact">
+                          <Lightbulb size={14} weight="fill" aria-hidden="true" />
+                          Astuce : {m.tip}
+                        </p>
+                      )}
+                    </div>
                   )}
-                </button>
+                </div>
               )}
             </div>
           ))}

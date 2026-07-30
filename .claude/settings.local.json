@@ -128,7 +128,24 @@
       "Bash(powershell -Command \"Get-Process node -ErrorAction SilentlyContinue | Select-Object Id,ProcessName,StartTime\")",
       "Bash(pnpm --filter @mealz-product-team/marmiton-prototype dev)",
       "Bash(jobs -p)",
-      "Bash(claude plugin *)"
+      "Bash(claude plugin *)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(node .claude/skills/impeccable/scripts/detect.mjs --json packages/marmiton-prototype/src/components/agent)",
+      "Bash(node .claude/skills/impeccable/scripts/detect.mjs --json packages/marmiton-prototype/app/agent/page.css)",
+      "Bash(node .claude/skills/impeccable/scripts/detect.mjs --json packages/marmiton-prototype/src/components/agent/AgentConversation.css)",
+      "Bash(node .claude/skills/impeccable/scripts/detect.mjs --help)",
+      "Bash(node .claude/skills/impeccable/scripts/detect.mjs --json --no-config packages/marmiton-prototype/app/agent)",
+      "Bash(node .claude/skills/impeccable/scripts/detect.mjs --json --no-config packages/marmiton-prototype/src/components/agent)",
+      "Bash(IMPECCABLE_CRITIQUE_META='{\"target\":\"agent workflow — homepage header \\(app/agent hero\\) + AgentConversation drawer\",\"total_score\":21,\"max_score\":40,\"na_heuristics\":\"\",\"p0_count\":0,\"p1_count\":3}' node .claude/skills/impeccable/scripts/critique-storage.mjs write \"packages/marmiton-prototype/app/agent\" \"C:\\\\Users\\\\rapha\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\F--Workspace-Mealz-CLAUDE-Projects-DS-MD\\\\fbce9544-d75e-403b-b21d-3fdc45b2a1d1\\\\scratchpad\\\\critique-agent-workflow.md\")",
+      "Bash(node .claude/skills/impeccable/scripts/critique-storage.mjs trend \"packages/marmiton-prototype/app/agent\" 5)",
+      "Bash(echo \"---exit $?---\")",
+      "Skill(plan-eng-review)",
+      "Skill(plan-eng-review:*)",
+      "Skill(impeccable)",
+      "Skill(impeccable:*)",
+      "Read(//f/Workspace/Mealz/CLAUDE/Projects/**)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://localhost:3000/agent --max-time 8)"
     ]
   },
   "hooks": {

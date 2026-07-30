@@ -18,6 +18,14 @@ export const MOCK_RECIPES: Recipe[] = [
     calories: 320,
     protein: 34,
     season: ['printemps', 'ete'],
+    reviews: [
+      { text: "Mon fils qui déteste tout mange ça sans discuter, la découpe en petits morceaux aide bien.", tag: 'enfant' },
+      { text: "Adapté même aux plus difficiles, le citron reste discret une fois cuit.", tag: 'enfant' },
+      { text: "Aucune sauce à préparer, juste le jus de citron qui réduit tout seul en fin de cuisson.", tag: 'sans-sauce' },
+      { text: "Parfait si vous évitez les sauces, le poulet reste juteux sans rien ajouter.", tag: 'sans-sauce' },
+      { text: "Vraiment prêt en 25 minutes montre en main, même un soir de semaine chargé.", tag: 'time' },
+      { text: "Le temps de cuisson annoncé est fiable, pas besoin de rallonger.", tag: 'time' },
+    ],
     ingredients: [
       {
         id: 'i-poulet',
@@ -70,6 +78,13 @@ export const MOCK_RECIPES: Recipe[] = [
     calories: 285,
     protein: 16,
     season: ['ete'],
+    reviews: [
+      { text: "Recette végétarienne copieuse, personne n'a réclamé de viande à table.", tag: 'vegetarien' },
+      { text: 'La ricotta remplace bien la viande, texture fondante garantie.', tag: 'vegetarien' },
+      { text: 'Un classique végé qui plaît même aux enfants réticents aux légumes.', tag: 'vegetarien' },
+      { text: '35 minutes montre en main en comptant la cuisson au four.', tag: 'time' },
+      { text: 'Un peu plus long que prévu si le four met du temps à chauffer.', tag: 'time' },
+    ],
     ingredients: [
       {
         id: 'i-courgettes',
@@ -121,6 +136,12 @@ export const MOCK_RECIPES: Recipe[] = [
     allergens: ['Œufs', 'Lait', 'Gluten'],
     calories: 610,
     protein: 28,
+    reviews: [
+      { text: "Aucune épice forte, mes enfants en redemandent à chaque fois.", tag: 'enfant' },
+      { text: "Simple et familier, parfait pour un enfant qui n'aime pas les surprises.", tag: 'enfant' },
+      { text: "20 minutes chrono, plus rapide qu'une pizza livrée.", tag: 'time' },
+      { text: 'Le temps annoncé est respecté même en débutant.', tag: 'time' },
+    ],
     ingredients: [
       {
         id: 'i-pates',
@@ -171,6 +192,10 @@ export const MOCK_RECIPES: Recipe[] = [
     calories: 340,
     protein: 5,
     season: ['ete'],
+    reviews: [
+      { text: "45 minutes montre en main, la pâte cuit pendant qu'on prépare les fruits.", tag: 'time' },
+      { text: 'Un peu plus long si les abricots sont très mûrs et rendent du jus.', tag: 'time' },
+    ],
     ingredients: [
       {
         id: 'i-abricots',
@@ -229,6 +254,10 @@ export const MOCK_RECIPES: Recipe[] = [
     calories: 245,
     protein: 22,
     season: ['ete'],
+    reviews: [
+      { text: 'Prête en 20 minutes montre en main, aucune cuisson requise.', tag: 'time' },
+      { text: 'Encore plus rapide en préparant les légumes à l’avance.', tag: 'time' },
+    ],
     ingredients: [
       {
         id: 'i-tomates',
@@ -271,6 +300,10 @@ export const MOCK_RECIPES: Recipe[] = [
     calories: 390,
     protein: 9,
     season: ['automne', 'hiver'],
+    reviews: [
+      { text: '90 minutes au four, mais 10 minutes de préparation seulement.', tag: 'time' },
+      { text: 'Le temps de cuisson est incompressible mais ça vaut le coup.', tag: 'time' },
+    ],
     ingredients: [
       {
         id: 'i-lait',

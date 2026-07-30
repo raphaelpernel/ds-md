@@ -37,4 +37,6 @@ export interface Recipe {
   calories?: number
   /** En grammes, par portion. */
   protein?: number
+  /** Avis mockés taggés par contrainte ou par 'time', pour la carte agent (signal communautaire contextuel). */
+  reviews?: { text: string; tag: 'enfant' | 'sans-sauce' | 'vegetarien' | 'sans-gluten' | 'sans-lactose' | 'time' }[]
 }

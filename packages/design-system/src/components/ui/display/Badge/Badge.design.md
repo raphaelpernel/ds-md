@@ -39,6 +39,13 @@
 | `false` (défaut) | Badge texte standard |
 | `true` | Ajoute un point coloré avant le texte (ex. "● En ligne") |
 
+### emphasis
+
+| Valeur | Usage |
+|---|---|
+| `light` (défaut) | Fond `BG Light` (teinte 50) — cas normal, badge posé sur une surface neutre (`Surface/Primary`, `Surface/Secondary`) |
+| `solid` | Fond `BG` plein (teinte 500) + texte `Content/Inversed` — **n'a d'effet que sur `success`/`danger`/`warning`/`info`** (seuls variants avec la triade `BG`/`BG Light`/`Content`). À utiliser quand le badge est posé sur une surface qui porte déjà la teinte `BG Light` de la même famille sémantique (ex. badge `info` dans un bandeau `Semantic/Info/BG Light`) — sinon fond-sur-fond quasi illisible. Voir `.claude/design-system-tokens.md` §2.5 pour la règle générale. |
+
 ---
 
 ## Props
@@ -49,6 +56,7 @@
 | `variant` | voir ci-dessus | `'default'` | Couleur sémantique |
 | `size` | `'S'\|'M'\|'L'` | `'M'` | Taille |
 | `dot` | `boolean` | `false` | Ajoute le point de statut |
+| `emphasis` | `'light'\|'solid'` | `'light'` | Poids du fond — voir ci-dessus |
 | `icon` | `ReactNode` | — | Icône avant le texte (mutuellement peu utile avec `dot`) |
 
 ---
@@ -61,11 +69,17 @@
 | `Content/Weak` | `--color-content-weak` | Texte variant `default` |
 | `Surface/Brand Light` | `--color-surface-brand-light` | Fond variant `brand` |
 | `Interactive/Content` | `--color-interactive-content` | Texte variant `brand` |
-| `Semantic/*/BG Light` | `--color-semantic-{success,danger,warning,info}-bg-light` | Fond des variants sémantiques |
-| `Semantic/*/Content` | `--color-semantic-{success,danger,warning,info}-content` | Texte des variants sémantiques |
+| `Semantic/*/BG Light` | `--color-semantic-{success,danger,warning,info}-bg-light` | Fond des variants sémantiques, `emphasis="light"` (défaut) |
+| `Semantic/*/BG` | `--color-semantic-{success,danger,warning,info}-bg` | Fond des variants sémantiques, `emphasis="solid"` |
+| `Semantic/*/Content` | `--color-semantic-{success,danger,warning,info}-content` | Texte des variants sémantiques, `emphasis="light"` |
+| `Content/Inversed` | `--color-content-inversed` | Texte des variants sémantiques, `emphasis="solid"` |
 | `Shape/Pill` | `--shape-pill` | Border-radius |
 | `Spacing/2,4,8,12` | `--spacing-2/4/8/12` | Padding par taille, gap icône/texte |
 | `Font Size/Label/SM,MD` | `--font-size-label-sm/md` | Taille de texte (`M`/`L`) |
+
+> **`BG` vs `BG Light`** : voir la règle générale dans `.claude/design-system-tokens.md` §2.5 — par
+> défaut `BG Light` (`emphasis="light"`), passer à `BG` (`emphasis="solid"`) si le contraste ne suffit
+> pas (typiquement : badge posé sur une surface déjà teintée de la même famille sémantique).
 
 > **Note** : la taille `S` utilise `10px`/`12px` codés en dur (pas de token `Font Size/Label/XS`). Ne pas inventer un token correspondant — c'est un gap existant.
 
