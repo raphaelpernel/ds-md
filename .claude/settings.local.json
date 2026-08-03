@@ -145,7 +145,13 @@
       "Skill(impeccable:*)",
       "Read(//f/Workspace/Mealz/CLAUDE/Projects/**)",
       "Bash(echo \"EXIT: $?\")",
-      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://localhost:3000/agent --max-time 8)"
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://localhost:3000/agent --max-time 8)",
+      "Bash(powershell -Command 'Get-NetTCPConnection -State Listen | Where-Object {$_.LocalPort -ge 3000 -and $_.LocalPort -le 3010} | Select-Object LocalPort,OwningProcess')",
+      "Bash(pnpm --version)",
+      "Bash(echo \"started pid $!\")",
+      "Bash(pnpm --filter @mealz-product-team/marmiton-prototype test -- --run)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(jobs -l)"
     ]
   },
   "hooks": {

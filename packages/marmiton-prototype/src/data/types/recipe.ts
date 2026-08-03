@@ -39,4 +39,8 @@ export interface Recipe {
   protein?: number
   /** Avis mockés taggés par contrainte ou par 'time', pour la carte agent (signal communautaire contextuel). */
   reviews?: { text: string; tag: 'enfant' | 'sans-sauce' | 'vegetarien' | 'sans-gluten' | 'sans-lactose' | 'time' }[]
+  /** Temps de préparation actif, en minutes — sous-ensemble de `duration` (total, four/repos inclus). Absent = pas de split connu, on n'affiche que `duration`. */
+  prepDuration?: number
+  /** Équipement nécessaire non-standard (ex. four, robot, mixeur) — absent ou vide = rien à signaler. */
+  equipment?: string[]
 }

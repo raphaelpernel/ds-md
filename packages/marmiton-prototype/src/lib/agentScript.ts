@@ -111,28 +111,27 @@ export function constraintLabel(recipe: Recipe, slots: AgentSlots, matched: bool
 
 export interface CommunityQuote {
   text: string
-  count: number
 }
 
 /**
  * Sélectionne un avis communautaire contextuel (signal contextuel, pas un résumé générique
  * de tous les avis — cf. design doc "Signal communautaire contextuel"). Priorité à la
  * contrainte exprimée (signal le plus décisionnel) sur le temps ; retourne le premier avis
- * du pool taggé, accompagné d'un compteur dérivé du pool réel (jamais un nombre stocké
- * séparément, donc jamais désynchronisé). `matched` utilise la même garde que
- * `constraintLabel` — jamais de quote de contrainte sur un résultat `relaxed`.
+ * du pool taggé. Pas de compteur — le nombre d'avis n'est pas un signal utile pour
+ * l'utilisateur, seule l'attribution ("Selon les avis") compte. `matched` utilise la même
+ * garde que `constraintLabel` — jamais de quote de contrainte sur un résultat `relaxed`.
  */
 export function selectCommunityQuote(recipe: Recipe, slots: AgentSlots, matched: boolean): CommunityQuote | undefined {
   const reviews = recipe.reviews ?? []
 
   if (constraintApplies(slots, matched)) {
-    const forConstraint = reviews.filter((r) => r.tag === slots.constraint)
-    if (forConstraint.length > 0) return { text: forConstraint[0].text, count: forConstraint.length }
+    const forConstraint = reviews.find((r) => r.tag === slots.constraint)
+    if (forConstraint) return { text: forConstraint.text }
   }
 
   if (slots.time !== undefined && recipe.duration <= slots.time) {
-    const forTime = reviews.filter((r) => r.tag === 'time')
-    if (forTime.length > 0) return { text: forTime[0].text, count: forTime.length }
+    const forTime = reviews.find((r) => r.tag === 'time')
+    if (forTime) return { text: forTime.text }
   }
 
   return undefined
@@ -151,10 +150,18 @@ export function isInSeason(recipe: Recipe, date: Date = new Date()): boolean {
   return !!recipe.season?.includes(seasonFor(date))
 }
 
+export interface RecommendedRecipe {
+  recipe: Recipe
+  /** true = recette réellement scorée (score > 0 via scoreRecipe) ; false = complément "proche" (quasi-match), jamais présentée comme une correspondance confirmée. */
+  matched: boolean
+  /** Score brut, 0 pour un quasi-match. Usage interne (tri, garde-fou signal insuffisant) — jamais affiché. */
+  score: number
+}
+
 export type AgentTurnResult =
   | { kind: 'clarify'; message: string }
-  | { kind: 'recommend'; recipe: Recipe; reason: string }
-  | { kind: 'relaxed'; recipe: Recipe; droppedConstraint: string; message: string }
+  | { kind: 'recommend'; recipes: RecommendedRecipe[]; reason: string }
+  | { kind: 'relaxed'; recipes: RecommendedRecipe[]; droppedConstraint: string; message: string }
   | { kind: 'not_understood'; message: string }
 
 const TIME_WORDS: Array<[RegExp, number]> = [
@@ -255,13 +262,45 @@ function scoreRecipe(recipe: Recipe, slots: AgentSlots): number {
   return score
 }
 
-function bestMatch(slots: AgentSlots): { recipe: Recipe; score: number } | null {
-  let best: { recipe: Recipe; score: number } | null = null
-  for (const recipe of MOCK_RECIPES) {
-    const score = scoreRecipe(recipe, slots)
-    if (score > 0 && (!best || score > best.score)) best = { recipe, score }
+const TOP_N = 3
+/** Même fenêtre de grâce que l'ancien fallback relaxed mono-recette. */
+const RELAXED_GRACE_MIN = 15
+
+/** Les `limit` recettes les mieux scorées (score > 0), triées décroissant. Tri stable : à score égal, l'ordre de `MOCK_RECIPES` est préservé (même comportement que l'ancien `bestMatch` à égalité). */
+function topMatches(slots: AgentSlots, limit = TOP_N): { recipe: Recipe; score: number }[] {
+  return MOCK_RECIPES.map((recipe) => ({ recipe, score: scoreRecipe(recipe, slots) }))
+    .filter((m) => m.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+}
+
+/**
+ * Complète le slate avec des recettes "proches" (reprend la logique de l'ancien fallback
+ * relaxed : fenêtre de grâce de 15 min sur la durée, premier ordre du tableau qui convient)
+ * quand moins de `limit` recettes ont réellement scoré. Exclut les recettes déjà retenues.
+ * Si rien ne convient du tout, `MOCK_RECIPES[0]` sert d'ultime filet — le slate n'est jamais vide.
+ */
+function fillNearFits(slots: AgentSlots, excludeIds: Set<string>, limit: number): Recipe[] {
+  const candidates = MOCK_RECIPES.filter(
+    (r) => !excludeIds.has(r.id) && (slots.time === undefined || r.duration <= slots.time + RELAXED_GRACE_MIN)
+  )
+  const result = candidates.slice(0, limit)
+  if (result.length === 0 && limit > 0 && !excludeIds.has(MOCK_RECIPES[0].id)) {
+    result.push(MOCK_RECIPES[0])
   }
-  return best
+  return result
+}
+
+/** Construit le slate de recommandation (jusqu'à `limit` recettes) : vrais matchs d'abord, complété par des quasi-matchs si besoin. `hasRealMatch` indique si au moins une recette a réellement scoré. */
+export function buildRecipeSlate(slots: AgentSlots, limit = TOP_N): { recipes: RecommendedRecipe[]; hasRealMatch: boolean } {
+  const real = topMatches(slots, limit)
+  const recipes: RecommendedRecipe[] = real.map((m) => ({ recipe: m.recipe, matched: true, score: m.score }))
+  if (recipes.length < limit) {
+    const excludeIds = new Set(recipes.map((r) => r.recipe.id))
+    const fillers = fillNearFits(slots, excludeIds, limit - recipes.length)
+    for (const f of fillers) recipes.push({ recipe: f, matched: false, score: 0 })
+  }
+  return { recipes, hasRealMatch: real.length > 0 }
 }
 
 function reasonFor(recipe: Recipe, slots: AgentSlots): string {
@@ -311,23 +350,23 @@ export function processTurn(text: string, prevSlots: AgentSlots, clarifyAttempts
     }
   }
 
-  const match = bestMatch(slots)
+  const { recipes, hasRealMatch } = buildRecipeSlate(slots)
 
-  if (!match) {
+  if (!hasRealMatch) {
     if (clarifyAttempts >= 1) {
       // Cas dégradé : aucune recette ne correspond → on relâche la contrainte la plus stricte.
-      const fallback = MOCK_RECIPES.find((r) => slots.time === undefined || r.duration <= slots.time + 15) ?? MOCK_RECIPES[0]
+      const top = recipes[0]
       const droppedConstraint = slots.constraint ?? 'contrainte'
       const reason = slots.constraint ? RELAXED_REASON[slots.constraint] : undefined
       return {
         slots,
         result: {
           kind: 'relaxed',
-          recipe: fallback,
+          recipes,
           droppedConstraint,
           message: reason
-            ? `Je n'ai pas trouvé de recette ${reason}, voici ce qui s'en rapproche le plus : ${fallback.name}.`
-            : `Je n'ai pas trouvé de recette qui corresponde exactement, voici ce qui s'en rapproche le plus : ${fallback.name}.`,
+            ? `Je n'ai pas trouvé de recette ${reason}, voici ce qui s'en rapproche le plus : ${top.recipe.name}.`
+            : `Je n'ai pas trouvé de recette qui corresponde exactement, voici ce qui s'en rapproche le plus : ${top.recipe.name}.`,
         },
       }
     }
@@ -341,7 +380,7 @@ export function processTurn(text: string, prevSlots: AgentSlots, clarifyAttempts
   }
 
   // Signal insuffisant pour trancher entre plusieurs recettes plausibles (ex. « pâtes » seul).
-  if (match.score <= 2 && slots.time === undefined && slots.servings === undefined && clarifyAttempts < 1) {
+  if (recipes[0].score <= 2 && slots.time === undefined && slots.servings === undefined && clarifyAttempts < 1) {
     return {
       slots,
       result: {
@@ -353,7 +392,7 @@ export function processTurn(text: string, prevSlots: AgentSlots, clarifyAttempts
 
   return {
     slots,
-    result: { kind: 'recommend', recipe: match.recipe, reason: reasonFor(match.recipe, slots) },
+    result: { kind: 'recommend', recipes, reason: reasonFor(recipes[0].recipe, slots) },
   }
 }
 

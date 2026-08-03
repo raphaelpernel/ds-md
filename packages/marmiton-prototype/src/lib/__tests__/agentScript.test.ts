@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { constraintApplies, selectCommunityQuote } from '../agentScript'
+import { constraintApplies, selectCommunityQuote, buildRecipeSlate, processTurn, EMPTY_SLOTS } from '../agentScript'
 import type { AgentSlots } from '../agentScript'
 import type { Recipe } from '../../data/types/recipe'
+import { MOCK_RECIPES } from '../../data/mock/recipes'
 
 function makeRecipe(overrides: Partial<Recipe> = {}): Recipe {
   return {
@@ -41,7 +42,7 @@ describe('selectCommunityQuote', () => {
     expect(selectCommunityQuote(recipe, makeSlots(), true)).toBeUndefined()
   })
 
-  it('retourne une quote et un compteur dérivé quand la contrainte matche un avis tagué', () => {
+  it('retourne la quote du premier avis tagué correspondant à la contrainte, sans compteur', () => {
     const recipe = makeRecipe({
       reviews: [
         { text: 'Coupez le poulet en petits morceaux.', tag: 'enfant' },
@@ -50,7 +51,8 @@ describe('selectCommunityQuote', () => {
       ],
     })
     const result = selectCommunityQuote(recipe, makeSlots({ constraint: 'enfant' }), true)
-    expect(result).toEqual({ text: 'Coupez le poulet en petits morceaux.', count: 2 })
+    expect(result).toEqual({ text: 'Coupez le poulet en petits morceaux.' })
+    expect(result).not.toHaveProperty('count')
   })
 
   it('retourne undefined si la contrainte matche mais qu\'aucun avis ne porte ce tag', () => {
@@ -80,7 +82,7 @@ describe('selectCommunityQuote', () => {
       ],
     })
     const result = selectCommunityQuote(recipe, makeSlots({ time: 25 }), true)
-    expect(result).toEqual({ text: 'Vraiment prête en 20 minutes, chrono en main.', count: 2 })
+    expect(result).toEqual({ text: 'Vraiment prête en 20 minutes, chrono en main.' })
   })
 
   it('ne retourne pas de quote time si la recette dépasse le temps annoncé', () => {
@@ -100,11 +102,76 @@ describe('selectCommunityQuote', () => {
       ],
     })
     const result = selectCommunityQuote(recipe, makeSlots({ constraint: 'enfant', time: 25 }), true)
-    expect(result).toEqual({ text: 'Adaptée aux enfants difficiles.', count: 1 })
+    expect(result).toEqual({ text: 'Adaptée aux enfants difficiles.' })
   })
 
   it('ne plante pas et retourne undefined quand recipe.reviews est absent', () => {
     const recipe = makeRecipe({ reviews: undefined })
     expect(selectCommunityQuote(recipe, makeSlots({ constraint: 'enfant' }), true)).toBeUndefined()
+  })
+})
+
+describe('buildRecipeSlate', () => {
+  it('retourne jusqu\'à 3 vrais matchs, triés par score décroissant, tous matched=true', () => {
+    // 3 ingrédients distincts, chacun ne matchant qu'une seule recette (score 3 chacun) —
+    // le tri par score ne départage pas ces égalités, donc l'ordre du tableau MOCK_RECIPES prévaut.
+    const { recipes, hasRealMatch } = buildRecipeSlate(makeSlots({ ingredients: ['poulet', 'courgette', 'thon'] }))
+    expect(hasRealMatch).toBe(true)
+    expect(recipes).toHaveLength(3)
+    expect(recipes.every((r) => r.matched)).toBe(true)
+    expect(recipes.map((r) => r.recipe.id)).toEqual(['r-poulet-citron', 'r-courgettes-ricotta', 'r-salade-nicoise'])
+  })
+
+  it('complète avec des quasi-matchs (matched=false) quand un seul vrai match existe, sans doublon', () => {
+    const { recipes, hasRealMatch } = buildRecipeSlate(makeSlots({ constraint: 'vegetarien' }))
+    expect(hasRealMatch).toBe(true)
+    expect(recipes).toHaveLength(3)
+    expect(recipes[0]).toMatchObject({ matched: true })
+    expect(recipes[0].recipe.id).toBe('r-courgettes-ricotta')
+    expect(recipes[1].matched).toBe(false)
+    expect(recipes[2].matched).toBe(false)
+    const ids = recipes.map((r) => r.recipe.id)
+    expect(new Set(ids).size).toBe(3) // pas de doublon
+  })
+
+  it('slate entièrement composé de quasi-matchs quand aucune recette ne score, hasRealMatch=false', () => {
+    // 'sans-gluten' n'est taggé sur aucune recette du mock.
+    const { recipes, hasRealMatch } = buildRecipeSlate(makeSlots({ constraint: 'sans-gluten' }))
+    expect(hasRealMatch).toBe(false)
+    expect(recipes).toHaveLength(3)
+    expect(recipes.every((r) => !r.matched)).toBe(true)
+  })
+
+  it('cas limite : slate jamais vide même quand aucun quasi-match ne convient (filet MOCK_RECIPES[0])', () => {
+    // time=1 exclut toute recette même avec la fenêtre de grâce de 15 min (durée min du mock = 20).
+    const { recipes, hasRealMatch } = buildRecipeSlate(makeSlots({ constraint: 'sans-lactose', time: 1 }))
+    expect(hasRealMatch).toBe(false)
+    expect(recipes.length).toBeGreaterThan(0)
+    expect(recipes[0].recipe.id).toBe(MOCK_RECIPES[0].id)
+  })
+})
+
+describe('processTurn — recommandation multi-recettes', () => {
+  it('kind recommend avec un slate de recettes quand au moins un vrai match existe', () => {
+    const { result } = processTurn('poulet', EMPTY_SLOTS, 0)
+    expect(result.kind).toBe('recommend')
+    if (result.kind === 'recommend') {
+      expect(result.recipes.length).toBeGreaterThan(0)
+      expect(result.recipes[0].matched).toBe(true)
+    }
+  })
+
+  it('kind relaxed avec un slate entièrement matched=false quand aucun vrai match n\'existe, après un échec de clarification', () => {
+    const { result } = processTurn('un plat sans gluten', EMPTY_SLOTS, 1)
+    expect(result.kind).toBe('relaxed')
+    if (result.kind === 'relaxed') {
+      expect(result.recipes.every((r) => !r.matched)).toBe(true)
+      expect(result.message).toContain(result.recipes[0].recipe.name)
+    }
+  })
+
+  it('garde "signal insuffisant" toujours active sur le score du premier vrai match', () => {
+    const { result } = processTurn('je suis vegetarien', EMPTY_SLOTS, 0)
+    expect(result.kind).toBe('clarify')
   })
 })

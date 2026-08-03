@@ -32,6 +32,12 @@
   align-items: flex-start;
 }
 
+/* Message portant un carousel de cartes recette : respire sur toute la largeur du fil plutôt
+   que la limite à 88% des bulles de texte, pour laisser de la place au peek du carousel. */
+.chat-message--wide {
+  max-width: 100%;
+}
+
 .chat-bubble {
   font-size: 14px;
   line-height: 1.5;
@@ -49,11 +55,18 @@
   background: var(--color-surface-secondary);
 }
 
+/* État "réflexion" (Loading) : mêmes fond/rayon que la bulle de texte agent, juste le
+   contenu qui change — évite un saut de layout entre la bulle "je réfléchis" et le texte final. */
+.chat-bubble--pending {
+  display: inline-flex;
+}
+
+/* Largeur non fixée ici : la carte vit toujours comme item du carousel (.chat-carousel__card
+   dans ChatCarousel.css fournit le flex-basis), jamais seule en pleine largeur. */
 .chat-card {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-8);
-  width: 100%;
   padding: var(--spacing-8);
   border: 1px solid var(--color-border-default);
   border-radius: var(--radius-card);
@@ -75,7 +88,7 @@
   background: transparent;
   font: inherit;
   color: inherit;
-  text-align: left;
+  text-align: center;
   cursor: pointer;
 }
 
@@ -113,6 +126,7 @@
 .chat-card__meta-row {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--spacing-8);
   flex-wrap: wrap;
 }
@@ -134,7 +148,14 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: var(--spacing-4);
+}
+
+/* Absorbe la différence de hauteur du header entre cartes d'un même carousel (cf. AgentConversation.tsx) —
+   n'a d'effet que parce que .chat-carousel__track étire les cartes à hauteur égale (align-items par défaut). */
+.chat-card__spacer {
+  flex: 1 0 0;
 }
 
 /* Marqueur du chemin `relaxed` (contrainte abandonnée) — volontairement pas un ChipTag
@@ -168,7 +189,7 @@
   align-items: flex-start;
   gap: var(--spacing-8);
   padding: var(--spacing-8);
-  border-radius: var(--shape-sheet);
+  border-radius: var(--radius-card);
   font-size: var(--font-size-body-xs);
   line-height: 1.4;
 }
@@ -193,13 +214,19 @@
   margin-top: 1px;
 }
 
-/* Signal communautaire contextuel (avis + compteur) — remplace le bandeau tip quand un avis
-   correspond au slot actif. Badge au-dessus de la quote (pas en ligne avec le texte) pour
-   rester scannable en un coup d'œil, cf. mockup approuvé en /plan-design-review. */
+/* Signal communautaire contextuel (avis) — remplace le bandeau tip quand un avis correspond
+   au slot actif. Attribution textuelle simple ("Selon les avis"), pas de compteur ni de Badge :
+   le nombre d'avis n'est pas un signal utile, seule l'attribution compte. */
 .chat-card__quote {
   flex-direction: column;
   align-items: flex-start;
   gap: var(--spacing-4);
+}
+
+.chat-card__quote-attribution {
+  font-size: var(--font-size-body-xs);
+  font-weight: 600;
+  color: var(--color-content-weak);
 }
 
 .chat-card__quote-text {
@@ -223,10 +250,6 @@
 .chat-card__highlight--compact svg {
   width: 14px;
   height: 14px;
-}
-
-.chat-cta {
-  padding: var(--spacing-8) var(--spacing-16);
 }
 
 .chat-composer {

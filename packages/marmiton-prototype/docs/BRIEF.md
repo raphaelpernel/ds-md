@@ -115,3 +115,44 @@ Les deux sections ci-dessus (classement + Itération 2) ont été écrites en pa
 7. `Recipe.tipForKids` remplace `tip` via `selectTip()` quand `slots.constraint === 'enfant'`.
 
 Prix/budget reste exclu. Temps de préparation vs total et équipement nécessaire restent notés pour plus tard, non construits dans cette passe.
+
+---
+
+## Latence de l'agent, relance systématique et persona de marque (2026-08-03)
+
+Contexte : analyse comparative de l'offre "Assistant Shopping IA" d'iAdvize (leader du conversational commerce e-commerce, testé en direct sur un client réel, Payne Glasses) via `/design:user-research`, pour en tirer des mécaniques transposables à `AgentConversation` — en écartant explicitement tout ce qui reproduirait le pattern "chatbot greffé" (bulle flottante sur un site inchangé) que le brief Marmiton Agentique interdit en §10.
+
+### Décision 1 — États de latence à deux niveaux + skeleton
+
+**Constat** : `submitTurn` produisait jusqu'ici le message agent (texte + cartes) de façon synchrone. En production, le pipeline réel a deux étapes de coût très différent : (a) classification de l'intention (`extractSlots`), rapide, et (b) le matching recette ↔ contraintes ↔ écart panier ↔ signal communautaire — la partie qui fait la valeur différenciante de Marmiton (principe 3 du brief : "extraire le signal des avis... c'est là que Marmiton devient inimitable") et qui sera la plus coûteuse une fois branchée sur un vrai backend.
+
+**Décision** : deux textes de réflexion distincts plutôt qu'un indicateur générique unique :
+1. *"Je regarde ce qui pourrait coller…"* — pendant la classification.
+2. *"Je croise avec les avis de la communauté et ce qu'il vous reste à acheter…"* — pendant le matching, accompagné d'un skeleton de cartes (nombre de cartes déjà connu, forme du carousel préfigurée).
+
+Le carousel réel ne s'affiche **que** lorsque la réflexion est terminée (jamais de contenu partiel qui change sous les yeux de l'utilisateur) — cf. pattern GPT apps cité par l'utilisateur. Composants DS utilisés (cf. §3 de `design-system/docs/DESIGN.md`) : `Loading` (spinner + label, attente courte sans layout à préfigurer) pour le texte de réflexion, `Skeleton` (`variant="rect"` pour l'image, `variant="text" lines={2}` pour le titre/meta) pour préfigurer la forme de la carte.
+
+**Implémentation** : `AgentConversation.tsx` — un message agent passe par un état transitoire `pending: { label, skeletonCount? }` avant d'être remplacé par son contenu final via `setTimeout` échelonnés (`THINK_DELAY`/`MATCH_DELAY`/`RELANCE_DELAY`, purement des délais de simulation pour ce prototype scripté — à remplacer par la vraie latence réseau quand un backend existera). Les timeouts en attente sont nettoyés à la fermeture du tiroir et au démontage, pour qu'une réponse encore "en réflexion" ne se matérialise jamais dans une conversation que l'utilisateur a quittée.
+
+### Décision 2 — Relance systématique après une carte
+
+**Constat** : un carousel de recettes qui s'affiche sans suite laisse l'utilisateur face à un résultat figé — contraire au principe 2 du brief ("l'agent rebondit, il ne rend pas 4837 résultats").
+
+**Décision** : toute carte/carousel affiché est désormais **toujours** suivi d'un message agent de relance, séparé, après un court délai (`RELANCE_DELAY`) :
+- Résultat `recommend` (vraie correspondance) : *"Une de ces recettes vous tente, ou je vous en cherche une autre ?"*
+- Résultat `relaxed` (contrainte relâchée, compromis) : *"Ça peut convenir, ou vous voulez que j'affine encore avec d'autres critères ?"* — formulation différente car ce n'est pas une vraie correspondance, l'agent ne doit pas donner le même niveau de confiance.
+
+### Décision 3 — CTA de la carte : un seul, visible, dans la carte (à vérifier)
+
+Le double CTA (bouton flottant hors du fil + carte entière cliquable sans affordance visible) a été traité dans une session parallèle. À la relecture du résultat : la carte entière reste cliquable (`chat-card__top` en `<button>`, `aria-label` porteur) mais **aucun bouton visible distinct n'a été ajouté à l'intérieur de la carte** — seul le clic sur toute la surface subsiste, sans consigne explicite donnée en ce sens à cette session parallèle. Décision provisoire : ne pas dupliquer ce travail ici ; à revérifier/compléter dans une prochaine passe si un CTA visible (`Button` "Voir la recette" à l'intérieur de `.chat-card`, pas hors du fil) est jugé nécessaire pour l'accessibilité/découvrabilité.
+
+### Décision 4 — Persona de marque : deux couches distinctes, pas une seule
+
+Documentation seule (rien à construire dans ce prototype scripté, pas de multi-tenant à ce stade). L'"AI Builder" d'iAdvize (ton, apparence, périmètre de connaissance, règles d'escalade, configurables sans code par client) ne se transpose qu'à moitié pour Mealz/Marmiton :
+
+- **Couche superficielle, généralisable comme chez iAdvize** : ton éditorial, formulations de relance, identité visuelle du chat — paramétrable pour de futurs partenaires contenu au-delà de Marmiton, cohérent avec la marque blanche déjà actée (§04 du brief : "Marque blanche (SDK) ou connecteur MCP").
+- **Couche comportementale profonde, spécifique à ce partenariat** : extraction de signal communautaire (principe 3), matching écart panier (`pantryMatch`), non-agressivité du panier (principe 5). Ce n'est pas un réglage de ton — c'est de la logique produit construite une fois pour Marmiton, pas un paramètre générique de back-office comme chez un client iAdvize (opticien, meuble) qui partage tous le même comportement sous-jacent.
+
+### Hors scope pour cette passe
+
+Anti-pattern iAdvize explicitement écarté : le widget flottant / bulle comme point d'entrée, le "shopping mode" à côté d'un parcours inchangé, le triage à boutons comme unique mécanisme d'entrée, le registre merchandising (prix en avant sur la carte). Voir l'analyse comparative complète dans la conversation du 2026-08-03 pour le détail de ce qui a été testé en direct et pourquoi ces patterns ne s'appliquent pas ici.

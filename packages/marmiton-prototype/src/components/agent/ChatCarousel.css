@@ -1,0 +1,44 @@
+.chat-carousel {
+  position: relative;
+}
+
+.chat-carousel__track {
+  display: flex;
+  gap: var(--spacing-12);
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.chat-carousel__track::-webkit-scrollbar {
+  display: none;
+}
+
+.chat-carousel__button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: var(--elevation-200);
+  background: var(--color-surface-primary);
+}
+
+.chat-carousel__button--left {
+  left: var(--spacing-8);
+}
+
+.chat-carousel__button--right {
+  right: var(--spacing-8);
+}
+
+/* Largeur relative au conteneur (pas de px fixe) pour garantir un "peek" d'au moins 1,5 carte
+   visible quel que soit le viewport. Vérifié : à 320px mobile (piste ~288px après padding),
+   64% de la piste ≈ 184px, un plancher à 200px aurait fait dominer le plancher et fait tomber
+   sous 1,5 carte visible (~1,42) — plancher abaissé à 180px pour que le pourcentage garde la
+   main jusqu'à cette largeur (n ≈ 1,53). Plafond à 260px pour ne pas grossir inutilement sur le
+   drawer desktop élargi (n ≈ 1,53 à 368px de piste). 180px reste confortable pour la vignette
+   96×96 empilée verticalement dans .chat-card__top (colonne, pas de contrainte de largeur serrée). */
+.chat-carousel__card {
+  scroll-snap-align: start;
+  flex: 0 0 clamp(180px, 64%, 260px);
+}
