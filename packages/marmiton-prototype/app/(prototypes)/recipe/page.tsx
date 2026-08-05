@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useState } from 'react'
+import { Suspense, useMemo, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { RecipeIngredientWidget, ViewToggle } from '@/components/product/RecipeIngredientWidget/RecipeIngredientWidget'
 import type { ViewMode } from '@/components/product/RecipeIngredientWidget/RecipeIngredientWidget'
@@ -9,6 +9,9 @@ import { Heart, ShareNetwork } from '@phosphor-icons/react'
 import { Button, Stepper, Drawer } from '@mealz-product-team/design-system'
 import { Cart } from '@/components/product/Cart/Cart'
 import { CartFooter } from '@/components/product/Cart/CartFooter'
+import { RecipeAskBar } from '@/components/product/RecipeAskBar/RecipeAskBar'
+import { RecipeAgentDrawer } from '@/components/agent/RecipeAgentDrawer'
+import { buildRecipeChips } from '@/lib/recipeAskScript'
 import { useCart } from '@/context/CartContext'
 import { getRecipeById } from '@/data/mock/recipes'
 import { getProductsByRecipe } from '@/data/mock/products'
@@ -34,6 +37,15 @@ function RecetteContent() {
   const [servings, setServings] = useState(RECIPE.servings)
   const [ingredientView, setIngredientView] = useState<ViewMode>('grid')
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [askOpen, setAskOpen] = useState(false)
+  const [askInitialMessage, setAskInitialMessage] = useState('')
+
+  const askChips = useMemo(() => buildRecipeChips(RECIPE), [RECIPE])
+
+  function handleAskOpen(message: string) {
+    setAskInitialMessage(message)
+    setAskOpen(true)
+  }
 
   const recipeCount = sections.filter((s) => s.recipeId !== null).length
 
@@ -202,6 +214,15 @@ function RecetteContent() {
         />
       </Drawer>
 
+      <RecipeAskBar chips={askChips} onOpen={handleAskOpen} />
+      <RecipeAgentDrawer
+        open={askOpen}
+        onClose={() => setAskOpen(false)}
+        recipe={RECIPE}
+        chips={askChips}
+        initialMessage={askInitialMessage}
+      />
+
       <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -210,6 +231,7 @@ function RecetteContent() {
           background-color: #f5f5f5;
           font-family: var(--font-family-body);
           color: var(--color-content-default);
+          padding-bottom: 96px;
         }
 
         /* Recipe wrapper — the card holding this recipe's own content */
