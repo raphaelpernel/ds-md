@@ -68,6 +68,18 @@ export function RecipeAgentDrawer({ open, onClose, recipe, chips, initialMessage
     threadEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
+  // Le focus clavier doit suivre l'ouverture du Drawer : `RecipeAskBar` ouvre ce
+  // Drawer au `onFocus` de son propre input, mais ne déplace pas le focus DOM —
+  // sans ça, le focus reste coincé sur un champ masqué sous l'overlay (recouvert
+  // en plein écran sur mobile, `mobilePlacement="bottom"`). `InputField` (design
+  // system) ne forwarde pas de ref, d'où la récupération par `id` existant plutôt
+  // que d'ajouter un `forwardRef` au composant partagé.
+  useEffect(() => {
+    if (open) {
+      document.getElementById('recipe-ask-composer-input')?.focus()
+    }
+  }, [open])
+
   useEffect(() => clearPendingTimeouts, [])
 
   function submitAsk(text: string, currentSlots: AgentSlots) {

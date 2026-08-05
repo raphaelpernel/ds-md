@@ -1,4 +1,4 @@
-import { extractSlots, selectTip, pantryMatch, constraintLabel, RELAXED_REASON } from './agentScript'
+import { extractSlots, selectTip, pantryMatch, constraintLabel, RELAXED_REASON, EMPTY_SLOTS } from './agentScript'
 import type { AgentSlots, PantryMatch } from './agentScript'
 import type { Recipe } from '../data/types/recipe'
 
@@ -92,7 +92,11 @@ export function answerRecipeAsk(
         ? `Cette recette contient : ${allergens.join(', ').toLowerCase()}.`
         : "Aucun allergène n'est signalé pour cette recette."
     )
-  } else if (slots.constraint) {
+  } else if (slots.constraint && prevSlots.constraint !== slots.constraint) {
+    // Contrainte nouvellement détectée à ce tour seulement — sinon le message
+    // "Oui, cette recette est..." / "n'est pas signalée comme..." rejouerait à
+    // chaque tour suivant du même fil, alors que `slots.constraint` persiste via
+    // `extractSlots(text, prevSlots)`.
     const label = constraintLabel(recipe, slots, true)
     constraintLabelResult = label
     if (label) {
@@ -103,12 +107,16 @@ export function answerRecipeAsk(
     }
   }
 
-  if (slots.time !== undefined) {
+  if (prevSlots.time === undefined && slots.time !== undefined) {
     communityQuote = communityQuote ?? findRecipeReview(recipe, 'time')
   }
 
   const match = pantryMatch(recipe, slots)
-  const tip = selectTip(recipe, slots)
+  // L'astuce n'a de sens qu'une fois, au premier tour du fil — la répéter à chaque
+  // bulle serait bruyant. `EMPTY_SLOTS` est le singleton passé par `RecipeAgentDrawer`
+  // au tout premier appel (jamais un clone), donc l'égalité de référence suffit à
+  // détecter ce premier tour sans introduire de compteur/état supplémentaire.
+  const tip = prevSlots === EMPTY_SLOTS ? selectTip(recipe, slots) : undefined
 
   if (bits.length === 0) {
     bits.push('Voici ce que je peux vous dire sur cette recette.')

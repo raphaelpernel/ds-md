@@ -137,4 +137,23 @@ describe('answerRecipeAsk', () => {
     const second = answerRecipeAsk(recipe, "j'ai du poulet", first.slots)
     expect(second.slots.constraint).toBe('vegetarien')
   })
+
+  it("ne répète pas le message de contrainte ni l'avis communautaire au tour suivant du même fil", () => {
+    const recipe = makeRecipe({
+      tags: ['vegetarien'],
+      reviews: [{ text: 'La ricotta remplace bien la viande.', tag: 'vegetarien' }],
+    })
+    const first = answerRecipeAsk(recipe, 'Une alternative végétarienne ?', EMPTY_SLOTS)
+    const second = answerRecipeAsk(recipe, "j'ai du poulet", first.slots)
+    expect(second.answer.message).toBe('Voici ce que je peux vous dire sur cette recette.')
+    expect(second.answer.communityQuote).toBeUndefined()
+  })
+
+  it("ne répète pas l'astuce anti-échec au tour suivant du même fil", () => {
+    const recipe = makeRecipe({ tip: 'Ajoutez le jus de citron hors du feu.' })
+    const first = answerRecipeAsk(recipe, 'une question sans rapport', EMPTY_SLOTS)
+    expect(first.answer.tip).toBe('Ajoutez le jus de citron hors du feu.')
+    const second = answerRecipeAsk(recipe, 'une autre question sans rapport', first.slots)
+    expect(second.answer.tip).toBeUndefined()
+  })
 })
