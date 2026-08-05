@@ -79,7 +79,7 @@ const CONSTRAINT_LABELS: Record<Exclude<Constraint, 'allergie'>, string> = {
  * complète ("une recette {phrase}") côté message `relaxed` — `CONSTRAINT_LABELS` est
  * un label de chip autonome (accord neutre), pas grammaticalement bindable à "recette".
  */
-const RELAXED_REASON: Record<Constraint, string> = {
+export const RELAXED_REASON: Record<Constraint, string> = {
   enfant: 'adaptée aux enfants',
   'sans-sauce': 'sans sauce',
   vegetarien: 'végétarienne',
