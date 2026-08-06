@@ -214,9 +214,10 @@
   margin-top: 1px;
 }
 
-/* Signal communautaire contextuel (avis) — remplace le bandeau tip quand un avis correspond
-   au slot actif. Attribution textuelle simple ("Selon les avis"), pas de compteur ni de Badge :
-   le nombre d'avis n'est pas un signal utile, seule l'attribution compte. */
+/* Signal communautaire contextuel (avis) — empilé avec le bandeau tip quand les deux existent
+   (2026-08-05 : viser le max d'info visible d'un coup d'œil plutôt que l'un remplaçant l'autre).
+   Attribution textuelle simple ("Selon les avis"), pas de compteur ni de Badge : le nombre
+   d'avis n'est pas un signal utile, seule l'attribution compte. */
 .chat-card__quote {
   flex-direction: column;
   align-items: flex-start;

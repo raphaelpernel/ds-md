@@ -34,7 +34,7 @@ interface CardData {
   matched: boolean
   pantryMatch: PantryMatch | null
   tip?: string
-  /** Avis communautaire contextuel (contrainte ou temps) — remplace `tip` sur la carte quand présent. */
+  /** Avis communautaire contextuel (contrainte ou temps), empilé avec `tip` sur la carte quand les deux existent — maximiser l'info visible d'un coup d'œil. */
   communityQuote?: CommunityQuote
   /** Affichés seulement quand la conversation a signalé une contrainte allergie — transparence, pas de filtrage automatique. */
   allergens?: string[]
@@ -373,7 +373,7 @@ export function AgentConversation({ open, onClose, initialMessage }: AgentConver
                       )}
 
                       {(card.pantryMatch ||
-                        (!card.communityQuote && card.tip) ||
+                        card.tip ||
                         (card.recipe.equipment && card.recipe.equipment.length > 0)) && (
                         <div className="chat-card__secondary">
                           {card.pantryMatch && (
@@ -386,7 +386,7 @@ export function AgentConversation({ open, onClose, initialMessage }: AgentConver
                             </p>
                           )}
 
-                          {!card.communityQuote && card.tip && (
+                          {card.tip && (
                             <p className="chat-card__highlight chat-card__highlight--info chat-card__highlight--compact">
                               <Lightbulb size={14} weight="fill" aria-hidden="true" />
                               Astuce : {card.tip}
