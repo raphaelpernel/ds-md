@@ -159,4 +159,99 @@ describe('answerRecipeAsk', () => {
     const second = answerRecipeAsk(recipe, 'une autre question sans rapport', first.slots)
     expect(second.answer.tip).toBeUndefined()
   })
+
+  it("suggère un substitut quand l'équipement demandé est requis et connu", () => {
+    const recipe = makeRecipe({ equipment: ['four'] })
+    const { answer } = answerRecipeAsk(recipe, "j'ai pas de four, je peux utiliser quoi à la place ?", EMPTY_SLOTS)
+    expect(answer.equipmentNote).toBe(
+      'Pas de souci, vous pouvez remplacer le four par une poêle avec couvercle, à feu doux, en surveillant la cuisson.'
+    )
+    expect(answer.message).toBe(answer.equipmentNote)
+  })
+
+  it("indique que l'équipement demandé n'est pas nécessaire quand la recette ne le requiert pas", () => {
+    const recipe = makeRecipe({ equipment: ['four'] })
+    const { answer } = answerRecipeAsk(recipe, "je n'ai pas de robot, ça marche quand même ?", EMPTY_SLOTS)
+    expect(answer.equipmentNote).toBe('Cette recette ne nécessite pas de robot.')
+  })
+
+  it("indique qu'aucun équipement n'est requis quand la recette n'en déclare aucun", () => {
+    const recipe = makeRecipe({ equipment: [] })
+    const { answer } = answerRecipeAsk(recipe, "j'ai pas de four, je fais comment ?", EMPTY_SLOTS)
+    expect(answer.equipmentNote).toBe('Cette recette ne nécessite pas de four.')
+  })
+
+  it("ne détecte pas de question d'équipement dans une question sans rapport", () => {
+    const recipe = makeRecipe({ equipment: ['four'] })
+    const { answer } = answerRecipeAsk(recipe, 'bonjour', EMPTY_SLOTS)
+    expect(answer.equipmentNote).toBeUndefined()
+  })
+
+  it("suggère un substitut d'ingrédient connu quand on demande une alternative", () => {
+    const recipe = makeRecipe({
+      ingredients: [{ id: 'i1', name: 'Ricotta', quantity: 250, unit: 'g', emoji: '🧀', productId: 'p1' }],
+    })
+    const { answer } = answerRecipeAsk(recipe, "j'ai pas de ricotta, je remplace par quoi ?", EMPTY_SLOTS)
+    expect(answer.ingredientSubstituteNote).toBe(
+      'Pas de souci, vous pouvez remplacer ricotta par du mascarpone ou du fromage frais épais.'
+    )
+  })
+
+  it("reconnaît une demande de substitution conjuguée (\"je remplace\")", () => {
+    const recipe = makeRecipe({
+      ingredients: [{ id: 'i1', name: 'Parmesan râpé', quantity: 50, unit: 'g', emoji: '🧀', productId: 'p1' }],
+    })
+    const { answer } = answerRecipeAsk(recipe, 'je remplace le parmesan par quoi ?', EMPTY_SLOTS)
+    expect(answer.ingredientSubstituteNote).toBe('Pas de souci, vous pouvez remplacer parmesan râpé par du gruyère râpé.')
+  })
+
+  it("propose une réponse neutre quand l'ingrédient demandé n'a pas de substitut connu", () => {
+    const recipe = makeRecipe({
+      ingredients: [{ id: 'i1', name: 'Courgettes', quantity: 3, unit: 'pièces', emoji: '🥒', productId: 'p1' }],
+    })
+    const { answer } = answerRecipeAsk(recipe, 'je remplace les courgettes par quoi ?', EMPTY_SLOTS)
+    expect(answer.ingredientSubstituteNote).toBe(
+      "Je n'ai pas de suggestion précise pour remplacer courgettes, mais vous pouvez tenter une texture ou un goût similaire."
+    )
+  })
+
+  it("avertit et suggère un substitut quand un ingrédient évité par goût est présent dans la recette", () => {
+    const recipe = makeRecipe({
+      ingredients: [{ id: 'i1', name: 'Ricotta', quantity: 250, unit: 'g', emoji: '🧀', productId: 'p1' }],
+    })
+    const { answer } = answerRecipeAsk(recipe, "j'aime pas la ricotta", EMPTY_SLOTS)
+    expect(answer.avoidedIngredientNote).toBe(
+      'Cette recette contient ricotta, que vous évitez : vous pouvez le remplacer par du mascarpone ou du fromage frais épais.'
+    )
+  })
+
+  it("avertit sans substitut quand l'ingrédient évité n'a pas d'alternative connue", () => {
+    const recipe = makeRecipe({
+      ingredients: [{ id: 'i1', name: 'Escalopes de poulet', quantity: 4, unit: 'pièces', emoji: '🍗', productId: 'p1' }],
+    })
+    const { answer } = answerRecipeAsk(recipe, "j'aime pas le poulet", EMPTY_SLOTS)
+    expect(answer.avoidedIngredientNote).toBe('Cette recette contient escalopes de poulet, que vous évitez.')
+  })
+
+  it("ne signale rien quand l'ingrédient évité n'est pas dans la recette", () => {
+    const recipe = makeRecipe({
+      ingredients: [{ id: 'i1', name: 'Ricotta', quantity: 250, unit: 'g', emoji: '🧀', productId: 'p1' }],
+    })
+    const { answer } = answerRecipeAsk(recipe, "j'aime pas le poulet", EMPTY_SLOTS)
+    expect(answer.avoidedIngredientNote).toBeUndefined()
+  })
+
+  it('répond au budget quand la question porte sur le prix', () => {
+    const recipe = makeRecipe({ estimatedPricePerServing: 3.25 })
+    const { answer } = answerRecipeAsk(recipe, "c'est cher ?", EMPTY_SLOTS)
+    expect(answer.budgetNote).toBe('Cette recette coûte environ 3,25 € par personne.')
+  })
+
+  it('ne répète pas la réponse budget au tour suivant du même fil', () => {
+    const recipe = makeRecipe({ estimatedPricePerServing: 3.25 })
+    const first = answerRecipeAsk(recipe, "c'est cher ?", EMPTY_SLOTS)
+    expect(first.answer.budgetNote).toBeDefined()
+    const second = answerRecipeAsk(recipe, 'et sinon niveau temps ?', first.slots)
+    expect(second.answer.budgetNote).toBeUndefined()
+  })
 })

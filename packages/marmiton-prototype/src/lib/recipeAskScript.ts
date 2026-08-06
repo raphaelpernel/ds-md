@@ -1,4 +1,4 @@
-import { extractSlots, selectTip, pantryMatch, constraintLabel, RELAXED_REASON, EMPTY_SLOTS } from './agentScript'
+import { extractSlots, selectTip, pantryMatch, avoidedIngredientMatch, constraintLabel, RELAXED_REASON, EMPTY_SLOTS } from './agentScript'
 import type { AgentSlots, PantryMatch } from './agentScript'
 import type { Recipe } from '../data/types/recipe'
 
@@ -42,6 +42,77 @@ const CHIP_QUERY: Record<ReviewTag, string> = {
 
 const MAX_CHIPS = 3
 
+/** Alias de reconnaissance entre les mots-clés de la question et `Recipe.equipment`. */
+const EQUIPMENT_ALIASES: Record<string, string[]> = {
+  four: ['four'],
+  robot: ['robot'],
+  mixeur: ['mixeur', 'mixer', 'blender'],
+}
+
+/** Substitut suggéré quand l'utilisateur n'a pas l'équipement demandé par la recette — pas de
+ * garantie de résultat identique, juste une alternative plausible pour ne pas bloquer l'achat. */
+const EQUIPMENT_SUBSTITUTES: Record<string, string> = {
+  four: 'une poêle avec couvercle, à feu doux, en surveillant la cuisson',
+  robot: 'un fouet ou une cuillère en bois, à la main',
+  mixeur: 'une fourchette ou un presse-purée',
+}
+
+/** Déclencheur commun aux questions de substitution (équipement et ingrédient) — `remplac` sans
+ * limite de mot en fin de motif pour couvrir "remplace"/"remplacer"/"remplacez", pas seulement
+ * l'infinitif. */
+const SUBSTITUTION_TRIGGER = /\b(pas de|sans|à la place|autre chose)\b|remplac/
+
+/** Détecte une question du type « j'ai pas de four, je peux utiliser quoi à la place ? » —
+ * retourne la clé d'équipement reconnue, ou `undefined` si la question n'en mentionne aucune. */
+function detectEquipmentQuestion(text: string): string | undefined {
+  const norm = normalize(text)
+  if (!SUBSTITUTION_TRIGGER.test(norm)) return undefined
+  for (const [key, aliases] of Object.entries(EQUIPMENT_ALIASES)) {
+    if (aliases.some((alias) => norm.includes(normalize(alias)))) return key
+  }
+  return undefined
+}
+
+/** Substituts suggérés pour les ingrédients récurrents des recettes mock — même schéma que
+ * `EQUIPMENT_SUBSTITUTES`, réutilisé à la fois pour "j'ai pas de X" (Task 4) et pour un ingrédient
+ * évité par goût (`avoidedIngredientMatch`, Task 2). Clés normalisées (minuscules, sans accents). */
+const INGREDIENT_SUBSTITUTES: Record<string, string> = {
+  ricotta: 'du mascarpone ou du fromage frais épais',
+  parmesan: 'du gruyère râpé',
+  œuf: "de l'aquafaba (l'eau de cuisson des pois chiches), environ 3 c. à soupe par œuf",
+  lardons: 'des allumettes de dinde fumées',
+}
+
+function findIngredientSubstitute(ingredientName: string): string | undefined {
+  const normName = normalize(ingredientName)
+  const key = Object.keys(INGREDIENT_SUBSTITUTES).find((k) => normName.includes(k))
+  return key ? INGREDIENT_SUBSTITUTES[key] : undefined
+}
+
+/** Détecte une question de substitution d'ingrédient — contrairement à l'équipement, pas de
+ * vocabulaire fixe : chaque recette a ses propres ingrédients, donc la recherche se fait
+ * dynamiquement dans `recipe.ingredients` de la recette affichée. */
+function detectIngredientSubstitutionQuestion(recipe: Recipe, text: string): { name: string; substitute?: string } | undefined {
+  const norm = normalize(text)
+  if (!SUBSTITUTION_TRIGGER.test(norm)) return undefined
+  for (const ingredient of recipe.ingredients) {
+    const words = normalize(ingredient.name)
+      .split(/[^a-zœ]+/)
+      .filter((w) => w.length > 2)
+    if (words.some((w) => norm.includes(w))) {
+      return { name: ingredient.name, substitute: findIngredientSubstitute(ingredient.name) }
+    }
+  }
+  return undefined
+}
+
+function normalize(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+}
+
 /**
  * Chips de pré-prompts propres à cette recette, générées depuis les tags distincts
  * présents dans ses avis mockés (`recipe.reviews`) — pas une donnée à part à maintenir,
@@ -64,6 +135,14 @@ export interface RecipeAskAnswer {
   tip?: string
   pantryMatch: PantryMatch | null
   allergens?: string[]
+  /** Présent uniquement quand la question porte sur un équipement précis (four, robot…). */
+  equipmentNote?: string
+  /** Présent uniquement quand la question porte sur la substitution d'un ingrédient précis de cette recette. */
+  ingredientSubstituteNote?: string
+  /** Présent uniquement quand un ingrédient évité par goût (slots.avoidIngredients) est présent dans cette recette. */
+  avoidedIngredientNote?: string
+  /** Présent uniquement quand la question porte sur le prix de cette recette. */
+  budgetNote?: string
 }
 
 /**
@@ -99,7 +178,7 @@ export function answerRecipeAsk(
     // (retour utilisateur du 2026-08-05) — une seule bulle de texte suffit.
     const label = constraintLabel(recipe, slots, true)
     if (label) {
-      const quote = findRecipeReview(recipe, slots.constraint)
+      const quote = slots.constraint !== 'debutant' ? findRecipeReview(recipe, slots.constraint as ReviewTag) : undefined
       bits.push(
         quote
           ? `Oui, cette recette est ${RELAXED_REASON[slots.constraint]} : d'après les avis, « ${quote.text} »`
@@ -113,6 +192,51 @@ export function answerRecipeAsk(
   if (bits.length === 0 && prevSlots.time === undefined && slots.time !== undefined) {
     const quote = findRecipeReview(recipe, 'time')
     if (quote) bits.push(`D'après les avis, « ${quote.text} »`)
+  }
+
+  let equipmentNote: string | undefined
+  const askedEquipment = detectEquipmentQuestion(text)
+  if (askedEquipment) {
+    const required = recipe.equipment ?? []
+    const needsIt = required.some((e) => normalize(e).includes(askedEquipment))
+    if (needsIt) {
+      const substitute = EQUIPMENT_SUBSTITUTES[askedEquipment]
+      equipmentNote = substitute
+        ? `Pas de souci, vous pouvez remplacer le ${askedEquipment} par ${substitute}.`
+        : `Cette recette nécessite un ${askedEquipment}, je n'ai pas d'alternative à vous proposer pour l'instant.`
+    } else {
+      equipmentNote = `Cette recette ne nécessite pas de ${askedEquipment}.`
+    }
+    bits.push(equipmentNote)
+  }
+
+  let ingredientSubstituteNote: string | undefined
+  const askedIngredient = detectIngredientSubstitutionQuestion(recipe, text)
+  if (askedIngredient) {
+    ingredientSubstituteNote = askedIngredient.substitute
+      ? `Pas de souci, vous pouvez remplacer ${askedIngredient.name.toLowerCase()} par ${askedIngredient.substitute}.`
+      : `Je n'ai pas de suggestion précise pour remplacer ${askedIngredient.name.toLowerCase()}, mais vous pouvez tenter une texture ou un goût similaire.`
+    bits.push(ingredientSubstituteNote)
+  }
+
+  let avoidedIngredientNote: string | undefined
+  const newlyAvoided = slots.avoidIngredients.filter((k) => !prevSlots.avoidIngredients.includes(k))
+  if (newlyAvoided.length > 0) {
+    const avoided = avoidedIngredientMatch(recipe, { ...slots, avoidIngredients: newlyAvoided })
+    if (avoided.length > 0) {
+      const [name] = avoided
+      const substitute = findIngredientSubstitute(name)
+      avoidedIngredientNote = substitute
+        ? `Cette recette contient ${name.toLowerCase()}, que vous évitez : vous pouvez le remplacer par ${substitute}.`
+        : `Cette recette contient ${name.toLowerCase()}, que vous évitez.`
+      bits.push(avoidedIngredientNote)
+    }
+  }
+
+  let budgetNote: string | undefined
+  if (!prevSlots.budgetFocus && slots.budgetFocus) {
+    budgetNote = `Cette recette coûte environ ${recipe.estimatedPricePerServing.toFixed(2).replace('.', ',')} € par personne.`
+    bits.push(budgetNote)
   }
 
   const match = pantryMatch(recipe, slots)
@@ -133,6 +257,10 @@ export function answerRecipeAsk(
       tip,
       pantryMatch: match,
       allergens,
+      equipmentNote,
+      ingredientSubstituteNote,
+      avoidedIngredientNote,
+      budgetNote,
     },
   }
 }
