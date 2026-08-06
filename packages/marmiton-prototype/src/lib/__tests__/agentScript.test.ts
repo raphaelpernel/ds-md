@@ -132,16 +132,30 @@ describe('buildRecipeSlate', () => {
     expect(recipes.map((r) => r.recipe.id)).toEqual(['r-poulet-citron', 'r-courgettes-ricotta', 'r-salade-nicoise'])
   })
 
-  it('complète avec des quasi-matchs (matched=false) quand un seul vrai match existe, sans doublon', () => {
+  it('complète avec un quasi-match (matched=false) quand deux vrais matchs existent, sans doublon', () => {
+    // La recette vegan porte aussi le tag vegetarien (vegan ⊂ végétarien) — deux vrais matchs désormais.
     const { recipes, hasRealMatch } = buildRecipeSlate(makeSlots({ constraint: 'vegetarien' }))
     expect(hasRealMatch).toBe(true)
     expect(recipes).toHaveLength(3)
-    expect(recipes[0]).toMatchObject({ matched: true })
-    expect(recipes[0].recipe.id).toBe('r-courgettes-ricotta')
-    expect(recipes[1].matched).toBe(false)
+    expect(recipes[0]).toMatchObject({ matched: true, recipe: { id: 'r-courgettes-ricotta' } })
+    expect(recipes[1]).toMatchObject({ matched: true, recipe: { id: 'r-curry-pois-chiches' } })
     expect(recipes[2].matched).toBe(false)
     const ids = recipes.map((r) => r.recipe.id)
     expect(new Set(ids).size).toBe(3) // pas de doublon
+  })
+
+  it('un vrai match vegan existe et n\'inclut pas les recettes seulement végétariennes', () => {
+    const { recipes, hasRealMatch } = buildRecipeSlate(makeSlots({ constraint: 'vegan' }))
+    expect(hasRealMatch).toBe(true)
+    expect(recipes[0].matched).toBe(true)
+    expect(recipes[0].recipe.id).toBe('r-curry-pois-chiches')
+  })
+
+  it('debutant matche les recettes difficulty facile sans dépendre de tags', () => {
+    const { recipes, hasRealMatch } = buildRecipeSlate(makeSlots({ constraint: 'debutant' }))
+    expect(hasRealMatch).toBe(true)
+    expect(recipes.every((r) => r.matched)).toBe(true)
+    expect(recipes.map((r) => r.recipe.id)).toEqual(['r-poulet-citron', 'r-courgettes-ricotta', 'r-pates-carbonara'])
   })
 
   it('slate entièrement composé de quasi-matchs quand aucune recette ne score, hasRealMatch=false', () => {
