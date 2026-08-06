@@ -9,6 +9,7 @@ import {
   processTurn,
   recommendationMessage,
   pantryMatch,
+  avoidedIngredientMatch,
   selectTip,
   constraintLabel,
   selectCommunityQuote,
@@ -38,6 +39,8 @@ interface CardData {
   communityQuote?: CommunityQuote
   /** Affichés seulement quand la conversation a signalé une contrainte allergie — transparence, pas de filtrage automatique. */
   allergens?: string[]
+  /** Ingrédients de cette recette que la conversation a signalés comme évités par goût — informationnel, ne filtre jamais la recommandation. */
+  avoidedIngredients: string[]
   health?: { calories?: number; protein?: number }
   /** Label de contrainte confirmée (ex. "Végétarien"), absent sur un quasi-match ou pour `allergie`. */
   constraintLabel?: string
@@ -100,6 +103,7 @@ function cardExtras(recipe: Recipe, slots: AgentSlots, matched: boolean) {
     tip: selectTip(recipe, slots),
     communityQuote: selectCommunityQuote(recipe, slots, matched),
     allergens: slots.constraint === 'allergie' ? recipe.allergens : undefined,
+    avoidedIngredients: avoidedIngredientMatch(recipe, slots),
     // Affichée directement dès que la recette porte la donnée — plus besoin de la demander
     // via une action séparée (ancien chip "Infos nutrition").
     health: recipe.calories !== undefined ? { calories: recipe.calories, protein: recipe.protein } : undefined,
@@ -366,6 +370,13 @@ export function AgentConversation({ open, onClose, initialMessage }: AgentConver
                         <p className="chat-card__highlight chat-card__highlight--warning">
                           <Warning size={16} weight="fill" aria-hidden="true" />
                           Contient : {card.allergens.join(', ').toLowerCase()}
+                        </p>
+                      )}
+
+                      {card.avoidedIngredients.length > 0 && (
+                        <p className="chat-card__highlight chat-card__highlight--warning">
+                          <Warning size={16} weight="fill" aria-hidden="true" />
+                          Contient {card.avoidedIngredients.join(', ').toLowerCase()} que vous évitez
                         </p>
                       )}
 
