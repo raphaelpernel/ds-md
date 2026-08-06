@@ -278,9 +278,11 @@ export function AgentConversation({ open, onClose, initialMessage }: AgentConver
                   {Array.from({ length: m.pending.skeletonCount }, (_, i) => (
                     <div key={i} className="chat-card chat-carousel__card chat-card--skeleton" aria-hidden="true">
                       <div className="chat-card__top">
-                        <Skeleton variant="rect" width={96} height={96} />
-                        <span className="chat-card__meta">
-                          <Skeleton variant="text" lines={2} />
+                        <span className="chat-card__header">
+                          <Skeleton variant="rect" width={96} height={96} />
+                          <span className="chat-card__meta">
+                            <Skeleton variant="text" lines={2} />
+                          </span>
                         </span>
                       </div>
                       {/* Préfigure le bandeau avis/astuce quasi systématique sur une carte finale — sans ça
@@ -300,34 +302,36 @@ export function AgentConversation({ open, onClose, initialMessage }: AgentConver
                         onClick={() => router.push(`/recipe?recipe=${card.recipe.id}`)}
                         aria-label={`Voir la recette ${card.recipe.name}`}
                       >
-                        <img src={card.recipe.imageUrl} alt="" className="chat-card__image" />
-                        <span className="chat-card__meta">
-                          <span className="chat-card__title">{card.recipe.name}</span>
-                          <span className="chat-card__meta-row">
-                            {card.recipe.rating !== undefined && (
-                              <span className="chat-card__meta-item chat-card__rating">
-                                <Star size={14} weight="fill" aria-hidden="true" />
-                                {card.recipe.rating.toFixed(1)}
-                                {card.recipe.reviewCount !== undefined && ` (${card.recipe.reviewCount} avis)`}
-                              </span>
-                            )}
-                            <span className="chat-card__meta-item">
-                              {card.recipe.duration} min
-                              {card.recipe.prepDuration !== undefined && ` (${card.recipe.prepDuration} min actif)`}
-                            </span>
-                            {card.servings !== undefined && (
-                              <span className="chat-card__meta-item">Pour {card.servings}</span>
-                            )}
-                            {card.recipe.difficulty && (
-                              <span className="chat-card__meta-item">{DIFFICULTY_LABEL[card.recipe.difficulty]}</span>
-                            )}
-                            {card.health?.calories !== undefined && (
+                        <span className="chat-card__header">
+                          <img src={card.recipe.imageUrl} alt="" className="chat-card__image" />
+                          <span className="chat-card__meta">
+                            <span className="chat-card__title">{card.recipe.name}</span>
+                            <span className="chat-card__meta-row">
+                              {card.recipe.rating !== undefined && (
+                                <span className="chat-card__meta-item chat-card__rating">
+                                  <Star size={14} weight="fill" aria-hidden="true" />
+                                  {card.recipe.rating.toFixed(1)}
+                                  {card.recipe.reviewCount !== undefined && ` (${card.recipe.reviewCount} avis)`}
+                                </span>
+                              )}
                               <span className="chat-card__meta-item">
-                                <Flame size={14} aria-hidden="true" />
-                                {card.health.calories} kcal
-                                {card.health.protein !== undefined && ` · ${card.health.protein} g prot.`}
+                                {card.recipe.duration} min
+                                {card.recipe.prepDuration !== undefined && ` (${card.recipe.prepDuration} min actif)`}
                               </span>
-                            )}
+                              {card.servings !== undefined && (
+                                <span className="chat-card__meta-item">Pour {card.servings}</span>
+                              )}
+                              {card.recipe.difficulty && (
+                                <span className="chat-card__meta-item">{DIFFICULTY_LABEL[card.recipe.difficulty]}</span>
+                              )}
+                              {card.health?.calories !== undefined && (
+                                <span className="chat-card__meta-item">
+                                  <Flame size={14} aria-hidden="true" />
+                                  {card.health.calories} kcal
+                                  {card.health.protein !== undefined && ` · ${card.health.protein} g prot.`}
+                                </span>
+                              )}
+                            </span>
                           </span>
                         </span>
 

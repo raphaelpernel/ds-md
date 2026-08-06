@@ -31,14 +31,18 @@
   right: var(--spacing-8);
 }
 
-/* Largeur relative au conteneur (pas de px fixe) pour garantir un "peek" d'au moins 1,5 carte
-   visible quel que soit le viewport. Vérifié : à 320px mobile (piste ~288px après padding),
-   64% de la piste ≈ 184px, un plancher à 200px aurait fait dominer le plancher et fait tomber
-   sous 1,5 carte visible (~1,42) — plancher abaissé à 180px pour que le pourcentage garde la
-   main jusqu'à cette largeur (n ≈ 1,53). Plafond à 260px pour ne pas grossir inutilement sur le
-   drawer desktop élargi (n ≈ 1,53 à 368px de piste). 180px reste confortable pour la vignette
-   96×96 empilée verticalement dans .chat-card__top (colonne, pas de contrainte de largeur serrée). */
+/* Largeur relative au conteneur (pas de px fixe). Revu le 2026-08-05 quand .chat-card__top
+   est passé d'un empilement vertical (image au-dessus du texte, pas de contrainte de largeur)
+   à une ligne horizontale (image 96px + gap 12px + colonne de texte) pour réduire la hauteur
+   de carte sur mobile — la colonne de texte a besoin d'assez de largeur pour un titre sur deux
+   lignes, ce qui pousse le plancher précédent (180px) bien en dessous du nécessaire.
+   Plancher relevé à 230px (96 + 12 + ~106px de texte utile après le padding de carte) : à
+   320px mobile (piste ~288px après padding), le pourcentage (70%) tomberait à ~202px, sous
+   le plancher — le plancher prend la main, carte à 230px, ~46px de la carte suivante visible
+   en peek (~20%, moins généreux que l'ancien ~1,5 carte, compromis assumé au profit de la
+   hauteur réduite, cf. retour utilisateur). Plafond à 300px pour ne pas grossir inutilement
+   sur le drawer desktop élargi. À vérifier visuellement, ces valeurs sont un point de départ. */
 .chat-carousel__card {
   scroll-snap-align: start;
-  flex: 0 0 clamp(180px, 64%, 260px);
+  flex: 0 0 clamp(230px, 70%, 300px);
 }

@@ -75,11 +75,15 @@
 
 /* Seule la zone image + titre navigue vers la fiche recette — les bandeaux
    (allergènes, écart panier, astuce) vivent hors du bouton pour ne pas être
-   noyés dans un unique nom accessible plat (cf. critique agent, P1 a11y). */
+   noyés dans un unique nom accessible plat (cf. critique agent, P1 a11y).
+   Colonne au niveau du bouton (header en ligne, puis chips en dessous en pleine
+   largeur) — cf. .chat-card__header pour la ligne image+texte (2026-08-05 :
+   passage d'un empilement vertical à une ligne horizontale pour réduire la
+   hauteur de carte sur mobile, cf. retour utilisateur). */
 .chat-card__top {
   display: flex;
-  align-items: center;
-  gap: var(--spacing-12);
+  align-items: stretch;
+  gap: var(--spacing-8);
   flex-direction: column;
   width: 100%;
   padding: 0;
@@ -88,7 +92,7 @@
   background: transparent;
   font: inherit;
   color: inherit;
-  text-align: center;
+  text-align: left;
   cursor: pointer;
 }
 
@@ -99,6 +103,17 @@
 .chat-card__top:focus-visible {
   outline: 2px solid var(--color-interactive-bg);
   outline-offset: 2px;
+}
+
+/* Ligne image + infos de base (titre, note, temps, difficulté, nutrition) —
+   remplace l'ancien empilement vertical (image au-dessus du texte) pour tenir
+   dans moins de hauteur sur mobile. */
+.chat-card__header {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--spacing-12);
+  width: 100%;
 }
 
 .chat-card__image {
@@ -113,6 +128,7 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+  flex: 1 1 0;
   min-width: 0;
 }
 
@@ -126,7 +142,7 @@
 .chat-card__meta-row {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: var(--spacing-8);
   flex-wrap: wrap;
 }
@@ -148,7 +164,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: var(--spacing-4);
 }
 
