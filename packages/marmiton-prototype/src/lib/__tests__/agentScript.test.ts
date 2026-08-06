@@ -200,6 +200,10 @@ describe('extractSlots — signal débutant', () => {
     expect(extractSlots('je débute en cuisine', EMPTY_SLOTS).constraint).toBe('debutant')
   })
 
+  it('reconnaît la formulation accentuée "je suis débutant"', () => {
+    expect(extractSlots('je suis débutant', EMPTY_SLOTS).constraint).toBe('debutant')
+  })
+
   it('reconnaît une formulation alternative', () => {
     expect(extractSlots("j'ai jamais cuisiné", EMPTY_SLOTS).constraint).toBe('debutant')
   })

@@ -196,7 +196,7 @@ const CONSTRAINT_WORDS: Array<[RegExp, Constraint]> = [
   [/sans gluten/i, 'sans-gluten'],
   [/sans lactose/i, 'sans-lactose'],
   [/allerg/i, 'allergie'],
-  [/débute|debutant|jamais cuisiné|jamais cuisine|nul(le)? en cuisine/i, 'debutant'],
+  [/débutant|débute|debutant|jamais cuisiné|jamais cuisine|nul(le)? en cuisine/i, 'debutant'],
 ]
 
 const HEALTH_WORDS = /léger|healthy|calories?|régime|diète|minceur/i
