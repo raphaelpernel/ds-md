@@ -8,7 +8,7 @@ import type { Recipe, Season } from '../data/types/recipe'
  * les chips ne sont qu'un raccourci qui produit le même texte reconnu.
  */
 
-export type Constraint = 'enfant' | 'sans-sauce' | 'vegetarien' | 'sans-gluten' | 'sans-lactose' | 'allergie'
+export type Constraint = 'enfant' | 'sans-sauce' | 'vegetarien' | 'vegan' | 'sans-gluten' | 'sans-lactose' | 'allergie' | 'debutant'
 
 export interface AgentSlots {
   time?: number
@@ -63,6 +63,7 @@ export function pantryMatch(recipe: Recipe, slots: AgentSlots): PantryMatch | nu
  */
 export function selectTip(recipe: Recipe, slots: AgentSlots): string | undefined {
   if (slots.constraint === 'enfant' && recipe.tipForKids) return recipe.tipForKids
+  if (slots.constraint === 'debutant' && recipe.tipForBeginners) return recipe.tipForBeginners
   return recipe.tip
 }
 
@@ -70,8 +71,10 @@ const CONSTRAINT_LABELS: Record<Exclude<Constraint, 'allergie'>, string> = {
   enfant: 'Adapté aux enfants',
   'sans-sauce': 'Sans sauce',
   vegetarien: 'Végétarien',
+  vegan: 'Vegan',
   'sans-gluten': 'Sans gluten',
   'sans-lactose': 'Sans lactose',
+  debutant: 'Facile pour débuter',
 }
 
 /**
@@ -83,9 +86,11 @@ export const RELAXED_REASON: Record<Constraint, string> = {
   enfant: 'adaptée aux enfants',
   'sans-sauce': 'sans sauce',
   vegetarien: 'végétarienne',
+  vegan: 'vegane',
   'sans-gluten': 'sans gluten',
   'sans-lactose': 'sans lactose',
   allergie: "garantissant l'absence de l'allergène mentionné",
+  debutant: 'facile pour débuter',
 }
 
 /**
@@ -99,13 +104,20 @@ export function constraintApplies(slots: AgentSlots, matched: boolean): boolean 
   return matched && !!slots.constraint && slots.constraint !== 'allergie'
 }
 
+/** `debutant` n'est pas porté par `recipe.tags` (pas de nouveau tag à maintenir sur les recettes
+ * existantes) — la correspondance se fait via `recipe.difficulty === 'facile'`, déjà peuplé. */
+function constraintSatisfiedBy(recipe: Recipe, constraint: Constraint): boolean {
+  if (constraint === 'debutant') return recipe.difficulty === 'facile'
+  return (recipe.tags ?? []).includes(constraint)
+}
+
 /**
  * Label de correspondance à afficher sur la carte quand la contrainte exprimée est
  * réellement satisfaite par la recette recommandée (présente dans `recipe.tags`).
  */
 export function constraintLabel(recipe: Recipe, slots: AgentSlots, matched: boolean): string | undefined {
   if (!constraintApplies(slots, matched)) return undefined
-  if (!(recipe.tags ?? []).includes(slots.constraint!)) return undefined
+  if (!constraintSatisfiedBy(recipe, slots.constraint!)) return undefined
   return CONSTRAINT_LABELS[slots.constraint as Exclude<Constraint, 'allergie'>]
 }
 
@@ -179,10 +191,12 @@ const SERVINGS_WORDS: Array<[RegExp, number]> = [
 const CONSTRAINT_WORDS: Array<[RegExp, Constraint]> = [
   [/enfant|gosse|petit(e)?\b.*mange/i, 'enfant'],
   [/sans sauce/i, 'sans-sauce'],
-  [/vegan|végétarien|vegetarien/i, 'vegetarien'],
+  [/vegan/i, 'vegan'],
+  [/végétarien|vegetarien/i, 'vegetarien'],
   [/sans gluten/i, 'sans-gluten'],
   [/sans lactose/i, 'sans-lactose'],
   [/allerg/i, 'allergie'],
+  [/débute|debutant|jamais cuisiné|jamais cuisine|nul(le)? en cuisine/i, 'debutant'],
 ]
 
 const HEALTH_WORDS = /léger|healthy|calories?|régime|diète|minceur/i
@@ -257,7 +271,7 @@ function scoreRecipe(recipe: Recipe, slots: AgentSlots): number {
   for (const ingredient of slots.ingredients) {
     if (tags.includes(ingredient) || tags.includes(ingredient === 'pates' ? 'pates' : ingredient)) score += 3
   }
-  if (slots.constraint && tags.includes(slots.constraint)) score += 2
+  if (slots.constraint && constraintSatisfiedBy(recipe, slots.constraint)) score += 2
   if (slots.time !== undefined && recipe.duration <= slots.time + 5) score += 1
   return score
 }

@@ -30,6 +30,8 @@ export interface Recipe {
   tip?: string
   /** Astuce alternative utilisée à la place de `tip` quand la conversation signale un contexte enfant. */
   tipForKids?: string
+  /** Astuce alternative utilisée à la place de `tip` quand la conversation signale un contexte débutant. */
+  tipForBeginners?: string
   /** Allergènes présents, affichés sur la carte uniquement quand la conversation signale une contrainte allergie. */
   allergens?: string[]
   /** Saisons où la recette est mise en avant comme "de saison" sur la carte agent. Absent = jamais affichée comme telle. */
@@ -38,7 +40,7 @@ export interface Recipe {
   /** En grammes, par portion. */
   protein?: number
   /** Avis mockés taggés par contrainte ou par 'time', pour la carte agent (signal communautaire contextuel). */
-  reviews?: { text: string; tag: 'enfant' | 'sans-sauce' | 'vegetarien' | 'sans-gluten' | 'sans-lactose' | 'time' }[]
+  reviews?: { text: string; tag: 'enfant' | 'sans-sauce' | 'vegetarien' | 'vegan' | 'sans-gluten' | 'sans-lactose' | 'time' }[]
   /** Temps de préparation actif, en minutes — sous-ensemble de `duration` (total, four/repos inclus). Absent = pas de split connu, on n'affiche que `duration`. */
   prepDuration?: number
   /** Équipement nécessaire non-standard (ex. four, robot, mixeur) — absent ou vide = rien à signaler. */

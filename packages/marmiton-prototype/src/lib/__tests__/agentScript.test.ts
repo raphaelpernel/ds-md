@@ -1,5 +1,14 @@
 import { describe, it, expect } from 'vitest'
-import { constraintApplies, selectCommunityQuote, buildRecipeSlate, processTurn, EMPTY_SLOTS } from '../agentScript'
+import {
+  constraintApplies,
+  selectCommunityQuote,
+  buildRecipeSlate,
+  processTurn,
+  extractSlots,
+  constraintLabel,
+  selectTip,
+  EMPTY_SLOTS,
+} from '../agentScript'
 import type { AgentSlots } from '../agentScript'
 import type { Recipe } from '../../data/types/recipe'
 import { MOCK_RECIPES } from '../../data/mock/recipes'
@@ -173,5 +182,59 @@ describe('processTurn — recommandation multi-recettes', () => {
   it('garde "signal insuffisant" toujours active sur le score du premier vrai match', () => {
     const { result } = processTurn('je suis vegetarien', EMPTY_SLOTS, 0)
     expect(result.kind).toBe('clarify')
+  })
+})
+
+describe('extractSlots — vegan distinct de végétarien', () => {
+  it('reconnaît vegan comme une contrainte distincte', () => {
+    expect(extractSlots('je cherche une recette vegan', EMPTY_SLOTS).constraint).toBe('vegan')
+  })
+
+  it('reconnaît toujours végétarien séparément', () => {
+    expect(extractSlots('un plat végétarien', EMPTY_SLOTS).constraint).toBe('vegetarien')
+  })
+})
+
+describe('extractSlots — signal débutant', () => {
+  it('reconnaît un signal débutant', () => {
+    expect(extractSlots('je débute en cuisine', EMPTY_SLOTS).constraint).toBe('debutant')
+  })
+
+  it('reconnaît une formulation alternative', () => {
+    expect(extractSlots("j'ai jamais cuisiné", EMPTY_SLOTS).constraint).toBe('debutant')
+  })
+})
+
+describe('constraintLabel — vegan et débutant', () => {
+  it('confirme vegan uniquement si recipe.tags contient vegan', () => {
+    const recipe = makeRecipe({ tags: ['vegan', 'vegetarien'] })
+    expect(constraintLabel(recipe, makeSlots({ constraint: 'vegan' }), true)).toBe('Vegan')
+  })
+
+  it('ne confirme pas vegan si seul vegetarien est tagué', () => {
+    const recipe = makeRecipe({ tags: ['vegetarien'] })
+    expect(constraintLabel(recipe, makeSlots({ constraint: 'vegan' }), true)).toBeUndefined()
+  })
+
+  it('confirme débutant via recipe.difficulty plutôt qu\'un tag', () => {
+    const recipe = makeRecipe({ tags: [], difficulty: 'facile' })
+    expect(constraintLabel(recipe, makeSlots({ constraint: 'debutant' }), true)).toBe('Facile pour débuter')
+  })
+
+  it('ne confirme pas débutant si la difficulté n\'est pas facile', () => {
+    const recipe = makeRecipe({ difficulty: 'moyen' })
+    expect(constraintLabel(recipe, makeSlots({ constraint: 'debutant' }), true)).toBeUndefined()
+  })
+})
+
+describe('selectTip — débutant', () => {
+  it('utilise tipForBeginners quand la contrainte est débutant', () => {
+    const recipe = makeRecipe({ tip: 'Astuce générale', tipForBeginners: 'Astuce débutant' })
+    expect(selectTip(recipe, makeSlots({ constraint: 'debutant' }))).toBe('Astuce débutant')
+  })
+
+  it('retombe sur tip si tipForBeginners est absent', () => {
+    const recipe = makeRecipe({ tip: 'Astuce générale' })
+    expect(selectTip(recipe, makeSlots({ constraint: 'debutant' }))).toBe('Astuce générale')
   })
 })
