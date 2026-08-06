@@ -130,17 +130,10 @@ export function RecipeAgentDrawer({ open, onClose, recipe, chips, initialMessage
                   <p className="recipe-ask-bubble">{m.text}</p>
                   {m.answer && (
                     <div className="recipe-ask-answer">
-                      {m.answer.constraintLabel && <ChipTag type="toned" size="S" label={m.answer.constraintLabel} />}
                       {m.answer.allergens && m.answer.allergens.length > 0 && (
                         <p className="recipe-ask-highlight recipe-ask-highlight--warning">
                           <Warning size={16} weight="fill" aria-hidden="true" />
                           Contient : {m.answer.allergens.join(', ').toLowerCase()}
-                        </p>
-                      )}
-                      {m.answer.communityQuote && (
-                        <p className="recipe-ask-highlight recipe-ask-highlight--info recipe-ask-quote">
-                          <span className="recipe-ask-quote__attribution">Selon les avis</span>
-                          <span className="recipe-ask-quote__text">« {m.answer.communityQuote.text} »</span>
                         </p>
                       )}
                       {m.answer.pantryMatch && (
@@ -152,7 +145,7 @@ export function RecipeAgentDrawer({ open, onClose, recipe, chips, initialMessage
                             : ' · vous avez tout'}
                         </p>
                       )}
-                      {m.answer.tip && !m.answer.communityQuote && (
+                      {m.answer.tip && (
                         <p className="recipe-ask-highlight recipe-ask-highlight--info">
                           <Lightbulb size={16} weight="fill" aria-hidden="true" />
                           Astuce : {m.answer.tip}

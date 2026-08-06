@@ -90,21 +90,6 @@
   margin-top: 1px;
 }
 
-.recipe-ask-quote {
-  flex-direction: column;
-  gap: var(--spacing-4);
-}
-
-.recipe-ask-quote__attribution {
-  font-size: var(--font-size-body-xs);
-  font-weight: 600;
-  color: var(--color-content-weak);
-}
-
-.recipe-ask-quote__text {
-  font-style: italic;
-}
-
 .recipe-ask-composer {
   display: flex;
   flex-direction: column;

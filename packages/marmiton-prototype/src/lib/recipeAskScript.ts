@@ -63,8 +63,6 @@ export interface RecipeAskAnswer {
   message: string
   tip?: string
   pantryMatch: PantryMatch | null
-  communityQuote?: { text: string }
-  constraintLabel?: string
   allergens?: string[]
 }
 
@@ -81,8 +79,6 @@ export function answerRecipeAsk(
   const slots = extractSlots(text, prevSlots)
   const bits: string[] = []
 
-  let communityQuote: { text: string } | undefined
-  let constraintLabelResult: string | undefined
   let allergens: string[] | undefined
 
   if (slots.constraint === 'allergie') {
@@ -96,19 +92,27 @@ export function answerRecipeAsk(
     // Contrainte nouvellement détectée à ce tour seulement — sinon le message
     // "Oui, cette recette est..." / "n'est pas signalée comme..." rejouerait à
     // chaque tour suivant du même fil, alors que `slots.constraint` persiste via
-    // `extractSlots(text, prevSlots)`.
+    // `extractSlots(text, prevSlots)`. L'avis communautaire (s'il existe) est fondu
+    // dans la même phrase plutôt qu'affiché à part : dans un fil de chat linéaire,
+    // un bandeau "Selon les avis" séparé + un chip dupliquant la même info que la
+    // phrase n'apportent rien qu'une carte de recommandation scannée n'apporterait
+    // (retour utilisateur du 2026-08-05) — une seule bulle de texte suffit.
     const label = constraintLabel(recipe, slots, true)
-    constraintLabelResult = label
     if (label) {
-      bits.push(`Oui, cette recette est ${RELAXED_REASON[slots.constraint]}.`)
-      communityQuote = findRecipeReview(recipe, slots.constraint)
+      const quote = findRecipeReview(recipe, slots.constraint)
+      bits.push(
+        quote
+          ? `Oui, cette recette est ${RELAXED_REASON[slots.constraint]} : d'après les avis, « ${quote.text} »`
+          : `Oui, cette recette est ${RELAXED_REASON[slots.constraint]}.`
+      )
     } else {
       bits.push(`Cette recette n'est pas signalée comme ${RELAXED_REASON[slots.constraint]}.`)
     }
   }
 
-  if (prevSlots.time === undefined && slots.time !== undefined) {
-    communityQuote = communityQuote ?? findRecipeReview(recipe, 'time')
+  if (bits.length === 0 && prevSlots.time === undefined && slots.time !== undefined) {
+    const quote = findRecipeReview(recipe, 'time')
+    if (quote) bits.push(`D'après les avis, « ${quote.text} »`)
   }
 
   const match = pantryMatch(recipe, slots)
@@ -128,8 +132,6 @@ export function answerRecipeAsk(
       message: bits.join(' '),
       tip,
       pantryMatch: match,
-      communityQuote,
-      constraintLabel: constraintLabelResult,
       allergens,
     },
   }

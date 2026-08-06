@@ -67,23 +67,27 @@ describe('buildRecipeChips', () => {
 })
 
 describe('answerRecipeAsk', () => {
-  it("confirme la contrainte quand le tag de la recette la couvre, et remonte l'avis correspondant", () => {
+  it("confirme la contrainte quand le tag de la recette la couvre, et fond l'avis correspondant dans la même phrase", () => {
     const recipe = makeRecipe({
       tags: ['vegetarien'],
       reviews: [{ text: 'La ricotta remplace bien la viande.', tag: 'vegetarien' }],
     })
     const { answer } = answerRecipeAsk(recipe, 'Une alternative végétarienne ?', EMPTY_SLOTS)
+    expect(answer.message).toBe(
+      "Oui, cette recette est végétarienne : d'après les avis, « La ricotta remplace bien la viande. »"
+    )
+  })
+
+  it("confirme la contrainte sans mention d'avis quand aucun avis ne porte ce tag", () => {
+    const recipe = makeRecipe({ tags: ['vegetarien'], reviews: [] })
+    const { answer } = answerRecipeAsk(recipe, 'Une alternative végétarienne ?', EMPTY_SLOTS)
     expect(answer.message).toBe('Oui, cette recette est végétarienne.')
-    expect(answer.constraintLabel).toBe('Végétarien')
-    expect(answer.communityQuote).toEqual({ text: 'La ricotta remplace bien la viande.' })
   })
 
   it("indique que la contrainte n'est pas couverte quand le tag est absent de la recette", () => {
     const recipe = makeRecipe({ tags: [] })
     const { answer } = answerRecipeAsk(recipe, 'Une version sans gluten ?', EMPTY_SLOTS)
     expect(answer.message).toBe("Cette recette n'est pas signalée comme sans gluten.")
-    expect(answer.constraintLabel).toBeUndefined()
-    expect(answer.communityQuote).toBeUndefined()
   })
 
   it("liste les allergènes déclarés quand la question porte sur une allergie", () => {
@@ -99,13 +103,13 @@ describe('answerRecipeAsk', () => {
     expect(answer.message).toBe("Aucun allergène n'est signalé pour cette recette.")
   })
 
-  it('remonte l\'avis tagué time quand la question porte sur la rapidité, quelle que soit la durée réelle', () => {
+  it('fond l\'avis tagué time dans le message quand la question porte sur la rapidité, quelle que soit la durée réelle', () => {
     const recipe = makeRecipe({
       duration: 90,
       reviews: [{ text: '90 minutes au four, mais 10 minutes de préparation seulement.', tag: 'time' }],
     })
     const { answer } = answerRecipeAsk(recipe, "C'est rapide à faire ?", EMPTY_SLOTS)
-    expect(answer.communityQuote).toEqual({ text: '90 minutes au four, mais 10 minutes de préparation seulement.' })
+    expect(answer.message).toBe("D'après les avis, « 90 minutes au four, mais 10 minutes de préparation seulement. »")
   })
 
   it("retourne l'écart panier quand des ingrédients sont mentionnés dans la question", () => {
@@ -138,7 +142,7 @@ describe('answerRecipeAsk', () => {
     expect(second.slots.constraint).toBe('vegetarien')
   })
 
-  it("ne répète pas le message de contrainte ni l'avis communautaire au tour suivant du même fil", () => {
+  it("ne répète pas le message de contrainte (avis inclus) au tour suivant du même fil", () => {
     const recipe = makeRecipe({
       tags: ['vegetarien'],
       reviews: [{ text: 'La ricotta remplace bien la viande.', tag: 'vegetarien' }],
@@ -146,7 +150,6 @@ describe('answerRecipeAsk', () => {
     const first = answerRecipeAsk(recipe, 'Une alternative végétarienne ?', EMPTY_SLOTS)
     const second = answerRecipeAsk(recipe, "j'ai du poulet", first.slots)
     expect(second.answer.message).toBe('Voici ce que je peux vous dire sur cette recette.')
-    expect(second.answer.communityQuote).toBeUndefined()
   })
 
   it("ne répète pas l'astuce anti-échec au tour suivant du même fil", () => {
