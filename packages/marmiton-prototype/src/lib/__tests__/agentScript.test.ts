@@ -7,6 +7,7 @@ import {
   extractSlots,
   constraintLabel,
   selectTip,
+  avoidedIngredientMatch,
   EMPTY_SLOTS,
 } from '../agentScript'
 import type { AgentSlots } from '../agentScript'
@@ -28,7 +29,7 @@ function makeRecipe(overrides: Partial<Recipe> = {}): Recipe {
 }
 
 function makeSlots(overrides: Partial<AgentSlots> = {}): AgentSlots {
-  return { ingredients: [], ...overrides }
+  return { ingredients: [], avoidIngredients: [], ...overrides }
 }
 
 describe('constraintApplies', () => {
@@ -240,5 +241,54 @@ describe('selectTip — débutant', () => {
   it('retombe sur tip si tipForBeginners est absent', () => {
     const recipe = makeRecipe({ tip: 'Astuce générale' })
     expect(selectTip(recipe, makeSlots({ constraint: 'debutant' }))).toBe('Astuce générale')
+  })
+})
+
+describe('extractSlots — avoidIngredients (dégoût, distinct de "j\'ai")', () => {
+  it('détecte un ingrédient évité par goût, sans le mettre dans "ingredients"', () => {
+    const slots = extractSlots("j'aime pas les courgettes", EMPTY_SLOTS)
+    expect(slots.avoidIngredients).toEqual(['courgette'])
+    expect(slots.ingredients).toEqual([])
+  })
+
+  it('reconnaît une formulation alternative ("j\'évite")', () => {
+    expect(extractSlots("j'évite les lardons", EMPTY_SLOTS).avoidIngredients).toEqual(['lardons'])
+  })
+
+  it('ne mélange pas un ingrédient évité avec un ingrédient déclaré dans un tour différent', () => {
+    const first = extractSlots("j'ai déjà du poulet", EMPTY_SLOTS)
+    expect(first.ingredients).toEqual(['poulet'])
+    const second = extractSlots("j'évite les lardons", first)
+    expect(second.ingredients).toEqual(['poulet'])
+    expect(second.avoidIngredients).toEqual(['lardons'])
+  })
+})
+
+describe('extractSlots — budgetFocus', () => {
+  it('détecte un intérêt budget', () => {
+    expect(extractSlots('je cherche pas cher', EMPTY_SLOTS).budgetFocus).toBe(true)
+  })
+
+  it('ne déclenche pas budgetFocus sur un mot contenant "cher" sans être le mot "cher"', () => {
+    expect(extractSlots('je cherche une recette vegan', EMPTY_SLOTS).budgetFocus).toBeUndefined()
+  })
+})
+
+describe('avoidedIngredientMatch', () => {
+  it("retourne les ingrédients de la recette présents dans avoidIngredients", () => {
+    const recipe = makeRecipe({
+      ingredients: [
+        { id: 'i1', name: 'Ricotta', quantity: 250, unit: 'g', emoji: '🧀', productId: 'p1' },
+        { id: 'i2', name: 'Parmesan râpé', quantity: 50, unit: 'g', emoji: '🧀', productId: 'p2' },
+      ],
+    })
+    expect(avoidedIngredientMatch(recipe, makeSlots({ avoidIngredients: ['ricotta'] }))).toEqual(['Ricotta'])
+  })
+
+  it('retourne un tableau vide si avoidIngredients est vide', () => {
+    const recipe = makeRecipe({
+      ingredients: [{ id: 'i1', name: 'Ricotta', quantity: 250, unit: 'g', emoji: '🧀', productId: 'p1' }],
+    })
+    expect(avoidedIngredientMatch(recipe, makeSlots())).toEqual([])
   })
 })

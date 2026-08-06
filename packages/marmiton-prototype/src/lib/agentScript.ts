@@ -17,6 +17,11 @@ export interface AgentSlots {
   ingredients: string[]
   /** Signale un intérêt pour les infos nutritionnelles (indépendant de `constraint`) — affiche calories/protéines sur la carte. */
   healthFocus?: boolean
+  /** Ingrédients évités par goût (ex. "j'aime pas les champignons") — distinct d'une allergie
+   * (`constraint: 'allergie'`, médical) et de `ingredients` (ce que l'utilisateur *a*, sens opposé). */
+  avoidIngredients: string[]
+  /** Signale un intérêt pour le prix (indépendant de `constraint`) — même schéma que `healthFocus`. */
+  budgetFocus?: boolean
 }
 
 export interface PantryMatch {
@@ -29,6 +34,23 @@ const INGREDIENT_ALIASES: Record<string, string[]> = {
   pates: ['pâtes', 'pates', 'spaghetti'],
 }
 
+/** Ingrédients "achetables" (hors `staple`) de la recette dont le nom (normalisé) correspond à au
+ * moins une des clés fournies (via `INGREDIENT_ALIASES`) — factorisation partagée entre `pantryMatch`
+ * (ce que l'utilisateur a déjà) et `avoidedIngredientMatch` (ce qu'il évite), même logique de matching. */
+function matchIngredientNames(recipe: Recipe, keys: string[]): string[] {
+  const shoppable = recipe.ingredients.filter((ingredient) => !ingredient.staple)
+  const matched: string[] = []
+  for (const ingredient of shoppable) {
+    const normName = normalize(ingredient.name)
+    const hit = keys.some((key) => {
+      const aliases = INGREDIENT_ALIASES[key] ?? [key]
+      return aliases.some((alias) => normName.includes(normalize(alias)))
+    })
+    if (hit) matched.push(ingredient.name)
+  }
+  return matched
+}
+
 /**
  * Croise ce que l'utilisateur a déclaré avoir (`AgentSlots.ingredients`) avec la liste
  * complète des ingrédients de la recette, pour afficher un écart panier concret sur la
@@ -39,21 +61,18 @@ const INGREDIENT_ALIASES: Record<string, string[]> = {
  */
 export function pantryMatch(recipe: Recipe, slots: AgentSlots): PantryMatch | null {
   if (slots.ingredients.length === 0) return null
-
-  const shoppable = recipe.ingredients.filter((ingredient) => !ingredient.staple)
-
-  const matched: string[] = []
-  for (const ingredient of shoppable) {
-    const normName = normalize(ingredient.name)
-    const hit = slots.ingredients.some((key) => {
-      const aliases = INGREDIENT_ALIASES[key] ?? [key]
-      return aliases.some((alias) => normName.includes(normalize(alias)))
-    })
-    if (hit) matched.push(ingredient.name)
-  }
-
+  const matched = matchIngredientNames(recipe, slots.ingredients)
   if (matched.length === 0) return null
+  const shoppable = recipe.ingredients.filter((ingredient) => !ingredient.staple)
   return { matchedIngredientNames: matched, missingCount: shoppable.length - matched.length }
+}
+
+/** Ingrédients de la recette que l'utilisateur évite par goût (`slots.avoidIngredients`) — utilisé
+ * pour un avertissement sur la carte/le drawer, jamais pour filtrer ou noter une recommandation
+ * (`/agent` reste inchangé au niveau du classement pour cette passe). */
+export function avoidedIngredientMatch(recipe: Recipe, slots: AgentSlots): string[] {
+  if (slots.avoidIngredients.length === 0) return []
+  return matchIngredientNames(recipe, slots.avoidIngredients)
 }
 
 /**
@@ -200,6 +219,8 @@ const CONSTRAINT_WORDS: Array<[RegExp, Constraint]> = [
 ]
 
 const HEALTH_WORDS = /léger|healthy|calories?|régime|diète|minceur/i
+const BUDGET_WORDS = /\bcher\b|économique|abordable|budget|coûte|prix/i
+const AVOID_WORDS = /j'aime pas|je n'aime pas|j'evite|je deteste/
 
 const INGREDIENT_WORDS: string[] = [
   'poulet',
@@ -224,7 +245,7 @@ function normalize(text: string): string {
 }
 
 export function extractSlots(text: string, prev: AgentSlots): AgentSlots {
-  const next: AgentSlots = { ...prev, ingredients: [...prev.ingredients] }
+  const next: AgentSlots = { ...prev, ingredients: [...prev.ingredients], avoidIngredients: [...prev.avoidIngredients] }
   const norm = normalize(text)
 
   for (const [re, val] of TIME_WORDS) {
@@ -254,11 +275,22 @@ export function extractSlots(text: string, prev: AgentSlots): AgentSlots {
     next.healthFocus = true
   }
 
+  if (BUDGET_WORDS.test(text)) {
+    next.budgetFocus = true
+  }
+
+  // Un tour qui exprime un dégoût ("j'aime pas X") va au slot avoidIngredients plutôt qu'au
+  // slot ingredients ("ce que j'ai") — un même tour ne porte qu'une seule de ces deux intentions.
+  const isAvoidTurn = AVOID_WORDS.test(norm)
+
   for (const word of INGREDIENT_WORDS) {
     const key = normalize(word).replace('pâtes', 'pates')
-    if (norm.includes(key) && !next.ingredients.includes('pates') && !next.ingredients.includes(key)) {
-      const canonical = key === 'courgettes' ? 'courgette' : key === 'abricots' ? 'abricot' : key
-      if (!next.ingredients.includes(canonical)) next.ingredients.push(canonical)
+    if (!norm.includes(key)) continue
+    const canonical = key === 'courgettes' ? 'courgette' : key === 'abricots' ? 'abricot' : key
+    if (isAvoidTurn) {
+      if (!next.avoidIngredients.includes(canonical)) next.avoidIngredients.push(canonical)
+    } else if (!next.ingredients.includes('pates') && !next.ingredients.includes(key) && !next.ingredients.includes(canonical)) {
+      next.ingredients.push(canonical)
     }
   }
 
@@ -410,4 +442,4 @@ export function processTurn(text: string, prevSlots: AgentSlots, clarifyAttempts
   }
 }
 
-export const EMPTY_SLOTS: AgentSlots = { ingredients: [] }
+export const EMPTY_SLOTS: AgentSlots = { ingredients: [], avoidIngredients: [] }
