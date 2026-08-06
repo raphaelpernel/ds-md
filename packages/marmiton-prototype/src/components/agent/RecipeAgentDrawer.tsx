@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { PaperPlaneRight, CheckCircle, Lightbulb, Warning } from '@phosphor-icons/react'
+import { PaperPlaneRight, CheckCircle, Lightbulb, Warning, CookingPot, ArrowsClockwise, Coins } from '@phosphor-icons/react'
 import { Drawer, Button, InputField, ChipTag, Loading } from '@mealz-product-team/design-system'
 import { EMPTY_SLOTS } from '@/lib/agentScript'
 import type { AgentSlots } from '@/lib/agentScript'
@@ -149,6 +149,30 @@ export function RecipeAgentDrawer({ open, onClose, recipe, chips, initialMessage
                         <p className="recipe-ask-highlight recipe-ask-highlight--info">
                           <Lightbulb size={16} weight="fill" aria-hidden="true" />
                           Astuce : {m.answer.tip}
+                        </p>
+                      )}
+                      {m.answer.equipmentNote && (
+                        <p className="recipe-ask-highlight recipe-ask-highlight--info">
+                          <CookingPot size={16} weight="fill" aria-hidden="true" />
+                          {m.answer.equipmentNote}
+                        </p>
+                      )}
+                      {m.answer.ingredientSubstituteNote && (
+                        <p className="recipe-ask-highlight recipe-ask-highlight--info">
+                          <ArrowsClockwise size={16} weight="fill" aria-hidden="true" />
+                          {m.answer.ingredientSubstituteNote}
+                        </p>
+                      )}
+                      {m.answer.avoidedIngredientNote && (
+                        <p className="recipe-ask-highlight recipe-ask-highlight--warning">
+                          <Warning size={16} weight="fill" aria-hidden="true" />
+                          {m.answer.avoidedIngredientNote}
+                        </p>
+                      )}
+                      {m.answer.budgetNote && (
+                        <p className="recipe-ask-highlight recipe-ask-highlight--info">
+                          <Coins size={16} weight="fill" aria-hidden="true" />
+                          {m.answer.budgetNote}
                         </p>
                       )}
                     </div>
