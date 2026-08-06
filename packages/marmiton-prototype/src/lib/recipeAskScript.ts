@@ -79,7 +79,7 @@ function detectEquipmentQuestion(text: string): string | undefined {
 const INGREDIENT_SUBSTITUTES: Record<string, string> = {
   ricotta: 'du mascarpone ou du fromage frais épais',
   parmesan: 'du gruyère râpé',
-  œuf: "de l'aquafaba (l'eau de cuisson des pois chiches), environ 3 c. à soupe par œuf",
+  oeuf: "de l'aquafaba (l'eau de cuisson des pois chiches), environ 3 c. à soupe par œuf",
   lardons: 'des allumettes de dinde fumées',
 }
 
@@ -111,6 +111,7 @@ function normalize(text: string): string {
     .toLowerCase()
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
+    .replace(/œ/g, 'oe')
 }
 
 /**
@@ -178,7 +179,10 @@ export function answerRecipeAsk(
     // (retour utilisateur du 2026-08-05) — une seule bulle de texte suffit.
     const label = constraintLabel(recipe, slots, true)
     if (label) {
-      const quote = slots.constraint !== 'debutant' ? findRecipeReview(recipe, slots.constraint as ReviewTag) : undefined
+      const quote =
+        slots.constraint === 'debutant' || slots.constraint === 'vegan'
+          ? undefined
+          : findRecipeReview(recipe, slots.constraint)
       bits.push(
         quote
           ? `Oui, cette recette est ${RELAXED_REASON[slots.constraint]} : d'après les avis, « ${quote.text} »`

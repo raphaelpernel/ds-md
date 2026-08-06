@@ -254,4 +254,27 @@ describe('answerRecipeAsk', () => {
     const second = answerRecipeAsk(recipe, 'et sinon niveau temps ?', first.slots)
     expect(second.answer.budgetNote).toBeUndefined()
   })
+
+  it("suggère un substitut pour un œuf même si l'utilisateur tape « oeuf » sans ligature", () => {
+    const recipe = makeRecipe({
+      ingredients: [{ id: 'i1', name: 'Œufs', quantity: 3, unit: 'pièces', emoji: '🥚', productId: 'p1' }],
+    })
+    const { answer } = answerRecipeAsk(recipe, "j'ai pas d'oeufs, je remplace par quoi ?", EMPTY_SLOTS)
+    expect(answer.ingredientSubstituteNote).toBe(
+      "Pas de souci, vous pouvez remplacer œufs par de l'aquafaba (l'eau de cuisson des pois chiches), environ 3 c. à soupe par œuf."
+    )
+  })
+
+  it("ne répète pas l'avertissement pour un ingrédient déjà signalé, mais avertit pour un nouvel ingrédient évité au tour suivant", () => {
+    const recipe = makeRecipe({
+      ingredients: [
+        { id: 'i1', name: 'Ricotta', quantity: 250, unit: 'g', emoji: '🧀', productId: 'p1' },
+        { id: 'i2', name: 'Escalopes de poulet', quantity: 4, unit: 'pièces', emoji: '🍗', productId: 'p2' },
+      ],
+    })
+    const first = answerRecipeAsk(recipe, "j'aime pas la ricotta", EMPTY_SLOTS)
+    expect(first.answer.avoidedIngredientNote).toBeDefined()
+    const second = answerRecipeAsk(recipe, "j'aime pas le poulet", first.slots)
+    expect(second.answer.avoidedIngredientNote).toBe('Cette recette contient escalopes de poulet, que vous évitez.')
+  })
 })
