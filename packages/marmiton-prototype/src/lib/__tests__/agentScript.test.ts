@@ -376,7 +376,8 @@ describe("extractSlots — avoidIngredients (dégoût, distinct de \"j'ai\")", (
   })
 
   it('reconnaît une apostrophe typographique (courbe) comme équivalente à une apostrophe droite', () => {
-    expect(extractSlots("j'aime pas les courgettes", EMPTY_SLOTS).avoidIngredients).toEqual(['courgette'])
+    const curlyApostrophe = String.fromCharCode(0x2019)
+    expect(extractSlots(`j${curlyApostrophe}aime pas les courgettes`, EMPTY_SLOTS).avoidIngredients).toEqual(['courgette'])
   })
 
   it('ne mélange pas un ingrédient évité avec un ingrédient déclaré dans un tour différent', () => {
