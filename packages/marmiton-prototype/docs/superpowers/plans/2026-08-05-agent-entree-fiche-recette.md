@@ -35,7 +35,7 @@
   - `export interface RecipeAskAnswer { message: string; tip?: string; pantryMatch: PantryMatch | null; communityQuote?: { text: string }; constraintLabel?: string; allergens?: string[] }`
   - `export function answerRecipeAsk(recipe: Recipe, text: string, prevSlots: AgentSlots): { slots: AgentSlots; answer: RecipeAskAnswer }`
 
-- [ ] **Step 1: Exporter `RELAXED_REASON` dans `agentScript.ts`**
+- [x] **Step 1: Exporter `RELAXED_REASON` dans `agentScript.ts`**
 
 Dans `packages/marmiton-prototype/src/lib/agentScript.ts`, ligne 82, remplacer :
 
@@ -51,7 +51,7 @@ export const RELAXED_REASON: Record<Constraint, string> = {
 
 Aucun autre changement dans ce fichier.
 
-- [ ] **Step 2: Écrire les tests (échouent, le module n'existe pas encore)**
+- [x] **Step 2: Écrire les tests (échouent, le module n'existe pas encore)**
 
 Créer `packages/marmiton-prototype/src/lib/__tests__/recipeAskScript.test.ts` :
 
@@ -198,12 +198,12 @@ describe('answerRecipeAsk', () => {
 })
 ```
 
-- [ ] **Step 3: Lancer les tests pour vérifier qu'ils échouent**
+- [x] **Step 3: Lancer les tests pour vérifier qu'ils échouent**
 
 Run: `cd packages/marmiton-prototype && npx vitest run src/lib/__tests__/recipeAskScript.test.ts`
 Expected: FAIL — `Cannot find module '../recipeAskScript'` (le module n'existe pas encore).
 
-- [ ] **Step 4: Implémenter `recipeAskScript.ts`**
+- [x] **Step 4: Implémenter `recipeAskScript.ts`**
 
 Créer `packages/marmiton-prototype/src/lib/recipeAskScript.ts` :
 
@@ -338,12 +338,12 @@ export function answerRecipeAsk(
 }
 ```
 
-- [ ] **Step 5: Lancer les tests pour vérifier qu'ils passent**
+- [x] **Step 5: Lancer les tests pour vérifier qu'ils passent**
 
 Run: `cd packages/marmiton-prototype && npx vitest run src/lib/__tests__/recipeAskScript.test.ts`
 Expected: PASS — 13 tests verts (4 `buildRecipeChips` + 9 `answerRecipeAsk`).
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add packages/marmiton-prototype/src/lib/agentScript.ts packages/marmiton-prototype/src/lib/recipeAskScript.ts packages/marmiton-prototype/src/lib/__tests__/recipeAskScript.test.ts
@@ -362,7 +362,7 @@ git commit -m "feat(marmiton-prototype): moteur mono-recette pour les questions 
 - Consomme : `RecipeChip` (Task 1, `@/lib/recipeAskScript`) ; composants DS `Button`, `ChipTag`, `InputField` (déjà validés via `design-system/docs/DESIGN.md` §3, mêmes signatures que dans `AgentConversation.tsx`).
 - Produit (utilisé par Task 4) : `export function RecipeAskBar({ chips, onOpen }: { chips: RecipeChip[]; onOpen: (message: string) => void }): JSX.Element`. `onOpen('')` = ouverture sans question pré-remplie (clic sur l'input vide) ; `onOpen(text)` = ouverture avec cette question déjà posée (clic sur un chip, ou saisie + Entrée).
 
-- [ ] **Step 1: Créer le composant**
+- [x] **Step 1: Créer le composant**
 
 Créer `packages/marmiton-prototype/src/components/product/RecipeAskBar/RecipeAskBar.tsx` :
 
@@ -427,7 +427,7 @@ export function RecipeAskBar({ chips, onOpen }: RecipeAskBarProps) {
 export default RecipeAskBar
 ```
 
-- [ ] **Step 2: Ajouter le CSS**
+- [x] **Step 2: Ajouter le CSS**
 
 Créer `packages/marmiton-prototype/src/components/product/RecipeAskBar/RecipeAskBar.css` :
 
@@ -474,12 +474,12 @@ Créer `packages/marmiton-prototype/src/components/product/RecipeAskBar/RecipeAs
 }
 ```
 
-- [ ] **Step 3: Vérifier la compilation TypeScript**
+- [x] **Step 3: Vérifier la compilation TypeScript**
 
 Run: `cd packages/marmiton-prototype && npx tsc --noEmit`
 Expected: aucune erreur liée à `RecipeAskBar.tsx` (le composant n'est pas encore importé nulle part, donc il doit compiler isolément sans erreur de type sur ses propres props).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add packages/marmiton-prototype/src/components/product/RecipeAskBar
@@ -498,7 +498,7 @@ git commit -m "feat(marmiton-prototype): barre sticky RecipeAskBar (input + pré
 - Consomme : `answerRecipeAsk`, `RecipeAskAnswer`, `RecipeChip` (Task 1, `@/lib/recipeAskScript`) ; `EMPTY_SLOTS`, `AgentSlots` (`@/lib/agentScript`) ; `Recipe` (`@/data/types/recipe`) ; composants DS `Drawer`, `Button`, `InputField`, `ChipTag`, `Loading`.
 - Produit (utilisé par Task 4) : `export function RecipeAgentDrawer({ open, onClose, recipe, chips, initialMessage }: RecipeAgentDrawerProps): JSX.Element` où `RecipeAgentDrawerProps = { open: boolean; onClose: () => void; recipe: Recipe; chips: RecipeChip[]; initialMessage: string }`.
 
-- [ ] **Step 1: Créer le composant**
+- [x] **Step 1: Créer le composant**
 
 Créer `packages/marmiton-prototype/src/components/agent/RecipeAgentDrawer.tsx` :
 
@@ -699,7 +699,7 @@ export function RecipeAgentDrawer({ open, onClose, recipe, chips, initialMessage
 export default RecipeAgentDrawer
 ```
 
-- [ ] **Step 2: Ajouter le CSS**
+- [x] **Step 2: Ajouter le CSS**
 
 Créer `packages/marmiton-prototype/src/components/agent/RecipeAgentDrawer.css` :
 
@@ -836,12 +836,12 @@ Créer `packages/marmiton-prototype/src/components/agent/RecipeAgentDrawer.css` 
 }
 ```
 
-- [ ] **Step 3: Vérifier la compilation TypeScript**
+- [x] **Step 3: Vérifier la compilation TypeScript**
 
 Run: `cd packages/marmiton-prototype && npx tsc --noEmit`
 Expected: aucune erreur liée à `RecipeAgentDrawer.tsx`.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add packages/marmiton-prototype/src/components/agent/RecipeAgentDrawer.tsx packages/marmiton-prototype/src/components/agent/RecipeAgentDrawer.css
@@ -858,7 +858,7 @@ git commit -m "feat(marmiton-prototype): RecipeAgentDrawer, conversation agent m
 **Interfaces:**
 - Consomme : `RecipeAskBar` (Task 2), `RecipeAgentDrawer` (Task 3), `buildRecipeChips` (Task 1, `@/lib/recipeAskScript`).
 
-- [ ] **Step 1: Ajouter les imports**
+- [x] **Step 1: Ajouter les imports**
 
 Dans `packages/marmiton-prototype/app/(prototypes)/recipe/page.tsx`, remplacer les lignes 1-15 :
 
@@ -903,7 +903,7 @@ import { getProductsByRecipe } from '@/data/mock/products'
 import '@mealz-product-team/design-system/styles/index.css'
 ```
 
-- [ ] **Step 2: Ajouter l'état et les chips**
+- [x] **Step 2: Ajouter l'état et les chips**
 
 Dans le même fichier, remplacer :
 
@@ -930,7 +930,7 @@ par :
   const recipeCount = sections.filter((s) => s.recipeId !== null).length
 ```
 
-- [ ] **Step 3: Rendre les deux nouveaux composants**
+- [x] **Step 3: Rendre les deux nouveaux composants**
 
 Toujours dans le même fichier, remplacer le bloc qui suit le `</Drawer>` du panier :
 
@@ -957,7 +957,7 @@ par :
       <style>{`
 ```
 
-- [ ] **Step 4: Laisser de la place à la barre sticky en bas de page**
+- [x] **Step 4: Laisser de la place à la barre sticky en bas de page**
 
 Toujours dans le même fichier, dans le bloc `<style>`, remplacer :
 
@@ -982,17 +982,17 @@ par :
         }
 ```
 
-- [ ] **Step 5: Vérifier la compilation TypeScript**
+- [x] **Step 5: Vérifier la compilation TypeScript**
 
 Run: `cd packages/marmiton-prototype && npx tsc --noEmit`
 Expected: aucune erreur.
 
-- [ ] **Step 6: Lancer la suite de tests complète du package**
+- [x] **Step 6: Lancer la suite de tests complète du package**
 
 Run: `cd packages/marmiton-prototype && npm test`
 Expected: PASS — tous les tests existants (`agentScript.test.ts`) plus les 13 nouveaux (`recipeAskScript.test.ts`) sont verts.
 
-- [ ] **Step 7: Vérification manuelle en dev server**
+- [x] **Step 7: Vérification manuelle en dev server**
 
 Démarrer le serveur de dev (`preview_start` avec la config `.claude/launch.json` du package, ou `npm run dev` si aucune config n'existe encore) et ouvrir `/recipe`. Vérifier dans le navigateur :
 1. La barre sticky est visible en bas de l'écran et le reste en scrollant jusqu'à la section Préparation.
@@ -1005,7 +1005,7 @@ Démarrer le serveur de dev (`preview_start` avec la config `.claude/launch.json
 
 Prendre une capture d'écran de la barre sticky + du Drawer ouvert avec une réponse affichée, à partager avec l'utilisateur.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add "packages/marmiton-prototype/app/(prototypes)/recipe/page.tsx"
