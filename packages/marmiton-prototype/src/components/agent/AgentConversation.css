@@ -269,6 +269,13 @@
   height: 14px;
 }
 
+/* CTA explicite en pied de carte — la carte entière reste cliquable (.chat-card__top),
+   ce bouton est une affordance additionnelle pour les users qui ne s'attendent pas à
+   ce qu'une carte de chat soit cliquable (cf. décision produit 2026-08-06). */
+.chat-card__cta {
+  width: 100%;
+}
+
 .chat-composer {
   display: flex;
   flex-direction: column;
