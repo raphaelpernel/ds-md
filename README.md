@@ -29,7 +29,6 @@ Le design system (`packages/design-system`) est indépendant de tout produit : c
 | `marmiton-prototype` | 3000 (défaut Next.js) | Premier prototype : parcours courses/panier Marmiton × Carrefour | — |
 | `assistant-shopping` | 3002 | Prototype UI de l'Assistant Shopping ChatGPT (commerce agentique, Carrefour Belgique) | `docs/docs/00-index.md` |
 | `form-mealz-planner` | 3001 | "Quick Features" côté déploiement Netlify — features rapides / tests UI ponctuels (nom de code conservé côté repo) | — |
-| `marmiton-agent` | 3003 | Wireframe d'exploration « Marmiton agentique » (agent culinaire piloté par IA) | `docs/Brief projet — Marmiton Agentique.md` |
 | `home` | 3004 | Hub de navigation entre les prototypes déployés (liens vers les sites Netlify indépendants) | `docs/BRIEF.md` |
 | `supermarket` | 3006 | Démo drive (catalogue + wizard planner) illustrant la réutilisation cross-package du design system (`RecipeCard`, `StoreHeader`, `BottomNav`) | `docs/BRIEF.md` |
 
@@ -55,7 +54,6 @@ Pour lancer une autre app que `marmiton-prototype`, cibler le package directemen
 ```bash
 pnpm --filter @mealz-product-team/assistant-shopping dev    # port 3002
 pnpm --filter @mealz-product-team/form-mealz-planner dev    # port 3001
-pnpm --filter @mealz-product-team/marmiton-agent dev        # port 3003
 pnpm --filter @mealz-product-team/home dev                  # port 3004
 pnpm --filter @mealz-product-team/supermarket dev           # port 3006
 ```
@@ -101,7 +99,6 @@ DS.MD/
     ├── marmiton-prototype/            # @mealz-product-team/marmiton-prototype — prototype Marmiton × Carrefour
     ├── assistant-shopping/            # @mealz-product-team/assistant-shopping — Assistant Shopping ChatGPT
     ├── form-mealz-planner/            # @mealz-product-team/form-mealz-planner — "Quick Features"
-    ├── marmiton-agent/                # @mealz-product-team/marmiton-agent — wireframe Marmiton agentique
     ├── home/                          # @mealz-product-team/home — hub de navigation entre prototypes
     └── supermarket/                   # @mealz-product-team/supermarket — démo drive catalogue + planner
 ```
@@ -148,7 +145,7 @@ function MyComponent() {
 }
 ```
 
-Les autres apps Next.js du monorepo (`assistant-shopping`, `form-mealz-planner`, `marmiton-agent`, `home`, `supermarket`) utilisent à la place `BrandThemeSwitcher` (`devtools/BrandThemeSwitcher`), un sélecteur de thème client intégré au `layout.tsx` — voir la règle d'intégration dans `CLAUDE.md` racine.
+Les autres apps Next.js du monorepo (`assistant-shopping`, `form-mealz-planner`, `home`, `supermarket`) utilisent à la place `BrandThemeSwitcher` (`devtools/BrandThemeSwitcher`), un sélecteur de thème client intégré au `layout.tsx` — voir la règle d'intégration dans `CLAUDE.md` racine.
 
 ### Brands disponibles
 
@@ -307,7 +304,7 @@ Spécifiques à chaque app, ne font pas partie du design system.
 | `components/QuestionCard` | Carte question du wizard planner (diète, équipement, repas, personnes) |
 | `context/WizardContext` | État partagé du flow planner multi-étapes |
 
-D'autres apps (`assistant-shopping`, `form-mealz-planner`, `marmiton-agent`, `home`) ont leurs propres composants métier dans `src/components/` — voir leur `docs/` respectif pour le contexte produit.
+D'autres apps (`assistant-shopping`, `form-mealz-planner`, `home`) ont leurs propres composants métier dans `src/components/` — voir leur `docs/` respectif pour le contexte produit.
 
 ---
 
@@ -360,8 +357,7 @@ Chaque app suit le même trio `dev`/`build`/`start` (Next.js), avec régénérat
 | `marmiton-prototype` | 3000 | `pnpm --filter @mealz-product-team/marmiton-prototype dev` |
 | `form-mealz-planner` | 3001 | `pnpm --filter @mealz-product-team/form-mealz-planner dev` |
 | `assistant-shopping` | 3002 | `pnpm --filter @mealz-product-team/assistant-shopping dev` |
-| `marmiton-agent` | 3003 | `pnpm --filter @mealz-product-team/marmiton-agent dev` |
 | `home` | 3004 | `pnpm --filter @mealz-product-team/home dev` |
 | `supermarket` | 3006 | `pnpm --filter @mealz-product-team/supermarket dev` |
 
-`assistant-shopping` et `marmiton-agent` exposent en plus un script `test` (Vitest).
+`assistant-shopping` et `marmiton-prototype` exposent en plus un script `test` (Vitest).
