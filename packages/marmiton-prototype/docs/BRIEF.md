@@ -84,7 +84,7 @@ Contexte : quels champs de la carte agent comptent le plus pour l'utilisateur, e
 - **`allergie` volontairement exclu de ce chip** — `allergie` dans `Recipe.tags` est un mot-clé approximatif de matching ("une allergie a été mentionnée"), pas un champ d'allergènes vérifié : afficher une confirmation de type "correspond ✓" serait trompeur sur un sujet de sécurité alimentaire. **Résolu par la section "Itération 2" ci-dessous** : plutôt qu'un chip de confirmation, affichage de la liste complète et honnête `Recipe.allergens` quand `slots.constraint === 'allergie'` — transparence plutôt que fausse promesse de filtrage précis.
 - **Confirmation des portions** — `slots.servings` était capturé par le classificateur mais jamais reflété sur la carte. Ajout de "Pour {servings}" dans la ligne meta, affiché uniquement quand `slots.servings` a été renseigné par l'utilisateur.
 - **Saisonnalité** — nouveau champ `Recipe.season?: Season[]` (`'printemps' | 'ete' | 'automne' | 'hiver'`), renseigné sur les 6 recettes mock. Chip "De saison" (`ChipTag`) affiché uniquement si le mois courant correspond à une saison déclarée sur la recette ; pas de valeur "toute-année" à gérer explicitement — une recette sans `season` déclaré n'affiche simplement pas le chip.
-- **Prix/budget** — reste délibérément exclu (reconfirmé), cohérent avec la décision déjà actée plus haut dans ce document (registre confiance/effort, pas merchandising).
+- **Prix/budget** — reste exclu de l'affichage carte et du classement `/agent` (registre confiance/effort, pas merchandising, décision reconfirmée). Depuis le 2026-08-06, la question directe ("c'est cher ?") reçoit une réponse honnête dans le drawer mono-recette (`budgetNote`, fiche recette uniquement) — l'exclusion porte sur la mise en avant proactive, pas sur la capacité à répondre si demandé.
 - **Notés pour une itération future, non construits maintenant** : temps de préparation vs temps total (un total identique peut cacher des profils d'effort réel différents), équipement nécessaire (four, robot...) — aucun champ actuel ne les porte, pas de besoin produit validé pour les construire cette fois-ci.
 
 ### Itération 2 — comparaison HelloFresh (meal-kit, même enjeu recette→courses)
@@ -98,7 +98,7 @@ Champs ajoutés en conséquence :
 | `Recipe.allergens` | Uniquement si `slots.constraint === 'allergie'` | Le classificateur détecte juste "une allergie a été mentionnée", pas laquelle — afficher la liste complète est le choix honnête (transparence) plutôt que de prétendre avoir filtré pour l'allergène précis |
 | `Recipe.calories` / `Recipe.protein` | Uniquement si `slots.healthFocus` (mots-clés "léger/healthy/calories/régime/minceur", slot indépendant de `constraint`) | Évite d'afficher ces chiffres par défaut sur toutes les cartes — bruit pour qui n'a pas exprimé ce souci |
 | `Ingredient.staple` | Exclut l'ingrédient du calcul d'écart panier (`pantryMatch`) | Sans ça, "il manque 3 produits" peut compter de l'huile ou du sel que tout le monde a déjà — dilue le signal |
-| `Recipe.tipForKids` | Remplace `tip` quand `slots.constraint === 'enfant'` (via `selectTip()`) | Première étape vers des astuces choisies selon le risque exprimé, sans construire un moteur de sélection multi-contextes (pas d'autre signal de risque détectable pour l'instant, ex. "débutant") |
+| `Recipe.tipForKids` | Remplace `tip` quand `slots.constraint === 'enfant'` (via `selectTip()`) | Première étape vers des astuces choisies selon le risque exprimé, sans construire un moteur de sélection multi-contextes. Depuis le 2026-08-06, le signal "débutant" est aussi détectable (`Constraint`, `Recipe.tipForBeginners`) — voir le spec `2026-08-06-questions-users-vocabulaire-design.md`. |
 
 **Pas fait, noté pour plus tard si besoin** : astuces multiples par étape (comme HelloFresh) — hors périmètre d'une carte de recommandation (vs. une fiche recette complète) ; détection de l'allergène précis (nécessiterait une liste d'allergènes nommés dans le classificateur, pas juste un mot-clé générique).
 
@@ -114,7 +114,7 @@ Les deux sections ci-dessus (classement + Itération 2) ont été écrites en pa
 6. `Ingredient.staple` exclu du calcul d'écart panier (`pantryMatch`).
 7. `Recipe.tipForKids` remplace `tip` via `selectTip()` quand `slots.constraint === 'enfant'`.
 
-Prix/budget reste exclu. Temps de préparation vs total et équipement nécessaire restent notés pour plus tard, non construits dans cette passe.
+Prix/budget reste exclu de l'affichage carte (voir plus haut — répondu sur demande depuis le 2026-08-06, jamais affiché proactivement). Temps de préparation vs total reste noté pour plus tard, non construit. Équipement nécessaire est affiché sur la carte depuis une passe antérieure et répondu sur demande (substitution) dans le drawer mono-recette depuis le 2026-08-06.
 
 ---
 
