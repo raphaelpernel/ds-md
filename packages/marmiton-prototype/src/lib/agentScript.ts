@@ -13,14 +13,16 @@ export type Constraint = 'enfant' | 'sans-sauce' | 'vegetarien' | 'vegan' | 'san
 export interface AgentSlots {
   time?: number
   servings?: number
-  constraint?: Constraint
+  /** Contraintes exprimées dans la conversation — un tableau, pas une valeur unique : un même
+   * user peut cumuler "enfant" et "sans-gluten" dans un même fil. Vide = aucune contrainte. */
+  constraints: Constraint[]
   ingredients: string[]
-  /** Signale un intérêt pour les infos nutritionnelles (indépendant de `constraint`) — affiche calories/protéines sur la carte. */
+  /** Signale un intérêt pour les infos nutritionnelles (indépendant de `constraints`) — affiche calories/protéines sur la carte. */
   healthFocus?: boolean
   /** Ingrédients évités par goût (ex. "j'aime pas les champignons") — distinct d'une allergie
-   * (`constraint: 'allergie'`, médical) et de `ingredients` (ce que l'utilisateur *a*, sens opposé). */
+   * (`constraints` incluant `'allergie'`, médical) et de `ingredients` (ce que l'utilisateur *a*, sens opposé). */
   avoidIngredients: string[]
-  /** Signale un intérêt pour le prix (indépendant de `constraint`) — même schéma que `healthFocus`. */
+  /** Signale un intérêt pour le prix (indépendant de `constraints`) — même schéma que `healthFocus`. */
   budgetFocus?: boolean
 }
 
@@ -77,12 +79,12 @@ export function avoidedIngredientMatch(recipe: Recipe, slots: AgentSlots): strin
 
 /**
  * Choisit l'astuce la plus pertinente pour le contexte de la conversation. `tipForKids`
- * prend le pas sur `tip` quand la contrainte détectée est « enfant », `tipForBeginners`
- * quand elle est « debutant ».
+ * prend le pas sur `tip` quand `constraints` contient « enfant », `tipForBeginners`
+ * quand elle contient « debutant ».
  */
 export function selectTip(recipe: Recipe, slots: AgentSlots): string | undefined {
-  if (slots.constraint === 'enfant' && recipe.tipForKids) return recipe.tipForKids
-  if (slots.constraint === 'debutant' && recipe.tipForBeginners) return recipe.tipForBeginners
+  if (slots.constraints.includes('enfant') && recipe.tipForKids) return recipe.tipForKids
+  if (slots.constraints.includes('debutant') && recipe.tipForBeginners) return recipe.tipForBeginners
   return recipe.tip
 }
 
@@ -112,33 +114,37 @@ export const RELAXED_REASON: Record<Constraint, string> = {
   debutant: 'facile pour débuter',
 }
 
-/**
- * Garde partagée : une contrainte ne doit jamais être présentée comme satisfaite si le
- * résultat est `relaxed` (contrainte abandonnée, `matched=false`) ou si la contrainte est
- * `allergie` (mot-clé approximatif dans `recipe.tags`, pas un champ d'allergènes vérifié —
- * voir `allergens` sur la carte, seule sortie honnête pour ce cas). Partagée entre
- * `constraintLabel` et `selectCommunityQuote` pour ne pas dupliquer cette règle de sécurité.
- */
-export function constraintApplies(slots: AgentSlots, matched: boolean): boolean {
-  return matched && !!slots.constraint && slots.constraint !== 'allergie'
-}
-
 /** `debutant` n'est pas porté par `recipe.tags` (pas de nouveau tag à maintenir sur les recettes
- * existantes) — la correspondance se fait via `recipe.difficulty === 'facile'`, déjà peuplé. */
-function constraintSatisfiedBy(recipe: Recipe, constraint: Constraint): boolean {
+ * existantes) — la correspondance se fait via `recipe.difficulty === 'facile'`, déjà peuplé.
+ * Exporté (sous-projet 2) pour que `recipeAskScript.ts` puisse vérifier une contrainte à la fois. */
+export function constraintSatisfiedBy(recipe: Recipe, constraint: Constraint): boolean {
   if (constraint === 'debutant') return recipe.difficulty === 'facile'
   return (recipe.tags ?? []).includes(constraint)
 }
 
 /**
- * Label de correspondance à afficher sur la carte quand la contrainte exprimée est
- * réellement satisfaite par la recette recommandée (`recipe.tags`, sauf `debutant` qui
- * se base sur `recipe.difficulty` — voir `constraintSatisfiedBy`).
+ * Sous-ensemble de `slots.constraints` réellement satisfait par la recette recommandée —
+ * exclut toujours `'allergie'` (mot-clé approximatif dans `recipe.tags`, pas un champ
+ * d'allergènes vérifié, voir `allergens` sur la carte, seule sortie honnête pour ce cas) et
+ * retourne `[]` sur un résultat `relaxed` (contrainte(s) abandonnée(s), `matched=false`) —
+ * une contrainte ne doit jamais être présentée comme satisfaite dans ce cas, même si
+ * `recipe.tags` la contient encore. Remplace `constraintApplies` (sous-projet 1), qui
+ * opérait sur une contrainte unique.
  */
-export function constraintLabel(recipe: Recipe, slots: AgentSlots, matched: boolean): string | undefined {
-  if (!constraintApplies(slots, matched)) return undefined
-  if (!constraintSatisfiedBy(recipe, slots.constraint!)) return undefined
-  return CONSTRAINT_LABELS[slots.constraint as Exclude<Constraint, 'allergie'>]
+export function satisfiedConstraints(recipe: Recipe, slots: AgentSlots, matched: boolean): Exclude<Constraint, 'allergie'>[] {
+  if (!matched) return []
+  return slots.constraints.filter(
+    (c): c is Exclude<Constraint, 'allergie'> => c !== 'allergie' && constraintSatisfiedBy(recipe, c)
+  )
+}
+
+/**
+ * Labels de correspondance à afficher sur la carte pour chaque contrainte exprimée
+ * réellement satisfaite par la recette recommandée. Remplace `constraintLabel` (sous-projet 1),
+ * qui retournait une seule valeur.
+ */
+export function constraintLabels(recipe: Recipe, slots: AgentSlots, matched: boolean): string[] {
+  return satisfiedConstraints(recipe, slots, matched).map((c) => CONSTRAINT_LABELS[c])
 }
 
 export interface CommunityQuote {
@@ -148,17 +154,24 @@ export interface CommunityQuote {
 /**
  * Sélectionne un avis communautaire contextuel (signal contextuel, pas un résumé générique
  * de tous les avis — cf. design doc "Signal communautaire contextuel"). Priorité à la
- * contrainte exprimée (signal le plus décisionnel) sur le temps ; retourne le premier avis
- * du pool taggé. Pas de compteur — le nombre d'avis n'est pas un signal utile pour
- * l'utilisateur, seule l'attribution ("Selon les avis") compte. `matched` utilise la même
- * garde que `constraintLabel` — jamais de quote de contrainte sur un résultat `relaxed`.
+ * première contrainte mentionnée (ordre d'expression par l'utilisateur, signal le plus
+ * décisionnel) sur le temps. Volontairement basé sur `slots.constraints` (ce qui a été dit),
+ * pas sur `satisfiedConstraints` (ce que le tag officiel confirme) — un avis communautaire
+ * répond à « la communauté en a-t-elle parlé ? », pas à « la recette est-elle officiellement
+ * taguée ? ». Retourne le premier avis du pool taggé pour cette contrainte. Pas de compteur —
+ * le nombre d'avis n'est pas un signal utile pour l'utilisateur, seule l'attribution
+ * ("Selon les avis") compte. Une seule citation même si plusieurs contraintes sont
+ * mentionnées — en empiler plusieurs alourdirait la carte sans ajouter de signal.
  */
 export function selectCommunityQuote(recipe: Recipe, slots: AgentSlots, matched: boolean): CommunityQuote | undefined {
   const reviews = recipe.reviews ?? []
 
-  if (constraintApplies(slots, matched)) {
-    const forConstraint = reviews.find((r) => r.tag === slots.constraint)
-    if (forConstraint) return { text: forConstraint.text }
+  if (matched) {
+    const firstConstraint = slots.constraints.find((c) => c !== 'allergie')
+    if (firstConstraint) {
+      const forConstraint = reviews.find((r) => r.tag === firstConstraint)
+      if (forConstraint) return { text: forConstraint.text }
+    }
   }
 
   if (slots.time !== undefined && recipe.duration <= slots.time) {
@@ -193,7 +206,7 @@ export interface RecommendedRecipe {
 export type AgentTurnResult =
   | { kind: 'clarify'; message: string }
   | { kind: 'recommend'; recipes: RecommendedRecipe[]; reason: string }
-  | { kind: 'relaxed'; recipes: RecommendedRecipe[]; droppedConstraint: string; message: string }
+  | { kind: 'relaxed'; recipes: RecommendedRecipe[]; droppedConstraints: Constraint[]; message: string }
   | { kind: 'not_understood'; message: string }
 
 const TIME_WORDS: Array<[RegExp, number]> = [
@@ -222,6 +235,10 @@ const CONSTRAINT_WORDS: Array<[RegExp, Constraint]> = [
 const HEALTH_WORDS = /léger|healthy|calories?|régime|diète|minceur/i
 const BUDGET_WORDS = /\bcher\b|économique|abordable|budget|coûte|prix/i
 const AVOID_WORDS = /j'aime pas|je n'aime pas|j'evite|je deteste/
+/** Déclenche un retrait plutôt qu'un ajout dans `extractSlots` — contrainte ou ingrédient déjà
+ * posé dans le fil que l'utilisateur annule ("finalement pas de poulet", "en fait peu importe
+ * le sans-gluten"). Testé sur le texte normalisé, même registre que `AVOID_WORDS`/`BUDGET_WORDS`. */
+const RETRACT_WORDS = /finalement|en fait|plutot pas|peu importe|oublie|annule/
 
 const INGREDIENT_WORDS: string[] = [
   'poulet',
@@ -244,11 +261,16 @@ function normalize(text: string): string {
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
     .replace(/œ/g, 'oe')
-    .replace(/[‘’]/g, "'")
+    .replace(/['']/g, "'")
 }
 
 export function extractSlots(text: string, prev: AgentSlots): AgentSlots {
-  const next: AgentSlots = { ...prev, ingredients: [...prev.ingredients], avoidIngredients: [...prev.avoidIngredients] }
+  const next: AgentSlots = {
+    ...prev,
+    ingredients: [...prev.ingredients],
+    avoidIngredients: [...prev.avoidIngredients],
+    constraints: [...prev.constraints],
+  }
   const norm = normalize(text)
 
   for (const [re, val] of TIME_WORDS) {
@@ -267,10 +289,14 @@ export function extractSlots(text: string, prev: AgentSlots): AgentSlots {
     }
   }
 
+  const isRetractTurn = RETRACT_WORDS.test(norm)
+
   for (const [re, val] of CONSTRAINT_WORDS) {
-    if (re.test(text)) {
-      next.constraint = val
-      break
+    if (!re.test(text)) continue
+    if (isRetractTurn) {
+      next.constraints = next.constraints.filter((c) => c !== val)
+    } else if (!next.constraints.includes(val)) {
+      next.constraints.push(val)
     }
   }
 
@@ -284,13 +310,18 @@ export function extractSlots(text: string, prev: AgentSlots): AgentSlots {
 
   // Un tour qui exprime un dégoût ("j'aime pas X") va au slot avoidIngredients plutôt qu'au
   // slot ingredients ("ce que j'ai") — un même tour ne porte qu'une seule de ces deux intentions.
+  // Un tour de retrait (isRetractTurn) est prioritaire sur les deux : il retire l'ingrédient
+  // reconnu des deux slots plutôt que de l'ajouter à l'un d'eux.
   const isAvoidTurn = AVOID_WORDS.test(norm)
 
   for (const word of INGREDIENT_WORDS) {
     const key = normalize(word).replace('pâtes', 'pates')
     if (!norm.includes(key)) continue
     const canonical = key === 'courgettes' ? 'courgette' : key === 'abricots' ? 'abricot' : key
-    if (isAvoidTurn) {
+    if (isRetractTurn) {
+      next.ingredients = next.ingredients.filter((i) => i !== canonical && i !== key)
+      next.avoidIngredients = next.avoidIngredients.filter((i) => i !== canonical && i !== key)
+    } else if (isAvoidTurn) {
       if (!next.avoidIngredients.includes(canonical)) next.avoidIngredients.push(canonical)
     } else if (!next.ingredients.includes('pates') && !next.ingredients.includes(key) && !next.ingredients.includes(canonical)) {
       next.ingredients.push(canonical)
@@ -306,7 +337,9 @@ function scoreRecipe(recipe: Recipe, slots: AgentSlots): number {
   for (const ingredient of slots.ingredients) {
     if (tags.includes(ingredient) || tags.includes(ingredient === 'pates' ? 'pates' : ingredient)) score += 3
   }
-  if (slots.constraint && constraintSatisfiedBy(recipe, slots.constraint)) score += 2
+  for (const constraint of slots.constraints) {
+    if (constraintSatisfiedBy(recipe, constraint)) score += 2
+  }
   if (slots.time !== undefined && recipe.duration <= slots.time + 5) score += 1
   return score
 }
@@ -355,8 +388,9 @@ export function buildRecipeSlate(slots: AgentSlots, limit = TOP_N): { recipes: R
 function reasonFor(recipe: Recipe, slots: AgentSlots): string {
   const bits: string[] = []
   if (slots.time !== undefined) bits.push(`prête en ${recipe.duration} min`)
-  if (slots.constraint === 'enfant') bits.push('adaptée aux enfants')
-  if (slots.constraint === 'sans-sauce') bits.push('sans sauce')
+  for (const constraint of slots.constraints) {
+    if (constraint !== 'allergie') bits.push(RELAXED_REASON[constraint])
+  }
   if (slots.ingredients.length > 0) bits.push(`utilise ${slots.ingredients.join(', ')}`)
   if (bits.length === 0) bits.push('correspond à ce que vous avez décrit')
   return bits.join(', ')
@@ -368,7 +402,15 @@ export function recommendationMessage(recipe: Recipe, reason: string): string {
 }
 
 export function hasEnoughSignal(slots: AgentSlots): boolean {
-  return slots.ingredients.length > 0 || slots.time !== undefined || slots.servings !== undefined || slots.constraint !== undefined
+  return slots.ingredients.length > 0 || slots.time !== undefined || slots.servings !== undefined || slots.constraints.length > 0
+}
+
+/** Jointure des formes accordées de `RELAXED_REASON` pour plusieurs contraintes abandonnées à la
+ * fois — "et" avant le dernier élément, virgule entre les précédents (français standard). */
+function joinReasons(constraints: Constraint[]): string {
+  const reasons = constraints.map((c) => RELAXED_REASON[c])
+  if (reasons.length <= 1) return reasons.join('')
+  return `${reasons.slice(0, -1).join(', ')} et ${reasons[reasons.length - 1]}`
 }
 
 /**
@@ -403,19 +445,21 @@ export function processTurn(text: string, prevSlots: AgentSlots, clarifyAttempts
 
   if (!hasRealMatch) {
     if (clarifyAttempts >= 1) {
-      // Cas dégradé : aucune recette ne correspond → on relâche la contrainte la plus stricte.
+      // Cas dégradé : aucune recette ne correspond → on relâche toutes les contraintes d'un
+      // coup plutôt que d'en relâcher une à la fois (pas d'ordre de priorité/spécificité
+      // défini entre les 8 valeurs de Constraint — décision produit du 2026-08-07).
       const top = recipes[0]
-      const droppedConstraint = slots.constraint ?? 'contrainte'
-      const reason = slots.constraint ? RELAXED_REASON[slots.constraint] : undefined
+      const droppedConstraints = slots.constraints
       return {
         slots,
         result: {
           kind: 'relaxed',
           recipes,
-          droppedConstraint,
-          message: reason
-            ? `Je n'ai pas trouvé de recette ${reason}, voici ce qui s'en rapproche le plus : ${top.recipe.name}.`
-            : `Je n'ai pas trouvé de recette qui corresponde exactement, voici ce qui s'en rapproche le plus : ${top.recipe.name}.`,
+          droppedConstraints,
+          message:
+            droppedConstraints.length > 0
+              ? `Je n'ai pas trouvé de recette ${joinReasons(droppedConstraints)}, voici ce qui s'en rapproche le plus : ${top.recipe.name}.`
+              : `Je n'ai pas trouvé de recette qui corresponde exactement, voici ce qui s'en rapproche le plus : ${top.recipe.name}.`,
         },
       }
     }
@@ -434,7 +478,7 @@ export function processTurn(text: string, prevSlots: AgentSlots, clarifyAttempts
       slots,
       result: {
         kind: 'clarify',
-        message: 'Vous avez combien de temps, ou vous êtes combien à table ? Ça m’aide à choisir la bonne version.',
+        message: "Vous avez combien de temps, ou vous êtes combien à table ? Ça m'aide à choisir la bonne version.",
       },
     }
   }
@@ -445,4 +489,4 @@ export function processTurn(text: string, prevSlots: AgentSlots, clarifyAttempts
   }
 }
 
-export const EMPTY_SLOTS: AgentSlots = { ingredients: [], avoidIngredients: [] }
+export const EMPTY_SLOTS: AgentSlots = { ingredients: [], avoidIngredients: [], constraints: [] }
