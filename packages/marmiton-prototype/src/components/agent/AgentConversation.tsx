@@ -11,7 +11,7 @@ import {
   pantryMatch,
   avoidedIngredientMatch,
   selectTip,
-  constraintLabel,
+  constraintLabels,
   selectCommunityQuote,
   isInSeason,
   type AgentSlots,
@@ -42,8 +42,8 @@ interface CardData {
   /** Ingrédients de cette recette que la conversation a signalés comme évités par goût — informationnel, ne filtre jamais la recommandation. */
   avoidedIngredients: string[]
   health?: { calories?: number; protein?: number }
-  /** Label de contrainte confirmée (ex. "Végétarien"), absent sur un quasi-match ou pour `allergie`. */
-  constraintLabel?: string
+  /** Labels de contraintes confirmées (ex. "Végétarien", "Sans gluten"), vide sur un quasi-match ou pour `allergie`. */
+  constraintLabels: string[]
   inSeason?: boolean
   servings?: number
 }
@@ -88,7 +88,7 @@ function nextChips(slots: AgentSlots): Chip[] {
       { label: '4 personnes', text: '4 personnes' },
     ]
   }
-  if (slots.constraint === undefined) {
+  if (slots.constraints.length === 0) {
     return [
       { label: 'Enfant difficile', text: "un enfant qui n'aime pas trop la sauce" },
       { label: 'Végétarien', text: 'plutôt végétarien' },
@@ -102,12 +102,12 @@ function cardExtras(recipe: Recipe, slots: AgentSlots, matched: boolean) {
     pantryMatch: pantryMatch(recipe, slots),
     tip: selectTip(recipe, slots),
     communityQuote: selectCommunityQuote(recipe, slots, matched),
-    allergens: slots.constraint === 'allergie' ? recipe.allergens : undefined,
+    allergens: slots.constraints.includes('allergie') ? recipe.allergens : undefined,
     avoidedIngredients: avoidedIngredientMatch(recipe, slots),
     // Affichée directement dès que la recette porte la donnée — plus besoin de la demander
     // via une action séparée (ancien chip "Infos nutrition").
     health: recipe.calories !== undefined ? { calories: recipe.calories, protein: recipe.protein } : undefined,
-    constraintLabel: constraintLabel(recipe, slots, matched),
+    constraintLabels: constraintLabels(recipe, slots, matched),
     inSeason: isInSeason(recipe),
     servings: slots.servings,
   }
@@ -149,6 +149,11 @@ function newId() {
 
 export function AgentConversation({ open, onClose, initialMessage }: AgentConversationProps) {
   const router = useRouter()
+
+  function goToRecipe(recipeId: string) {
+    router.push(`/recipe?recipe=${recipeId}`)
+  }
+
   const [messages, setMessages] = useState<Message[]>([])
   const [slots, setSlots] = useState<AgentSlots>(EMPTY_SLOTS)
   const [clarifyAttempts, setClarifyAttempts] = useState(0)
@@ -303,7 +308,7 @@ export function AgentConversation({ open, onClose, initialMessage }: AgentConver
                       <button
                         type="button"
                         className="chat-card__top"
-                        onClick={() => router.push(`/recipe?recipe=${card.recipe.id}`)}
+                        onClick={() => goToRecipe(card.recipe.id)}
                         aria-label={`Voir la recette ${card.recipe.name}`}
                       >
                         <span className="chat-card__header">
@@ -339,7 +344,7 @@ export function AgentConversation({ open, onClose, initialMessage }: AgentConver
                           </span>
                         </span>
 
-                        {(!card.matched || card.constraintLabel || card.inSeason) && (
+                        {(!card.matched || card.constraintLabels.length > 0 || card.inSeason) && (
                           <span className="chat-card__chips">
                             {!card.matched && (
                               <span className="chat-card__compromise">
@@ -347,11 +352,11 @@ export function AgentConversation({ open, onClose, initialMessage }: AgentConver
                                 Le plus proche, sans cette contrainte
                               </span>
                             )}
-                            {card.constraintLabel && (
-                              <span className="chat-card__chip-static">
-                                <ChipTag type="toned" size="S" label={card.constraintLabel} />
+                            {card.constraintLabels.map((label) => (
+                              <span key={label} className="chat-card__chip-static">
+                                <ChipTag type="toned" size="S" label={label} />
                               </span>
-                            )}
+                            ))}
                             {card.inSeason && (
                               <span className="chat-card__chip-static">
                                 <ChipTag type="toned" size="S" label="De saison" />
@@ -416,6 +421,14 @@ export function AgentConversation({ open, onClose, initialMessage }: AgentConver
                           )}
                         </div>
                       )}
+
+                      <Button
+                        variant="secondary"
+                        size="S"
+                        label="Voir la recette"
+                        onClick={() => goToRecipe(card.recipe.id)}
+                        className="chat-card__cta"
+                      />
                     </div>
                   ))}
                 </ChatCarousel>
