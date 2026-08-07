@@ -478,7 +478,7 @@ export function processTurn(text: string, prevSlots: AgentSlots, clarifyAttempts
       slots,
       result: {
         kind: 'clarify',
-        message: "Vous avez combien de temps, ou vous êtes combien à table ? Ça m'aide à choisir la bonne version.",
+        message: "Vous avez combien de temps, ou vous êtes combien à table ? Ça m’aide à choisir la bonne version.",
       },
     }
   }
