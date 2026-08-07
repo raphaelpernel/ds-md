@@ -276,6 +276,15 @@ describe('processTurn — recommandation multi-recettes', () => {
       expect(result.reason).toContain('végétarienne')
     }
   })
+
+  it("reasonFor n'inclut que les contraintes réellement satisfaites par la recette recommandée", () => {
+    const { result } = processTurn('vegetarien et sans gluten, 25 min', EMPTY_SLOTS, 0)
+    expect(result.kind).toBe('recommend')
+    if (result.kind === 'recommend') {
+      expect(result.reason).toContain('végétarienne')
+      expect(result.reason).not.toContain('sans gluten')
+    }
+  })
 })
 
 describe('extractSlots — vegan distinct de végétarien', () => {

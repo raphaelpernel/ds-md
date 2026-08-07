@@ -88,7 +88,7 @@ export function selectTip(recipe: Recipe, slots: AgentSlots): string | undefined
   return recipe.tip
 }
 
-const CONSTRAINT_LABELS: Record<Exclude<Constraint, 'allergie'>, string> = {
+export const CONSTRAINT_LABELS: Record<Exclude<Constraint, 'allergie'>, string> = {
   enfant: 'Adapté aux enfants',
   'sans-sauce': 'Sans sauce',
   vegetarien: 'Végétarien',
@@ -388,8 +388,8 @@ export function buildRecipeSlate(slots: AgentSlots, limit = TOP_N): { recipes: R
 function reasonFor(recipe: Recipe, slots: AgentSlots): string {
   const bits: string[] = []
   if (slots.time !== undefined) bits.push(`prête en ${recipe.duration} min`)
-  for (const constraint of slots.constraints) {
-    if (constraint !== 'allergie') bits.push(RELAXED_REASON[constraint])
+  for (const constraint of satisfiedConstraints(recipe, slots, true)) {
+    bits.push(RELAXED_REASON[constraint])
   }
   if (slots.ingredients.length > 0) bits.push(`utilise ${slots.ingredients.join(', ')}`)
   if (bits.length === 0) bits.push('correspond à ce que vous avez décrit')
@@ -405,12 +405,17 @@ export function hasEnoughSignal(slots: AgentSlots): boolean {
   return slots.ingredients.length > 0 || slots.time !== undefined || slots.servings !== undefined || slots.constraints.length > 0
 }
 
-/** Jointure des formes accordées de `RELAXED_REASON` pour plusieurs contraintes abandonnées à la
- * fois — "et" avant le dernier élément, virgule entre les précédents (français standard). */
+/** Jointure de style liste française : "et" avant le dernier élément, virgule entre les
+ * précédents. Généraliste — `joinReasons` (ci-dessous) l'utilise pour des `RELAXED_REASON`,
+ * `recipeAskScript.ts` l'utilise pour un mélange de labels de contrainte et de noms d'ingrédients. */
+export function joinList(items: string[]): string {
+  if (items.length <= 1) return items.join('')
+  return `${items.slice(0, -1).join(', ')} et ${items[items.length - 1]}`
+}
+
+/** Jointure des formes accordées de `RELAXED_REASON` pour plusieurs contraintes abandonnées à la fois. */
 function joinReasons(constraints: Constraint[]): string {
-  const reasons = constraints.map((c) => RELAXED_REASON[c])
-  if (reasons.length <= 1) return reasons.join('')
-  return `${reasons.slice(0, -1).join(', ')} et ${reasons[reasons.length - 1]}`
+  return joinList(constraints.map((c) => RELAXED_REASON[c]))
 }
 
 /**

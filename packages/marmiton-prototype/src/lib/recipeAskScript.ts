@@ -1,5 +1,15 @@
-import { extractSlots, selectTip, pantryMatch, avoidedIngredientMatch, constraintSatisfiedBy, RELAXED_REASON, EMPTY_SLOTS } from './agentScript'
-import type { AgentSlots, PantryMatch } from './agentScript'
+import {
+  extractSlots,
+  selectTip,
+  pantryMatch,
+  avoidedIngredientMatch,
+  constraintSatisfiedBy,
+  CONSTRAINT_LABELS,
+  RELAXED_REASON,
+  joinList,
+  EMPTY_SLOTS,
+} from './agentScript'
+import type { AgentSlots, Constraint, PantryMatch } from './agentScript'
 import type { Recipe } from '../data/types/recipe'
 
 /**
@@ -199,13 +209,18 @@ export function answerRecipeAsk(
   // Accusé de retrait explicite : contrairement à /agent (moteur multi-recette, où le retrait
   // se reflète silencieusement dans la prochaine recommandation), ce drawer est un dialogue
   // direct sur une recette déjà affichée — un retrait silencieux serait déroutant ici.
-  const retractedConstraints = prevSlots.constraints.filter((c) => c !== 'allergie' && !slots.constraints.includes(c))
+  const retractedConstraints = prevSlots.constraints.filter(
+    (c): c is Exclude<Constraint, 'allergie'> => c !== 'allergie' && !slots.constraints.includes(c)
+  )
   const retractedIngredients = Array.from(new Set([...prevSlots.ingredients, ...prevSlots.avoidIngredients])).filter(
     (i) => !slots.ingredients.includes(i) && !slots.avoidIngredients.includes(i)
   )
   if (retractedConstraints.length > 0 || retractedIngredients.length > 0) {
-    const labels = [...retractedConstraints.map((c) => RELAXED_REASON[c]), ...retractedIngredients]
-    bits.push(`D'accord, je ne tiens plus compte de : ${labels.join(', ')}.`)
+    const labels = [
+      ...retractedConstraints.map((c) => CONSTRAINT_LABELS[c].toLowerCase()),
+      ...retractedIngredients,
+    ]
+    bits.push(`D'accord, je ne tiens plus compte de : ${joinList(labels)}.`)
   }
 
   if (bits.length === 0 && prevSlots.time === undefined && slots.time !== undefined) {

@@ -319,7 +319,15 @@ describe('answerRecipeAsk', () => {
     expect(first.slots.constraints).toEqual(['sans-gluten'])
     expect(first.slots.ingredients).toEqual(['poulet'])
     const second = answerRecipeAsk(recipe, 'en fait oublie le sans gluten et le poulet', first.slots)
-    expect(second.answer.message).toBe("D'accord, je ne tiens plus compte de : sans gluten, poulet.")
+    expect(second.answer.message).toBe("D'accord, je ne tiens plus compte de : sans gluten et poulet.")
+  })
+
+  it("utilise le label neutre (pas la forme accordée) dans l'accusé de retrait, pour une contrainte où les deux diffèrent", () => {
+    const recipe = makeRecipe({ tags: [] })
+    const first = answerRecipeAsk(recipe, 'pour un enfant', EMPTY_SLOTS)
+    expect(first.slots.constraints).toEqual(['enfant'])
+    const second = answerRecipeAsk(recipe, 'finalement pas pour un enfant', first.slots)
+    expect(second.answer.message).toBe("D'accord, je ne tiens plus compte de : adapté aux enfants.")
   })
 
   it("ne fait rien de visible quand le retrait n'a pas de mot-clé identifiable", () => {
