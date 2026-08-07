@@ -269,7 +269,7 @@ describe('processTurn — recommandation multi-recettes', () => {
     }
   })
 
-  it('reasonFor inclut désormais toutes les contraintes, pas seulement enfant/sans-sauce', () => {
+  it('reasonFor inclut toute contrainte satisfaite, pas seulement enfant/sans-sauce', () => {
     const { result } = processTurn('vegetarien, 20 minutes', EMPTY_SLOTS, 0)
     expect(result.kind).toBe('recommend')
     if (result.kind === 'recommend') {
