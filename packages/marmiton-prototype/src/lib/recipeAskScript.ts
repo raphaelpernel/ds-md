@@ -112,6 +112,7 @@ function normalize(text: string): string {
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
     .replace(/œ/g, 'oe')
+    .replace(/[‘’]/g, "'")
 }
 
 /**
@@ -211,7 +212,6 @@ export function answerRecipeAsk(
     } else {
       equipmentNote = `Cette recette ne nécessite pas de ${askedEquipment}.`
     }
-    bits.push(equipmentNote)
   }
 
   let ingredientSubstituteNote: string | undefined
@@ -220,7 +220,6 @@ export function answerRecipeAsk(
     ingredientSubstituteNote = askedIngredient.substitute
       ? `Pas de souci, vous pouvez remplacer ${askedIngredient.name.toLowerCase()} par ${askedIngredient.substitute}.`
       : `Je n'ai pas de suggestion précise pour remplacer ${askedIngredient.name.toLowerCase()}, mais vous pouvez tenter une texture ou un goût similaire.`
-    bits.push(ingredientSubstituteNote)
   }
 
   let avoidedIngredientNote: string | undefined
@@ -233,14 +232,18 @@ export function answerRecipeAsk(
       avoidedIngredientNote = substitute
         ? `Cette recette contient ${name.toLowerCase()}, que vous évitez : vous pouvez le remplacer par ${substitute}.`
         : `Cette recette contient ${name.toLowerCase()}, que vous évitez.`
-      bits.push(avoidedIngredientNote)
+      // Un même ingrédient ne doit pas déclencher les deux bandeaux à la fois (ex. "j'aime pas
+      // les lardons, je remplace par quoi ?" coche les deux détections) — le bandeau "évité"
+      // est le plus riche des deux (avertissement + suggestion), il prime sur la substitution.
+      if (askedIngredient && normalize(askedIngredient.name) === normalize(name)) {
+        ingredientSubstituteNote = undefined
+      }
     }
   }
 
   let budgetNote: string | undefined
   if (!prevSlots.budgetFocus && slots.budgetFocus) {
     budgetNote = `Cette recette coûte environ ${recipe.estimatedPricePerServing.toFixed(2).replace('.', ',')} € par personne.`
-    bits.push(budgetNote)
   }
 
   const match = pantryMatch(recipe, slots)

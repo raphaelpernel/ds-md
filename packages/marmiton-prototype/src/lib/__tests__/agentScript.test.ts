@@ -269,6 +269,10 @@ describe('extractSlots — avoidIngredients (dégoût, distinct de "j\'ai")', ()
     expect(extractSlots("j'évite les lardons", EMPTY_SLOTS).avoidIngredients).toEqual(['lardons'])
   })
 
+  it('reconnaît une apostrophe typographique (courbe) comme équivalente à une apostrophe droite', () => {
+    expect(extractSlots('j’aime pas les courgettes', EMPTY_SLOTS).avoidIngredients).toEqual(['courgette'])
+  })
+
   it('ne mélange pas un ingrédient évité avec un ingrédient déclaré dans un tour différent', () => {
     const first = extractSlots("j'ai déjà du poulet", EMPTY_SLOTS)
     expect(first.ingredients).toEqual(['poulet'])

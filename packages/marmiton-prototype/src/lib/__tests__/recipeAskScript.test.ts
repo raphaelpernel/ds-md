@@ -166,7 +166,7 @@ describe('answerRecipeAsk', () => {
     expect(answer.equipmentNote).toBe(
       'Pas de souci, vous pouvez remplacer le four par une poêle avec couvercle, à feu doux, en surveillant la cuisson.'
     )
-    expect(answer.message).toBe(answer.equipmentNote)
+    expect(answer.message).toBe('Voici ce que je peux vous dire sur cette recette.')
   })
 
   it("indique que l'équipement demandé n'est pas nécessaire quand la recette ne le requiert pas", () => {
@@ -276,5 +276,14 @@ describe('answerRecipeAsk', () => {
     expect(first.answer.avoidedIngredientNote).toBeDefined()
     const second = answerRecipeAsk(recipe, "j'aime pas le poulet", first.slots)
     expect(second.answer.avoidedIngredientNote).toBe('Cette recette contient escalopes de poulet, que vous évitez.')
+  })
+
+  it("ne double-affiche pas la substitution et l'évitement pour le même ingrédient dans la même question", () => {
+    const recipe = makeRecipe({
+      ingredients: [{ id: 'i1', name: 'Lardons fumés', quantity: 200, unit: 'g', emoji: '🥓', productId: 'p1' }],
+    })
+    const { answer } = answerRecipeAsk(recipe, "j'aime pas les lardons, je remplace par quoi ?", EMPTY_SLOTS)
+    expect(answer.avoidedIngredientNote).toBeDefined()
+    expect(answer.ingredientSubstituteNote).toBeUndefined()
   })
 })

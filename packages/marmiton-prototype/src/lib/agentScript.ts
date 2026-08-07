@@ -77,8 +77,8 @@ export function avoidedIngredientMatch(recipe: Recipe, slots: AgentSlots): strin
 
 /**
  * Choisit l'astuce la plus pertinente pour le contexte de la conversation. `tipForKids`
- * prend le pas sur `tip` quand la contrainte détectée est « enfant » — les autres contextes
- * de risque (ex. débutant) ne sont pas encore détectables par le classificateur (Lot 1).
+ * prend le pas sur `tip` quand la contrainte détectée est « enfant », `tipForBeginners`
+ * quand elle est « debutant ».
  */
 export function selectTip(recipe: Recipe, slots: AgentSlots): string | undefined {
   if (slots.constraint === 'enfant' && recipe.tipForKids) return recipe.tipForKids
@@ -132,7 +132,8 @@ function constraintSatisfiedBy(recipe: Recipe, constraint: Constraint): boolean 
 
 /**
  * Label de correspondance à afficher sur la carte quand la contrainte exprimée est
- * réellement satisfaite par la recette recommandée (présente dans `recipe.tags`).
+ * réellement satisfaite par la recette recommandée (`recipe.tags`, sauf `debutant` qui
+ * se base sur `recipe.difficulty` — voir `constraintSatisfiedBy`).
  */
 export function constraintLabel(recipe: Recipe, slots: AgentSlots, matched: boolean): string | undefined {
   if (!constraintApplies(slots, matched)) return undefined
@@ -242,6 +243,8 @@ function normalize(text: string): string {
     .toLowerCase()
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
+    .replace(/œ/g, 'oe')
+    .replace(/[‘’]/g, "'")
 }
 
 export function extractSlots(text: string, prev: AgentSlots): AgentSlots {
