@@ -261,7 +261,7 @@ function normalize(text: string): string {
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
     .replace(/œ/g, 'oe')
-    .replace(/['']/g, "'")
+    .replace(/[‘’]/g, "'")
 }
 
 export function extractSlots(text: string, prev: AgentSlots): AgentSlots {
