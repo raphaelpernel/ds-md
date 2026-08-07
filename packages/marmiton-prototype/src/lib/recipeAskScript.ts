@@ -1,4 +1,4 @@
-import { extractSlots, selectTip, pantryMatch, avoidedIngredientMatch, constraintLabel, RELAXED_REASON, EMPTY_SLOTS } from './agentScript'
+import { extractSlots, selectTip, pantryMatch, avoidedIngredientMatch, constraintSatisfiedBy, RELAXED_REASON, EMPTY_SLOTS } from './agentScript'
 import type { AgentSlots, PantryMatch } from './agentScript'
 import type { Recipe } from '../data/types/recipe'
 
@@ -162,36 +162,50 @@ export function answerRecipeAsk(
 
   let allergens: string[] | undefined
 
-  if (slots.constraint === 'allergie') {
+  const newlyAddedConstraints = slots.constraints.filter((c) => !prevSlots.constraints.includes(c))
+
+  // Allergie traitée à part : la question "sécurité alimentaire" a une réponse dédiée
+  // (liste complète des allergènes), pas un simple oui/non de correspondance.
+  if (newlyAddedConstraints.includes('allergie')) {
     allergens = recipe.allergens ?? []
     bits.push(
       allergens.length > 0
         ? `Cette recette contient : ${allergens.join(', ').toLowerCase()}.`
         : "Aucun allergène n'est signalé pour cette recette."
     )
-  } else if (slots.constraint && prevSlots.constraint !== slots.constraint) {
-    // Contrainte nouvellement détectée à ce tour seulement — sinon le message
-    // "Oui, cette recette est..." / "n'est pas signalée comme..." rejouerait à
-    // chaque tour suivant du même fil, alors que `slots.constraint` persiste via
-    // `extractSlots(text, prevSlots)`. L'avis communautaire (s'il existe) est fondu
-    // dans la même phrase plutôt qu'affiché à part : dans un fil de chat linéaire,
-    // un bandeau "Selon les avis" séparé + un chip dupliquant la même info que la
-    // phrase n'apportent rien qu'une carte de recommandation scannée n'apporterait
-    // (retour utilisateur du 2026-08-05) — une seule bulle de texte suffit.
-    const label = constraintLabel(recipe, slots, true)
-    if (label) {
-      const quote =
-        slots.constraint === 'debutant' || slots.constraint === 'vegan'
-          ? undefined
-          : findRecipeReview(recipe, slots.constraint)
+  }
+
+  // Une phrase de confirmation par contrainte nouvellement mentionnée ce tour (hors allergie,
+  // traitée ci-dessus) — sinon le message rejouerait à chaque tour suivant du même fil, alors
+  // que `slots.constraints` persiste via `extractSlots(text, prevSlots)`. L'avis communautaire
+  // (s'il existe) est fondu dans la même phrase plutôt qu'affiché à part : dans un fil de chat
+  // linéaire, un bandeau "Selon les avis" séparé + un chip dupliquant la même info que la
+  // phrase n'apportent rien qu'une carte de recommandation scannée n'apporterait (retour
+  // utilisateur du 2026-08-05) — une seule bulle de texte suffit.
+  for (const constraint of newlyAddedConstraints) {
+    if (constraint === 'allergie') continue
+    if (constraintSatisfiedBy(recipe, constraint)) {
+      const quote = constraint === 'debutant' || constraint === 'vegan' ? undefined : findRecipeReview(recipe, constraint)
       bits.push(
         quote
-          ? `Oui, cette recette est ${RELAXED_REASON[slots.constraint]} : d'après les avis, « ${quote.text} »`
-          : `Oui, cette recette est ${RELAXED_REASON[slots.constraint]}.`
+          ? `Oui, cette recette est ${RELAXED_REASON[constraint]} : d'après les avis, « ${quote.text} »`
+          : `Oui, cette recette est ${RELAXED_REASON[constraint]}.`
       )
     } else {
-      bits.push(`Cette recette n'est pas signalée comme ${RELAXED_REASON[slots.constraint]}.`)
+      bits.push(`Cette recette n'est pas signalée comme ${RELAXED_REASON[constraint]}.`)
     }
+  }
+
+  // Accusé de retrait explicite : contrairement à /agent (moteur multi-recette, où le retrait
+  // se reflète silencieusement dans la prochaine recommandation), ce drawer est un dialogue
+  // direct sur une recette déjà affichée — un retrait silencieux serait déroutant ici.
+  const retractedConstraints = prevSlots.constraints.filter((c) => !slots.constraints.includes(c))
+  const retractedIngredients = Array.from(new Set([...prevSlots.ingredients, ...prevSlots.avoidIngredients])).filter(
+    (i) => !slots.ingredients.includes(i) && !slots.avoidIngredients.includes(i)
+  )
+  if (retractedConstraints.length > 0 || retractedIngredients.length > 0) {
+    const labels = [...retractedConstraints.map((c) => RELAXED_REASON[c]), ...retractedIngredients]
+    bits.push(`D'accord, je ne tiens plus compte de : ${labels.join(', ')}.`)
   }
 
   if (bits.length === 0 && prevSlots.time === undefined && slots.time !== undefined) {

@@ -139,7 +139,7 @@ describe('answerRecipeAsk', () => {
     const recipe = makeRecipe({ tags: ['vegetarien'] })
     const first = answerRecipeAsk(recipe, 'Une alternative végétarienne ?', EMPTY_SLOTS)
     const second = answerRecipeAsk(recipe, "j'ai du poulet", first.slots)
-    expect(second.slots.constraint).toBe('vegetarien')
+    expect(second.slots.constraints).toEqual(['vegetarien'])
   })
 
   it("ne répète pas le message de contrainte (avis inclus) au tour suivant du même fil", () => {
@@ -285,5 +285,48 @@ describe('answerRecipeAsk', () => {
     const { answer } = answerRecipeAsk(recipe, "j'aime pas les lardons, je remplace par quoi ?", EMPTY_SLOTS)
     expect(answer.avoidedIngredientNote).toBeDefined()
     expect(answer.ingredientSubstituteNote).toBeUndefined()
+  })
+
+  it('confirme plusieurs contraintes nouvellement mentionnées dans le même tour', () => {
+    const recipe = makeRecipe({ tags: ['vegetarien'] })
+    const { answer } = answerRecipeAsk(recipe, 'Un plat végétarien et sans gluten ?', EMPTY_SLOTS)
+    expect(answer.message).toBe(
+      "Oui, cette recette est végétarienne. Cette recette n'est pas signalée comme sans gluten."
+    )
+  })
+
+  it("accuse réception d'une contrainte retirée entre deux tours", () => {
+    const recipe = makeRecipe({ tags: [] })
+    const first = answerRecipeAsk(recipe, 'Une version sans gluten ?', EMPTY_SLOTS)
+    expect(first.slots.constraints).toEqual(['sans-gluten'])
+    const second = answerRecipeAsk(recipe, 'en fait peu importe le sans gluten', first.slots)
+    expect(second.slots.constraints).toEqual([])
+    expect(second.answer.message).toBe("D'accord, je ne tiens plus compte de : sans gluten.")
+  })
+
+  it("accuse réception d'un ingrédient retiré entre deux tours", () => {
+    const recipe = makeRecipe({ ingredients: [] })
+    const first = answerRecipeAsk(recipe, "j'ai du poulet", EMPTY_SLOTS)
+    expect(first.slots.ingredients).toEqual(['poulet'])
+    const second = answerRecipeAsk(recipe, 'finalement pas de poulet', first.slots)
+    expect(second.slots.ingredients).toEqual([])
+    expect(second.answer.message).toBe("D'accord, je ne tiens plus compte de : poulet.")
+  })
+
+  it('accuse réception dans un seul message quand contrainte et ingrédient sont retirés ensemble', () => {
+    const recipe = makeRecipe({ tags: [], ingredients: [] })
+    const first = answerRecipeAsk(recipe, 'sans gluten, avec du poulet', EMPTY_SLOTS)
+    expect(first.slots.constraints).toEqual(['sans-gluten'])
+    expect(first.slots.ingredients).toEqual(['poulet'])
+    const second = answerRecipeAsk(recipe, 'en fait oublie le sans gluten et le poulet', first.slots)
+    expect(second.answer.message).toBe("D'accord, je ne tiens plus compte de : sans gluten, poulet.")
+  })
+
+  it("ne fait rien de visible quand le retrait n'a pas de mot-clé identifiable", () => {
+    const recipe = makeRecipe({ tags: ['vegetarien'] })
+    const first = answerRecipeAsk(recipe, 'Une alternative végétarienne ?', EMPTY_SLOTS)
+    const second = answerRecipeAsk(recipe, 'en fait peu importe', first.slots)
+    expect(second.slots.constraints).toEqual(['vegetarien'])
+    expect(second.answer.message).toBe('Voici ce que je peux vous dire sur cette recette.')
   })
 })
