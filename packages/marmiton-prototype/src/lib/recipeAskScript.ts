@@ -199,7 +199,7 @@ export function answerRecipeAsk(
   // Accusé de retrait explicite : contrairement à /agent (moteur multi-recette, où le retrait
   // se reflète silencieusement dans la prochaine recommandation), ce drawer est un dialogue
   // direct sur une recette déjà affichée — un retrait silencieux serait déroutant ici.
-  const retractedConstraints = prevSlots.constraints.filter((c) => !slots.constraints.includes(c))
+  const retractedConstraints = prevSlots.constraints.filter((c) => c !== 'allergie' && !slots.constraints.includes(c))
   const retractedIngredients = Array.from(new Set([...prevSlots.ingredients, ...prevSlots.avoidIngredients])).filter(
     (i) => !slots.ingredients.includes(i) && !slots.avoidIngredients.includes(i)
   )

@@ -329,4 +329,14 @@ describe('answerRecipeAsk', () => {
     expect(second.slots.constraints).toEqual(['vegetarien'])
     expect(second.answer.message).toBe('Voici ce que je peux vous dire sur cette recette.')
   })
+
+  it("exclut allergie de l'accusé de retrait (jamais de phrase RELAXED_REASON cassée)", () => {
+    const recipe = makeRecipe({ allergens: ['Arachides'] })
+    const first = answerRecipeAsk(recipe, "j'ai une allergie", EMPTY_SLOTS)
+    expect(first.slots.constraints).toEqual(['allergie'])
+    const second = answerRecipeAsk(recipe, `en fait peu importe l${String.fromCharCode(0x2019)}allergie`, first.slots)
+    expect(second.slots.constraints).toEqual([])
+    expect(second.answer.message).not.toContain('allerg')
+    expect(second.answer.message).toBe('Voici ce que je peux vous dire sur cette recette.')
+  })
 })
