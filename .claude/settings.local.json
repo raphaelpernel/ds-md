@@ -209,7 +209,23 @@
       "Bash(\"C:\\\\Users\\\\rapha\\\\.claude\\\\plugins\\\\cache\\\\claude-plugins-official\\\\superpowers\\\\6.2.0\\\\skills\\\\subagent-driven-development\\\\scripts\\\\review-package\" \"packages/marmiton-prototype/docs/superpowers/plans/2026-08-07-questions-users-structurel.md\" 0c996c5 c1ce1466e3293ebeed8b1165dda8c700aa842bda)",
       "Bash(echo \"TSC_EXIT=$?\")",
       "Bash(powershell -Command \"Test-Path 'F:\\\\Workspace\\\\Mealz\\\\CLAUDE\\\\Projects\\\\DS.MD\\\\.superpowers\\\\sdd\\\\2026-08-07-questions-users-structurel'\")",
-      "Bash(\"C:\\\\Users\\\\rapha\\\\.claude\\\\plugins\\\\cache\\\\claude-plugins-official\\\\superpowers\\\\6.2.0\\\\skills\\\\subagent-driven-development\\\\scripts\\\\review-package\" \"packages/marmiton-prototype/docs/superpowers/plans/2026-08-07-questions-users-structurel.md\" c1ce1466e3293ebeed8b1165dda8c700aa842bda 2385279e23b38e832dc260da9e2031848353acb0)"
+      "Bash(\"C:\\\\Users\\\\rapha\\\\.claude\\\\plugins\\\\cache\\\\claude-plugins-official\\\\superpowers\\\\6.2.0\\\\skills\\\\subagent-driven-development\\\\scripts\\\\review-package\" \"packages/marmiton-prototype/docs/superpowers/plans/2026-08-07-questions-users-structurel.md\" c1ce1466e3293ebeed8b1165dda8c700aa842bda 2385279e23b38e832dc260da9e2031848353acb0)",
+      "Bash(cd /tmp)",
+      "Bash(/c/Users/rapha/.claude/skills/gstack/design/dist/design generate --brief 'Mobile app screenshot mockup \\(375x812, iPhone-style viewport\\) for Marmiton'\\\\''s food recipe app conversational-agent hero section, in French. Design language: light/white grounded UI matching Marmiton'\\\\''s real brand — white and very light salmon backgrounds \\(#FFFFFF, #FDF1EE\\), coral-red accent color #FF6F61, warm dark brown text #3F3735, clean modern sans-serif typography \\(Open Sans style\\), pill-shaped UI elements, light card shadows. NOT a dark or moody theme, NOT a saturated gradient background. *)",
+      "Bash(echo \"EXIT_CODE=$?\")",
+      "Bash(claude plugins *)",
+      "mcp__plugin_figma_figma__whoami",
+      "mcp__plugin_figma_figma__get_metadata",
+      "mcp__plugin_figma_figma__get_screenshot",
+      "mcp__plugin_figma_figma__get_variable_defs",
+      "Bash(mkdir -p /c/Users/rapha/AppData/Local/Temp/claude/F--Workspace-Mealz-CLAUDE-Projects-DS-MD/321ea094-3806-46d8-8930-f1b3a3cbea7c/scratchpad/figma)",
+      "Bash(curl -sL -o /c/Users/rapha/AppData/Local/Temp/claude/F--Workspace-Mealz-CLAUDE-Projects-DS-MD/321ea094-3806-46d8-8930-f1b3a3cbea7c/scratchpad/figma/home.png \"https://www.figma.com/api/mcp/asset/42c5fa7a-dee9-4b0b-b042-7dc0dd75e87a.png\")",
+      "Bash(curl -sL -o /c/Users/rapha/AppData/Local/Temp/claude/F--Workspace-Mealz-CLAUDE-Projects-DS-MD/321ea094-3806-46d8-8930-f1b3a3cbea7c/scratchpad/figma/assistant1.png \"https://www.figma.com/api/mcp/asset/e71e717b-773c-4acc-b7c2-d0fdb44f62a1.png\")",
+      "Bash(curl -sL -o /c/Users/rapha/AppData/Local/Temp/claude/F--Workspace-Mealz-CLAUDE-Projects-DS-MD/321ea094-3806-46d8-8930-f1b3a3cbea7c/scratchpad/figma/assistant2.png \"https://www.figma.com/api/mcp/asset/94737fe3-3d77-45af-95bb-fb4551890522.png\")",
+      "Read(//c/Users/rapha/AppData/Local/Temp/claude/F--Workspace-Mealz-CLAUDE-Projects-DS-MD/321ea094-3806-46d8-8930-f1b3a3cbea7c/scratchpad/**)",
+      "mcp__plugin_figma_figma__use_figma",
+      "Bash(curl -sL -o /c/Users/rapha/AppData/Local/Temp/claude/F--Workspace-Mealz-CLAUDE-Projects-DS-MD/321ea094-3806-46d8-8930-f1b3a3cbea7c/scratchpad/figma/user_attempt.png \"https://www.figma.com/api/mcp/asset/5fa584df-ba8f-441b-990e-294f7aebc1b7.png\")",
+      "Read(//c/Users/rapha/AppData/Local/Temp/claude/F--Workspace-Mealz-CLAUDE-Projects-DS-MD/321ea094-3806-46d8-8930-f1b3a3cbea7c/scratchpad/figma/**)"
     ]
   },
   "hooks": {
@@ -219,7 +235,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/hook.mjs\"",
+            "command": "[ ! -f \"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/hook.mjs\" ] || node \"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/hook.mjs\"",
             "timeout": 5,
             "statusMessage": "Checking UI changes"
           }
@@ -231,7 +247,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/hook.mjs\"",
+            "command": "[ ! -f \"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/hook.mjs\" ] || node \"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/hook.mjs\"",
             "timeout": 30,
             "statusMessage": "Design deep pass"
           }

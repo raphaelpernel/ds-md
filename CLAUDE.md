@@ -110,3 +110,13 @@ Key routing rules:
 - Save progress → invoke /context-save
 - Resume context → invoke /context-restore
 - Author a backlog-ready spec/issue → invoke /spec
+
+## Agent skills
+
+### Issue tracker
+
+Issues live in GitHub Issues on `raphaelpernel/ds-md`, via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Domain docs
+
+Multi-context monorepo — a root `CONTEXT-MAP.md` points at per-package `CONTEXT.md` files under `packages/<name>/docs/`. See `docs/agents/domain.md`.
