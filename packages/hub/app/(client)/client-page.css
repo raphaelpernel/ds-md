@@ -1,0 +1,4 @@
+.hub-client-shell {
+  min-height: 100vh;
+  padding: var(--spacing-24);
+}
