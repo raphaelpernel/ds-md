@@ -1,0 +1,110 @@
+.cart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+}
+
+.cart__show-all {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--font-size-body-sm);
+  color: var(--color-interactive-content);
+  font-family: var(--font-family-body);
+  padding: 0;
+}
+
+.cart__show-all:hover {
+  text-decoration: underline;
+}
+
+.cart__store-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-8);
+  margin: var(--spacing-12) var(--spacing-16) 0;
+  padding: var(--spacing-8) var(--spacing-12);
+  background-color: var(--partner-bg-light);
+  border: 1px solid var(--partner-border);
+  border-radius: var(--shape-input);
+}
+
+.cart__store-banner__icon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--partner-content-alt);
+  flex-shrink: 0;
+}
+
+.cart__store-banner__name {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-body-bold);
+  color: var(--partner-content-alt);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cart__store-banner__change,
+.cart__store-banner__choose {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--font-size-body-sm);
+  color: var(--partner-content-alt);
+  font-family: var(--font-family-body);
+  padding: 0;
+  white-space: nowrap;
+  font-weight: var(--font-weight-body-bold);
+}
+
+.cart__store-banner__choose {
+  width: 100%;
+  text-align: center;
+  font-weight: var(--font-weight-body-bold);
+}
+
+.cart__store-banner__change:hover,
+.cart__store-banner__choose:hover {
+  text-decoration: underline;
+}
+
+.cart__sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  padding: var(--spacing-16) var(--spacing-16) 0 var(--spacing-16);
+}
+
+/* Empty state */
+.cart--empty {
+  min-height: 300px;
+}
+
+.cart__empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-8);
+  padding: var(--spacing-32) var(--spacing-16);
+  text-align: center;
+}
+
+.cart__empty-icon {
+  font-size: 48px;
+  line-height: 1;
+}
+
+.cart__empty-title {
+  font-size: var(--font-size-body-lg);
+  font-weight: var(--font-weight-body-bold);
+  color: var(--color-content-default);
+}
+
+.cart__empty-sub {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-content-weak);
+  line-height: var(--line-height-body-sm);
+}

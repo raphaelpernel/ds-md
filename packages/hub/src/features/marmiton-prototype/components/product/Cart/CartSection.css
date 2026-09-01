@@ -1,0 +1,89 @@
+.cart-section {
+  border-radius: var(--shape-card);
+  overflow: hidden;
+  border: 1px solid var(--color-border-weak);
+}
+
+.cart-section__header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-12);
+  padding: var(--spacing-12) var(--spacing-16);
+  background-color: var(--color-surface-secondary);
+  width: 100%;
+  text-align: left;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.cart-section__header:hover {
+  background-color: var(--color-surface-secondary-hover);
+}
+
+.cart-section__visual-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--shape-input);
+  background-color: var(--color-surface-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.cart-section__visual-emoji {
+  font-size: 22px;
+  line-height: 1;
+}
+
+/* Visuel recette — volontairement plus grand que le visuel produit (48px)
+   pour signaler que la recette regroupe plusieurs produits */
+.cart-section__visual-wrap--recipe {
+  width: 96px;
+  height: 96px;
+}
+
+.cart-section__visual-wrap--recipe .cart-section__visual-emoji {
+  font-size: 48px;
+}
+
+.cart-section__visual-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cart-section__meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.cart-section__name {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-body-bold);
+  color: var(--color-content-default);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cart-section__subtitle {
+  font-size: 12px;
+  color: var(--color-content-weak);
+  margin-top: 2px;
+}
+
+.cart-section__chevron {
+  display: flex;
+  align-items: center;
+  color: var(--color-content-weak);
+  flex-shrink: 0;
+}
+
+.cart-section__items {
+  display: flex;
+  flex-direction: column;
+}
