@@ -1,0 +1,173 @@
+.carrefour-login {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+}
+
+.carrefour-login__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-8);
+  padding-bottom: var(--spacing-16);
+  border-bottom: 1px solid var(--color-border-default);
+}
+
+.carrefour-login__brand-sub {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-content-weak);
+  text-align: center;
+}
+
+.carrefour-wordmark {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+}
+
+.carrefour-wordmark__text {
+  font-size: var(--font-size-heading-sm);
+  font-weight: var(--font-weight-heading);
+  color: #004899;
+}
+
+.carrefour-login__error {
+  background-color: var(--color-semantic-danger-bg-light);
+  color: var(--color-semantic-danger-content);
+  border-radius: var(--shape-input);
+  padding: var(--spacing-8) var(--spacing-12);
+  font-size: var(--font-size-body-sm);
+}
+
+.carrefour-login__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+}
+
+.carrefour-login__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.carrefour-login__label {
+  font-size: var(--font-size-label-md);
+  font-weight: var(--font-weight-label);
+  color: var(--color-content-default);
+}
+
+.carrefour-login__input {
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--shape-input);
+  padding: 0 var(--spacing-12);
+  height: var(--spacing-40);
+  font-size: var(--font-size-body-md);
+  font-family: var(--font-family-body);
+  color: var(--color-content-default);
+  background-color: var(--color-surface-primary);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.carrefour-login__input:focus {
+  border-color: #0070CC;
+}
+
+.carrefour-login__input::placeholder {
+  color: var(--color-content-weak);
+}
+
+.carrefour-login__forgot {
+  font-size: var(--font-size-body-sm);
+  color: #0070CC;
+  text-decoration: none;
+  align-self: flex-end;
+}
+
+.carrefour-login__forgot:hover {
+  text-decoration: underline;
+}
+
+.carrefour-login__create {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-content-weak);
+  text-align: center;
+}
+
+.carrefour-login__create a {
+  color: #0070CC;
+  text-decoration: none;
+}
+
+.carrefour-login__create a:hover {
+  text-decoration: underline;
+}
+
+.carrefour-login__demo-btn {
+  background: none;
+  border: 1.5px dashed var(--color-border-default);
+  border-radius: var(--shape-button);
+  padding: 8px 16px;
+  font-size: var(--font-size-body-sm);
+  font-family: var(--font-family-body);
+  color: var(--color-content-weak);
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.carrefour-login__demo-btn:hover {
+  background-color: var(--color-surface-secondary);
+  color: var(--color-content-default);
+}
+
+/* Footer actions */
+.carrefour-login__footer-actions {
+  display: flex;
+  gap: var(--spacing-8);
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.carrefour-login__btn-secondary {
+  background: none;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--shape-button);
+  padding: 0 var(--spacing-16);
+  height: var(--spacing-40);
+  font-size: var(--font-size-label-md);
+  font-family: var(--font-family-label);
+  color: var(--color-content-default);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.carrefour-login__btn-secondary:hover {
+  background-color: var(--color-surface-secondary);
+}
+
+.carrefour-login__btn-primary {
+  background-color: var(--partner-bg);
+  color: var(--partner-content);
+  border: none;
+  border-radius: var(--shape-button);
+  padding: 0 var(--spacing-20);
+  height: var(--spacing-40);
+  font-size: var(--font-size-label-md);
+  font-weight: var(--font-weight-label);
+  font-family: var(--font-family-label);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.carrefour-login__btn-primary:hover:not(:disabled) {
+  background-color: var(--partner-bg-hover);
+}
+
+.carrefour-login__btn-primary:disabled {
+  background-color: var(--color-interactive-disabled-bg);
+  color: var(--color-interactive-disabled-content);
+  cursor: not-allowed;
+}

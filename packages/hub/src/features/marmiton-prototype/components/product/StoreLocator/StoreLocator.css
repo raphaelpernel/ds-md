@@ -1,0 +1,33 @@
+.store-locator {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+}
+
+.store-locator__nearby-label {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-body-bold);
+  color: var(--color-content-weak);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.store-locator__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.store-locator__empty {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-content-weak);
+  text-align: center;
+  padding: var(--spacing-16) 0;
+}
+
+.store-locator__footer-actions {
+  display: flex;
+  gap: var(--spacing-8);
+  width: 100%;
+  justify-content: flex-end;
+}
