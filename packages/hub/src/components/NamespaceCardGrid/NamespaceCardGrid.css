@@ -1,0 +1,35 @@
+.hub-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--spacing-16);
+}
+
+.hub-card-grid__card {
+  padding: var(--spacing-16);
+  border-radius: var(--shape-card);
+  background: var(--color-surface-primary);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.hub-card-grid__card-title {
+  font-size: var(--font-size-heading-sm);
+  margin: 0;
+}
+
+.hub-card-grid__card-desc {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-content-weak);
+  margin: 0;
+}
+
+.hub-card-grid__card-date {
+  font-size: var(--font-size-body-xs);
+  color: var(--color-content-weak);
+}
+
+.hub-card-grid__empty {
+  color: var(--color-content-weak);
+  font-size: var(--font-size-body-md);
+}
