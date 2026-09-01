@@ -1,0 +1,301 @@
+.chat-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.chat-thread {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+  padding: var(--spacing-16);
+}
+
+.chat-message {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  max-width: 88%;
+}
+
+.chat-message--user {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.chat-message--agent {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+/* Message portant un carousel de cartes recette : respire sur toute la largeur du fil plutôt
+   que la limite à 88% des bulles de texte, pour laisser de la place au peek du carousel. */
+.chat-message--wide {
+  max-width: 100%;
+}
+
+.chat-bubble {
+  font-size: 14px;
+  line-height: 1.5;
+  padding: var(--spacing-8) var(--spacing-16);
+  border-radius: var(--shape-sheet);
+  color: var(--color-content-default);
+}
+
+.chat-message--user .chat-bubble {
+  background: var(--color-interactive-bg);
+  color: #fff;
+}
+
+.chat-message--agent .chat-bubble {
+  background: var(--color-surface-secondary);
+}
+
+/* État "réflexion" (Loading) : mêmes fond/rayon que la bulle de texte agent, juste le
+   contenu qui change — évite un saut de layout entre la bulle "je réfléchis" et le texte final. */
+.chat-bubble--pending {
+  display: inline-flex;
+}
+
+/* Largeur non fixée ici : la carte vit toujours comme item du carousel (.chat-carousel__card
+   dans ChatCarousel.css fournit le flex-basis), jamais seule en pleine largeur. */
+.chat-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  padding: var(--spacing-8);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-card);
+  background: var(--color-surface-primary);
+}
+
+/* Seule la zone image + titre navigue vers la fiche recette — les bandeaux
+   (allergènes, écart panier, astuce) vivent hors du bouton pour ne pas être
+   noyés dans un unique nom accessible plat (cf. critique agent, P1 a11y).
+   Colonne au niveau du bouton (header en ligne, puis chips en dessous en pleine
+   largeur) — cf. .chat-card__header pour la ligne image+texte (2026-08-05 :
+   passage d'un empilement vertical à une ligne horizontale pour réduire la
+   hauteur de carte sur mobile, cf. retour utilisateur). */
+.chat-card__top {
+  display: flex;
+  align-items: stretch;
+  gap: var(--spacing-8);
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+  border: none;
+  border-radius: var(--shape-sheet);
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.chat-card__top:hover .chat-card__title {
+  text-decoration: underline;
+}
+
+.chat-card__top:focus-visible {
+  outline: 2px solid var(--color-interactive-bg);
+  outline-offset: 2px;
+}
+
+/* Ligne image + infos de base (titre, note, temps, difficulté, nutrition) —
+   remplace l'ancien empilement vertical (image au-dessus du texte) pour tenir
+   dans moins de hauteur sur mobile. */
+.chat-card__header {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--spacing-12);
+  width: 100%;
+}
+
+.chat-card__image {
+  width: 96px;
+  height: 96px;
+  border-radius: var(--shape-sheet);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.chat-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.chat-card__title {
+  font-family: var(--font-family-heading);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-content-default);
+}
+
+.chat-card__meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--spacing-8);
+  flex-wrap: wrap;
+}
+
+.chat-card__meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: var(--font-size-body-xs);
+  color: var(--color-content-weak);
+}
+
+.chat-card__rating {
+  color: var(--color-content-default);
+  font-weight: 600;
+}
+
+.chat-card__chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--spacing-4);
+}
+
+/* Absorbe la différence de hauteur du header entre cartes d'un même carousel (cf. AgentConversation.tsx) —
+   n'a d'effet que parce que .chat-carousel__track étire les cartes à hauteur égale (align-items par défaut). */
+.chat-card__spacer {
+  flex: 1 0 0;
+}
+
+/* Marqueur du chemin `relaxed` (contrainte abandonnée) — volontairement pas un ChipTag
+   coloré ni une bordure d'alerte : neutre et sobre pour rester honnête (ce n'est pas une
+   erreur) tout en étant visuellement distinct d'une correspondance confirmée. Placé en
+   tête de carte car c'est l'information la plus décisionnelle quand elle existe. */
+.chat-card__compromise {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px var(--spacing-8);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--shape-pill, 999px);
+  background: var(--color-surface-secondary);
+  font-size: var(--font-size-body-xs);
+  font-weight: 600;
+  color: var(--color-content-weak);
+}
+
+/* ChipTag est aussi utilisé, ailleurs dans ce composant, comme raccourci cliquable dans le
+   composer — enveloppe locale pour neutraliser cette affordance quand le même composant sert
+   de simple étiquette de confirmation sur la carte (cf. critique agent, P1 cohérence). */
+.chat-card__chip-static {
+  display: inline-flex;
+  pointer-events: none;
+  cursor: default;
+}
+
+.chat-card__highlight {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-8);
+  padding: var(--spacing-8);
+  border-radius: var(--radius-card);
+  font-size: var(--font-size-body-xs);
+  line-height: 1.4;
+}
+
+.chat-card__highlight--success {
+  background: var(--color-semantic-success-bg-light);
+  color: var(--color-semantic-success-content);
+}
+
+.chat-card__highlight--info {
+  background: var(--color-semantic-info-bg-light);
+  color: var(--color-semantic-info-content);
+}
+
+.chat-card__highlight--warning {
+  background: var(--color-semantic-warning-bg-light);
+  color: var(--color-semantic-warning-content);
+}
+
+.chat-card__highlight svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Signal communautaire contextuel (avis) — empilé avec le bandeau tip quand les deux existent
+   (2026-08-05 : viser le max d'info visible d'un coup d'œil plutôt que l'un remplaçant l'autre).
+   Attribution textuelle simple ("Selon les avis"), pas de compteur ni de Badge : le nombre
+   d'avis n'est pas un signal utile, seule l'attribution compte. */
+.chat-card__quote {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-4);
+}
+
+.chat-card__quote-attribution {
+  font-size: var(--font-size-body-xs);
+  font-weight: 600;
+  color: var(--color-content-weak);
+}
+
+.chat-card__quote-text {
+  font-style: italic;
+}
+
+/* Écart panier + astuce reculent au second plan derrière l'allergène (sécurité) et le
+   marqueur de contrainte/compromis (décision) — cf. classement d'importance du brief produit :
+   même couleur de contenu, mais sans le bloc coloré plein qui leur donnait un poids égal. */
+.chat-card__secondary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.chat-card__highlight--compact {
+  padding: 0;
+  background: none;
+}
+
+.chat-card__highlight--compact svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* CTA explicite en pied de carte — la carte entière reste cliquable (.chat-card__top),
+   ce bouton est une affordance additionnelle pour les users qui ne s'attendent pas à
+   ce qu'une carte de chat soit cliquable (cf. décision produit 2026-08-06). */
+.chat-card__cta {
+  width: 100%;
+}
+
+.chat-composer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  padding: var(--spacing-16);
+  border-top: 1px solid var(--color-border-default);
+}
+
+.chat-composer__suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-8);
+}
+
+.chat-composer__row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-8);
+}
+
+.chat-composer__row .input-field {
+  flex: 1;
+}
