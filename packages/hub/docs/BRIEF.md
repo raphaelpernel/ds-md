@@ -38,3 +38,14 @@ Squelette seul pour l'instant (pas de vrai prototype migré) — les pages
 `/neutral` et `/<client>` affichent un état vide. La migration de
 `marmiton-prototype`, puis des protos neutres, fait l'objet de plans
 séparés (voir la section "Migration progressive" de la spec).
+
+## Limites connues (squelette, décisions assumées pour l'instant)
+
+- **Pas de protection anti brute-force sur les gates** : un mot de passe
+  partagé sans limite de tentatives HTTP est toute la barrière de sécurité
+  d'un espace client. Acceptable pour un squelette à mots de passe distribués
+  manuellement à une poignée de personnes, mais à revisiter avant d'exposer
+  un vrai client externe en continu.
+- **Pas de déconnexion, pas de redirection si déjà authentifié sur `/gate`** :
+  les cookies durent un an sans moyen de les effacer depuis l'UI ; visiter
+  `/gate` déjà authentifié réaffiche le formulaire plutôt que de rediriger.

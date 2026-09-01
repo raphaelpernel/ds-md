@@ -7,14 +7,8 @@ import { getRequiredEnvVar } from '@/lib/env'
 import { constantTimeEqual } from './compare'
 import { MASTER_COOKIE_NAME, clientCookieName, COOKIE_MAX_AGE_SECONDS } from './cookies'
 import { signToken } from './token'
+import { safeNext } from './safeNext'
 import { MASTER_PASSWORD_ENV_VAR, findClientNamespace } from '@/config/namespaces'
-
-function safeNext(rawNext: string, fallback: string): string {
-  // Reject protocol-relative URLs ("//evil.com") in addition to anything not
-  // starting with "/" — startsWith('/') alone lets "//evil.com" through,
-  // which browsers resolve as an external https://evil.com redirect target.
-  return rawNext.startsWith('/') && !rawNext.startsWith('//') ? rawNext : fallback
-}
 
 export async function authenticateMaster(formData: FormData) {
   const password = String(formData.get('password') ?? '')

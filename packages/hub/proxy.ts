@@ -37,13 +37,13 @@ export async function proxy(request: NextRequest) {
     return withBrandHeaders(request, clientNamespace.brand, true)
   }
 
-  if (pathname.startsWith('/gate')) {
+  if (pathname === '/gate' || pathname.startsWith('/gate/')) {
     const gateClientId = pathname.split('/')[2]
     const gateClientNamespace = gateClientId ? findClientNamespace(gateClientId) : undefined
     if (gateClientNamespace) {
       return withBrandHeaders(request, gateClientNamespace.brand, true)
     }
-    return NextResponse.next()
+    return withBrandHeaders(request, NEUTRAL_BRAND, false)
   }
 
   if (!hasMaster) {
