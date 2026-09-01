@@ -1,0 +1,56 @@
+.cart-ai-banner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  background-color: var(--color-surface-brand);
+  border-radius: var(--shape-card);
+  padding: var(--spacing-16);
+}
+
+.cart-ai-banner__header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+}
+
+.cart-ai-banner__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: var(--shape-pill);
+  background-color: rgba(255, 255, 255, 0.2);
+  color: var(--color-content-inversed);
+}
+
+.cart-ai-banner__header-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  min-width: 0;
+}
+
+.cart-ai-banner__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-body-md);
+  font-weight: var(--font-weight-body-bold);
+  color: var(--color-content-inversed);
+}
+
+.cart-ai-banner__subtitle {
+  font-size: var(--font-size-body-xs);
+  color: var(--color-content-inversed);
+  opacity: 0.85;
+}
+
+.cart-ai-banner .cart-ai-prompt__field {
+  background-color: var(--color-surface-primary);
+  border-color: transparent;
+}
+
+.cart-ai-banner .cart-ai-prompt__hint {
+  color: var(--color-content-inversed);
+  opacity: 0.85;
+}
