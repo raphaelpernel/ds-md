@@ -1673,7 +1673,7 @@ et le plan d'implémentation du squelette : [`docs/superpowers/plans/2026-09-01-
   Cookies httpOnly signés (HMAC via Web Crypto), jamais de secret en clair
   dans le code — voir `.env.example`.
 - **Brand verrouillée par client** : `/<client>/*` fixe `data-brand` côté
-  serveur (via des headers posés par `middleware.ts`, lus par
+  serveur (via des headers posés par `proxy.ts`, lus par
   `app/layout.tsx`) et n'affiche jamais `BrandThemeSwitcher`.
 - **Sidebar façon "Design Studio"** (visible uniquement en session master) :
   groupe **Mealz** (Neutral + Guide, extensible plus tard), un groupe par
