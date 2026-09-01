@@ -4,9 +4,9 @@
 
 **Goal:** Turn `packages/home` into `packages/hub` — a single Next.js app with a master/per-client password gate, brand-locked namespaces, and a Design-Studio-style sidebar shell — with no real prototype content migrated yet (that's later plans).
 
-**Architecture:** `middleware.ts` checks signed httpOnly cookies (one master cookie that unlocks everything, one cookie per external client scoped to its own path) and injects `x-hub-brand`/`x-hub-locked` request headers; the single root `app/layout.tsx` reads those headers to set `data-brand` on `<html>` and to decide whether to render the brand switcher. A `(master)` route group holds the sidebar shell (Mealz group: Neutral + Guide, one group per client) and the Neutral/Guide stub pages; a `(client)/[client]` route group holds the locked, sidebar-less client view. Two `/gate` pages (root + per-client) host password forms wired to Server Actions that verify the password against an env var and set the signed cookie.
+**Architecture:** `proxy.ts` (Next.js 16's renamed `middleware.ts` convention) checks signed httpOnly cookies (one master cookie that unlocks everything, one cookie per external client scoped to its own path) and injects `x-hub-brand`/`x-hub-locked` request headers; the single root `app/layout.tsx` reads those headers to set `data-brand` on `<html>` and to decide whether to render the brand switcher. A `(master)` route group holds the sidebar shell (Mealz group: Neutral + Guide, one group per client) and the Neutral/Guide stub pages; a `(client)/[client]` route group holds the locked, sidebar-less client view. Two `/gate` pages (root + per-client) host password forms wired to Server Actions that verify the password against an env var and set the signed cookie.
 
-**Tech Stack:** Next.js 16 (App Router, Server Actions, Edge middleware), React 19, TypeScript, Vitest + Testing Library (new to this package), Web Crypto (`crypto.subtle`) for HMAC signing — no new runtime dependency needed for that.
+**Tech Stack:** Next.js 16 (App Router, Server Actions, Proxy), React 19, TypeScript, Vitest + Testing Library (new to this package), Web Crypto (`crypto.subtle`) for HMAC signing — no new runtime dependency needed for that.
 
 ## Global Constraints
 
@@ -29,7 +29,7 @@ packages/hub/                                          # renamed from packages/h
   tsconfig.json                                          # unchanged (already has @/* -> ./src/*)
   vitest.config.ts                                       # new
   vitest.setup.ts                                        # new
-  middleware.ts                                          # new — auth gate + brand header injection
+  proxy.ts                                               # new — auth gate + brand header injection (Next 16's proxy convention, formerly middleware.ts)
   .env.example                                           # new — documents required env vars
   docs/BRIEF.md                                          # rewritten for the new hub role
   app/
@@ -276,7 +276,7 @@ git commit -m "test(hub): add Vitest + Testing Library infrastructure"
 
 **Interfaces:**
 - Produces: `getRequiredEnvVar(name: string): string` (throws if unset/empty). `constantTimeEqual(a: string, b: string): boolean`.
-- Consumed by: Task 4 (`token.ts`), Task 8 (`actions.ts`), Task 6 (`middleware.ts`).
+- Consumed by: Task 4 (`token.ts`), Task 8 (`actions.ts`), Task 6 (`proxy.ts`).
 
 - [ ] **Step 1: Write the failing tests for `getRequiredEnvVar`**
 
@@ -405,7 +405,7 @@ git commit -m "feat(hub): add env var and constant-time compare primitives"
 **Interfaces:**
 - Consumes: `constantTimeEqual` from `./compare` (Task 3).
 - Produces: `MASTER_COOKIE_NAME: string`, `clientCookieName(clientId: string): string`, `COOKIE_MAX_AGE_SECONDS: number`, `signToken(scope: string, expiresAt: number, secret: string): Promise<string>`, `verifyToken(token: string, scope: string, secret: string, now?: number): Promise<boolean>`.
-- Consumed by: Task 6 (`middleware.ts`), Task 8 (`actions.ts`).
+- Consumed by: Task 6 (`proxy.ts`), Task 8 (`actions.ts`).
 
 - [ ] **Step 1: Write the failing tests for `cookies.ts`**
 
@@ -583,7 +583,7 @@ git commit -m "feat(hub): add signed session tokens (HMAC via Web Crypto)"
 **Interfaces:**
 - Consumes: `BRANDS` from `@mealz-product-team/design-system/styles/tokens/brands/brands` (existing, read-only).
 - Produces: `interface ClientNamespace { id: string; brand: string; label: string; passwordEnvVar: string }`, `CLIENT_NAMESPACES: ClientNamespace[]`, `findClientNamespace(id: string): ClientNamespace | undefined`, `NEUTRAL_BRAND: string`, `MASTER_PASSWORD_ENV_VAR: string`.
-- Consumed by: Task 6 (`middleware.ts`), Task 8 (`actions.ts`), Task 9 (gate pages), Task 10 (`Sidebar`), Task 11 (client layout/page).
+- Consumed by: Task 6 (`proxy.ts`), Task 8 (`actions.ts`), Task 9 (gate pages), Task 10 (`Sidebar`), Task 11 (client layout/page).
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -687,21 +687,23 @@ git commit -m "feat(hub): add client namespace registry sourced from design-syst
 
 ---
 
-### Task 6: `middleware.ts` — auth gate and brand header injection
+### Task 6: `proxy.ts` — auth gate and brand header injection
 
 **Files:**
-- Create: `packages/hub/middleware.ts`
+- Create: `packages/hub/proxy.ts`
 
 **Interfaces:**
 - Consumes: `MASTER_COOKIE_NAME`, `clientCookieName` (Task 4), `verifyToken` (Task 4), `CLIENT_NAMESPACES`, `findClientNamespace`, `NEUTRAL_BRAND` (Task 5), `getRequiredEnvVar` (Task 3).
 - Produces: for every non-static request, either a redirect to `/gate` or `/gate/<client>`, or a forwarded request carrying `x-hub-brand` and `x-hub-locked` headers — consumed by Task 7 (`app/layout.tsx`).
 
-No automated test for this file: it's Next.js Edge middleware built entirely from already-tested pure functions (Tasks 3-5). Verified manually against a running dev server, since `NextRequest`/`NextResponse` aren't practical to construct in Vitest without pulling in Next's test harness.
+**Naming note:** Next.js 16 renamed the `middleware.ts` file convention to `proxy.ts` (exported function `proxy` instead of `middleware`) — a leftover `middleware.ts` risks being silently ignored on a future Next 16.x point release with no build error, which would be a silent auth bypass for this whole hub. Use `proxy.ts` from the start. Everything else about the API is unchanged: same file location (package root), same `NextRequest`/`NextResponse` imports, same `NextResponse.next({ request: { headers } })` pattern for forwarding headers, same `config.matcher` shape. Proxy always runs on the Node.js runtime (not Edge) — irrelevant here since `signToken`/`verifyToken` (Task 4) use the Web Crypto API, which works identically on both.
 
-- [ ] **Step 1: Implement `middleware.ts`**
+No automated test for this file: it's Next.js Proxy built entirely from already-tested pure functions (Tasks 3-5). Verified manually against a running dev server, since `NextRequest`/`NextResponse` aren't practical to construct in Vitest without pulling in Next's test harness.
+
+- [ ] **Step 1: Implement `proxy.ts`**
 
 ```ts
-// packages/hub/middleware.ts
+// packages/hub/proxy.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { CLIENT_NAMESPACES, findClientNamespace, NEUTRAL_BRAND } from '@/config/namespaces'
 import { MASTER_COOKIE_NAME, clientCookieName } from '@/lib/auth/cookies'
@@ -715,7 +717,7 @@ function withBrandHeaders(request: NextRequest, brand: string, locked: boolean) 
   return NextResponse.next({ request: { headers: requestHeaders } })
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const secret = getRequiredEnvVar('HUB_COOKIE_SECRET')
 
@@ -787,8 +789,8 @@ Expected: each returns a `307` (or `308`) status with a `location` header pointi
 - [ ] **Step 3: Commit**
 
 ```bash
-git add packages/hub/middleware.ts
-git commit -m "feat(hub): add middleware gate (master + per-client cookies, brand headers)"
+git add packages/hub/proxy.ts
+git commit -m "feat(hub): add proxy auth gate (master + per-client cookies, brand headers)"
 ```
 
 ---
@@ -1710,7 +1712,7 @@ Run: `pnpm --filter @mealz-product-team/hub exec tsc --noEmit`
 Expected: no errors.
 
 Run: `pnpm --filter @mealz-product-team/hub build`
-Expected: build succeeds (this also validates `middleware.ts` compiles for the Edge runtime).
+Expected: build succeeds (this also validates `proxy.ts` compiles — Proxy always runs on the Node.js runtime in Next 16, not Edge).
 
 - [ ] **Step 3: Start the dev server with test credentials**
 
