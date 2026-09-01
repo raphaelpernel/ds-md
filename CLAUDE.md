@@ -1,3 +1,5 @@
+Ce fichier ajoute une couche de workflow propre à Claude Code (routing vers des skills, slash commands) par-dessus les fondamentaux du projet. Pour l'architecture, les conventions par package, et tout ce qui doit rester lisible par un agent tiers (GPT, Codex...), voir `AGENTS.md` à la racine — ne pas dupliquer son contenu ici.
+
 # Démarrage de travail dans un package (packages/<nom>)
 
 Quand je commence à travailler dans un dossier `packages/<nom>` (ou équivalent : premier message de la session qui touche ce package), avant toute construction ou réflexion :
