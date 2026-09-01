@@ -120,3 +120,19 @@ Issues live in GitHub Issues on `raphaelpernel/ds-md`, via the `gh` CLI. See `do
 ### Domain docs
 
 Multi-context monorepo — a root `CONTEXT-MAP.md` points at per-package `CONTEXT.md` files under `packages/<name>/docs/`. See `docs/agents/domain.md`.
+
+### Chaîne feature/UI (brainstorming → ship)
+
+Pour une nouvelle feature ou un nouveau flow UX (product-facing), la chaîne de référence est :
+
+`/brainstorming` (superpowers) → `/to-spec` (mattpocock) → `/grill-me` (mattpocock) → `/design-shotgun` (gstack, exploration visuelle/UX) → `codebase-design` (mattpocock, design d'interface technique) → `writing-plans` / `executing-plans` (superpowers, code).
+
+Enchaîner ces étapes automatiquement dès qu'une le permet. Trois d'entre elles (`to-spec`, `grill-me`, `setup-matt-pocock-skills`) ont `disable-model-invocation: true` dans mattpocock-skills — l'agent ne peut jamais les déclencher lui-même, même en contexte parfait. Quand la chaîne atteint une de ces étapes :
+
+1. **Le dire clairement** à l'utilisateur — quelle commande taper (`/to-spec`, `/grill-me`) et pourquoi cette étape est nécessaire maintenant.
+2. **S'arrêter là** — ne pas tenter de contourner ou de simuler l'étape.
+3. Une fois que l'utilisateur a lancé la commande, **reprendre la chaîne automatiquement** à l'étape suivante, sans qu'il ait à redemander de continuer.
+
+`design-an-interface` n'existe pas comme skill séparé dans `mattpocock-skills` (v1.2.3 installée) — c'est en réalité le contenu du skill `codebase-design` (auto-déclenchable, pas de `disable-model-invocation`). Ne pas chercher à invoquer un `/design-an-interface` inexistant.
+
+`/setup-matt-pocock-skills` a déjà été exécuté dans ce repo (`docs/agents/issue-tracker.md`, `docs/agents/domain.md`) — pas besoin de le relancer sauf pour changer de tracker ou repartir de zéro.
