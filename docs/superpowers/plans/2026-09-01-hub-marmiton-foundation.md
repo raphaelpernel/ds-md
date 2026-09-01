@@ -142,11 +142,14 @@ export default async function ClientLayout({
 }
 ```
 
-- [ ] **Step 3: Move the `.hub-client-shell` wrapper into `[client]/page.tsx`**
+- [ ] **Step 3: Move the `.hub-client-shell` wrapper into `[client]/page.tsx` — conditionally**
+
+`.hub-client-shell`'s padding must apply **only** when this page is NOT rendered inside `MasterShell` — `MasterShell` already pads its content via `.hub-shell__content` (`--spacing-24`), so wrapping unconditionally would double that padding for a master session (the two would nest). This is the one place a stub page still needs to know whether it's in the master branch — `ClientNamespaceShell` itself stays completely unaware of padding either way, this check lives only in the stub page, not in the reusable shell:
 
 ```tsx
 // packages/hub/app/(client)/[client]/page.tsx
 import { notFound } from 'next/navigation'
+import { headers } from 'next/headers'
 import { findClientNamespace } from '@/config/namespaces'
 import { NamespaceCardGrid } from '@/components/NamespaceCardGrid/NamespaceCardGrid'
 
@@ -157,14 +160,24 @@ export default async function ClientPage({ params }: { params: Promise<{ client:
     notFound()
   }
 
-  return (
-    <div className="hub-client-shell">
-      <section>
-        <h1 className="hub-namespace-page__title">{namespace.label}</h1>
-        <NamespaceCardGrid cards={[]} emptyMessage="Aucun prototype migré pour l'instant." />
-      </section>
-    </div>
+  const headersList = await headers()
+  const isMaster = headersList.get('x-hub-is-master') === '1'
+
+  const content = (
+    <section>
+      <h1 className="hub-namespace-page__title">{namespace.label}</h1>
+      <NamespaceCardGrid cards={[]} emptyMessage="Aucun prototype migré pour l'instant." />
+    </section>
   )
+
+  // Inside MasterShell, .hub-shell__content already provides the padding —
+  // wrapping again here would double it. Outside MasterShell (locked view),
+  // there is no other padding source, so this wrapper supplies it.
+  if (isMaster) {
+    return content
+  }
+
+  return <div className="hub-client-shell">{content}</div>
 }
 ```
 
