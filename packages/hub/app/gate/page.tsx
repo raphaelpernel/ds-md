@@ -1,5 +1,9 @@
 // packages/hub/app/gate/page.tsx
 import { authenticateMaster } from '@/lib/auth/actions'
+import { Heading } from '@mealz-product-team/design-system/components/ui/typography/Heading/Heading'
+import { InputField } from '@mealz-product-team/design-system/components/ui/form/InputField/InputField'
+import { Button } from '@mealz-product-team/design-system/components/ui/form/Button/Button'
+import { Alert } from '@mealz-product-team/design-system/components/ui/feedback/Alert/Alert'
 import './gate.css'
 
 export default async function MasterGatePage({
@@ -12,16 +16,13 @@ export default async function MasterGatePage({
   return (
     <main className="hub-gate">
       <form className="hub-gate__form" action={authenticateMaster}>
-        <h1 className="hub-gate__title">Accès équipe</h1>
-        <label className="hub-gate__label" htmlFor="password">
-          Mot de passe
-        </label>
-        <input className="hub-gate__input" id="password" name="password" type="password" autoFocus required />
+        <Heading as="h1" size="md">
+          Accès équipe
+        </Heading>
+        <InputField label="Mot de passe" id="password" name="password" type="password" autoFocus required />
         <input type="hidden" name="next" value={next ?? '/'} />
-        {error && <p className="hub-gate__error">Mot de passe incorrect.</p>}
-        <button className="hub-gate__submit" type="submit">
-          Entrer
-        </button>
+        {error && <Alert variant="danger">Mot de passe incorrect.</Alert>}
+        <Button type="submit">Entrer</Button>
       </form>
     </main>
   )

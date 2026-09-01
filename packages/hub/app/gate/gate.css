@@ -17,37 +17,3 @@
   background: var(--color-surface-primary);
   border-radius: var(--shape-card);
 }
-
-.hub-gate__title {
-  font-size: var(--font-size-heading-md);
-  margin: 0 0 var(--spacing-8);
-}
-
-.hub-gate__label {
-  font-size: var(--font-size-body-sm);
-  color: var(--color-content-weak);
-}
-
-.hub-gate__input {
-  padding: var(--spacing-8) var(--spacing-12);
-  border: 1px solid var(--color-border-default);
-  border-radius: var(--shape-input);
-  font-size: var(--font-size-body-md);
-}
-
-.hub-gate__error {
-  color: var(--color-semantic-danger-content);
-  font-size: var(--font-size-body-sm);
-  margin: 0;
-}
-
-.hub-gate__submit {
-  margin-top: var(--spacing-8);
-  padding: var(--spacing-8) var(--spacing-16);
-  border: none;
-  border-radius: var(--shape-button);
-  background: var(--color-interactive-bg);
-  color: var(--color-interactive-content);
-  font-size: var(--font-size-body-md);
-  cursor: pointer;
-}
