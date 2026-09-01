@@ -1,0 +1,282 @@
+/**
+ * Header — reproduction du header marmiton.org (desktop / tablette / mobile).
+ * Breakpoint desktop : 1024px (en dessous, marmiton.org bascule sur une
+ * version compacte : hamburger + logo + panier + icône recherche).
+ */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--color-surface-primary, #fff);
+  border-bottom: 1px solid var(--color-border-default, rgba(63, 55, 53, 0.1));
+  font-family: var(--font-family-body);
+}
+
+.header__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-16);
+  padding: var(--spacing-12) var(--spacing-16);
+}
+
+.header__left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-12);
+  flex-shrink: 0;
+}
+
+.header__burger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: var(--spacing-4);
+  color: var(--brand-500, #ff6f61);
+  cursor: pointer;
+}
+
+.header__logo img {
+  display: block;
+  height: 20px;
+  width: auto;
+}
+
+.header__search {
+  flex: 1;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.header__search .input-field__wrapper {
+  border-radius: var(--shape-pill);
+  background: var(--color-surface-secondary, #f4f4f4);
+}
+
+.header__search-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--color-content-default);
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.header__right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-12);
+  flex-shrink: 0;
+}
+
+.header__cart {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--brand-500, #ff6f61);
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  color: var(--brand-500, #ff6f61);
+  cursor: pointer;
+}
+
+.header__cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+}
+
+.header__login.btn {
+  background-color: var(--color-category-new-bg, #0288d1);
+  white-space: nowrap;
+}
+.header__login.btn:hover:not(:disabled) {
+  filter: brightness(0.92);
+}
+
+.header__icon-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--brand-500, #ff6f61);
+  cursor: pointer;
+}
+
+/* ── Nav secondaire (ligne 2, desktop uniquement) ── */
+
+.header__nav {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-24);
+  padding: 0 var(--spacing-16) var(--spacing-12);
+}
+
+.header__nav-list,
+.header__event-list {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header__nav-list {
+  gap: var(--spacing-24);
+}
+
+.header__nav-link {
+  color: var(--brand-500, #ff6f61);
+  font-weight: var(--font-weight-body-bold, 700);
+  font-size: 14px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.header__nav-link:hover {
+  text-decoration: underline;
+}
+
+.header__event-list {
+  gap: var(--spacing-16);
+}
+
+.header__event-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  color: var(--color-content-weak);
+  font-size: 13px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.header__event-link:hover {
+  color: var(--color-content-default);
+}
+
+/* ── Mega-menu (hamburger) ── */
+
+.header__mega-menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(63, 55, 53, 0.6);
+  border: none;
+  padding: 0;
+  z-index: 40;
+  cursor: pointer;
+}
+
+.header__mega-menu-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 41;
+  background: var(--color-surface-primary, #fff);
+  box-shadow: var(--elevation-400);
+  max-height: calc(100vh - 64px);
+  overflow-y: auto;
+  padding: var(--spacing-24) var(--spacing-16);
+}
+
+.header__mega-menu-account {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  padding-bottom: var(--spacing-20);
+  margin-bottom: var(--spacing-20);
+  border-bottom: 1px solid var(--color-border-default);
+}
+
+.header__mega-menu-account-label {
+  font-size: 13px;
+  color: var(--color-content-weak);
+  max-width: 420px;
+}
+
+.header__mega-menu-account-actions {
+  display: flex;
+  gap: var(--spacing-8);
+}
+
+.header__mega-menu-columns {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-24) var(--spacing-16);
+}
+
+.header__mega-menu-column-title {
+  font-weight: var(--font-weight-body-bold, 700);
+  font-size: 14px;
+  color: var(--color-content-default);
+  margin: 0 0 var(--spacing-12);
+}
+
+.header__mega-menu-column-title--link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  color: var(--brand-500, #ff6f61);
+  text-decoration: none;
+}
+
+.header__mega-menu-column-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header__mega-menu-column-link {
+  font-size: 13px;
+  color: var(--color-content-weak);
+  text-decoration: none;
+}
+.header__mega-menu-column-link:hover {
+  color: var(--brand-500, #ff6f61);
+  text-decoration: underline;
+}
+
+/* ── Breakpoints ── */
+
+@media (min-width: 1024px) {
+  .header__nav {
+    display: flex;
+  }
+
+  .header__mega-menu-columns {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1023.98px) {
+  .header__search,
+  .header__login.btn,
+  .header__icon-link {
+    display: none;
+  }
+
+  .header__search-toggle {
+    display: flex;
+  }
+
+  .header__mega-menu-columns {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .header__mega-menu-columns {
+    grid-template-columns: 1fr;
+  }
+}
