@@ -151,7 +151,7 @@ export function AgentConversation({ open, onClose, initialMessage }: AgentConver
   const router = useRouter()
 
   function goToRecipe(recipeId: string) {
-    router.push(`/recipe?recipe=${recipeId}`)
+    router.push(`/marmiton/recipe?recipe=${recipeId}`)
   }
 
   const [messages, setMessages] = useState<Message[]>([])
