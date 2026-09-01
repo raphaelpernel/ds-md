@@ -1,3 +1,5 @@
+'use client'
+
 import { Truck, Car } from '@phosphor-icons/react'
 import { Radio, ChipTag } from '@mealz-product-team/design-system'
 import type { Store } from '../../../data/types/store'

@@ -1,3 +1,5 @@
+'use client'
+
 import { ArrowRight } from '@phosphor-icons/react'
 import { Button } from '@mealz-product-team/design-system'
 import './CartFooter.css'
