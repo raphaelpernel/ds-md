@@ -31,13 +31,25 @@ et le plan d'implémentation du squelette : [`docs/superpowers/plans/2026-09-01-
   registre `BRANDS` du design-system (`neutral` exclu) — ajouter un client
   revient à ajouter une brand côté design-system + son mot de passe en env
   var, pas à modifier ce fichier à la main.
+- **`marmiton-prototype` monte directement sur `/marmiton`, pas
+  `/marmiton/marmiton-prototype`** : le modèle `/<client>/<proto>` de la
+  spec sert à désambiguïser plusieurs protos neutres déclinés sous un même
+  client — un proto client-spécifique qui est la seule expérience de son
+  client n'a pas cette ambiguïté. Sa propre page d'accueil (cards
+  Recipe/Agent) fait déjà office d'index, donc `NamespaceCardGrid` (l'index
+  générique de `[client]/page.tsx`) ne s'applique plus à Marmiton — seul
+  CoursesU (pas encore migré) l'utilise encore aujourd'hui.
 
 ## Statut
 
-Squelette seul pour l'instant (pas de vrai prototype migré) — les pages
-`/neutral` et `/<client>` affichent un état vide. La migration de
-`marmiton-prototype`, puis des protos neutres, fait l'objet de plans
-séparés (voir la section "Migration progressive" de la spec).
+Le squelette (auth deux niveaux, sidebar, brand verrouillée) est en place,
+et la fondation de `marmiton-prototype` (routing, chrome `Header`/`Footer`,
+couche data) est migrée sous `/marmiton` — pas encore la logique métier des
+parcours recette/agent eux-mêmes. La page `/<client>` générique
+(`NamespaceCardGrid`) reste affichée en état vide pour les clients pas
+encore migrés (CoursesU). La suite de la migration de `marmiton-prototype`,
+puis des protos neutres, fait l'objet de plans séparés (voir la section
+"Migration progressive" de la spec).
 
 ## Limites connues (squelette, décisions assumées pour l'instant)
 

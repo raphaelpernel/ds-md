@@ -22,7 +22,7 @@ const FLOWS: FlowLink[] = [
 
 export default function MarmitonHomePage() {
   return (
-    <main className="home">
+    <div className="home">
       <h1 className="home__title">Marmiton Prototype</h1>
       <div className="home__grid">
         {FLOWS.map((flow) => (
@@ -32,6 +32,6 @@ export default function MarmitonHomePage() {
           </a>
         ))}
       </div>
-    </main>
+    </div>
   )
 }
