@@ -1,0 +1,126 @@
+.ingredient-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-4);
+  text-align: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.ingredient-card__image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--shape-card);
+  border: 1px solid var(--color-border-default);
+  overflow: visible;
+  background-color: var(--color-surface-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ingredient-card__emoji {
+  font-size: 42px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Overlay wrapper pour le bouton ajouter / stepper en mode grille */
+.ingredient-card__stepper {
+  position: absolute;
+  bottom: -12px;
+  right: -12px;
+  background-color: var(--color-surface-primary);
+  border-radius: 999px;
+  padding: 2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.ingredient-card__qty {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-body-bold);
+  color: var(--color-content-default);
+  margin-top: var(--spacing-8);
+  width: 100%;
+}
+
+.ingredient-card__name {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-content-default);
+  line-height: var(--line-height-body-sm);
+  width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ingredient-card__unavailable {
+  font-size: var(--font-size-body-xs);
+  color: var(--color-semantic-danger-content);
+}
+
+/* ── List variant ──────────────────────────────────────────── */
+
+.ingredient-card--list {
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  gap: var(--spacing-12);
+  padding: var(--spacing-12) 0;
+  border-bottom: 1px solid var(--color-border-weak);
+}
+
+.ingredient-card--list:last-child {
+  border-bottom: none;
+}
+
+.ingredient-card--list .ingredient-card__image-wrap {
+  width: 48px;
+  aspect-ratio: unset;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.ingredient-card--list .ingredient-card__emoji {
+  font-size: 26px;
+}
+
+.ingredient-card__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  min-width: 0;
+}
+
+.ingredient-card--list .ingredient-card__qty {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-body-bold);
+  color: var(--color-content-default);
+  margin-top: 0;
+}
+
+.ingredient-card--list .ingredient-card__name {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-content-default);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ingredient-card--list .ingredient-card__unavailable {
+  font-size: var(--font-size-body-xs);
+  color: var(--color-semantic-danger-content);
+}
+
+.ingredient-card__action {
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* En liste, le bouton et le stepper sont rendus inline (pas de wrapper) */

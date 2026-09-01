@@ -1,0 +1,113 @@
+.recipe-order-banner {
+  background-color: var(--partner-bg-light);
+  border: 1px solid var(--partner-border);
+  border-radius: var(--shape-card);
+  padding: var(--spacing-16);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  margin-bottom: var(--spacing-16);
+}
+
+.recipe-order-banner__header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+}
+
+.recipe-order-banner__header-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.recipe-order-banner__logo {
+  flex-shrink: 0;
+}
+
+.recipe-order-banner__title {
+  font-size: var(--font-size-body-md);
+  font-weight: var(--font-weight-body-bold);
+  color: var(--partner-content-alt);
+  line-height: var(--line-height-body-md);
+}
+
+.recipe-order-banner__subtitle {
+  font-size: var(--font-size-body-xs);
+  color: var(--color-content-weak);
+  line-height: var(--line-height-body-xs);
+}
+
+.recipe-order-banner__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  min-width: 0;
+}
+
+.recipe-order-banner__price {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-content-default);
+  line-height: var(--line-height-body-sm);
+}
+
+.recipe-order-banner__price strong {
+  font-family: var(--font-family-price);
+  font-size: var(--font-size-price-sm);
+  font-weight: var(--font-weight-price);
+  line-height: var(--line-height-price-sm);
+  color: var(--partner-content-alt);
+}
+
+.recipe-order-banner__price-per-serving {
+  color: var(--color-content-weak);
+}
+
+.recipe-order-banner__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-8);
+  width: 100%;
+  background-color: var(--partner-bg);
+  color: var(--partner-content);
+  border: none;
+  border-radius: var(--shape-button);
+  padding: 0 var(--spacing-20);
+  height: var(--spacing-48);
+  font-size: var(--font-size-label-lg);
+  font-weight: var(--font-weight-label);
+  font-family: var(--font-family-label);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.recipe-order-banner__cta:hover {
+  background-color: var(--partner-bg-hover);
+}
+
+.recipe-order-banner__cta--secondary {
+  background-color: transparent;
+  color: var(--partner-bg);
+  border: 1.5px solid var(--partner-bg);
+}
+
+.recipe-order-banner__cta--secondary:hover {
+  background-color: var(--partner-bg-light);
+}
+
+/* Tablet+ : la bannière devient une ligne, le CTA hug son contenu à droite
+   au lieu d'occuper toute la largeur. */
+@media (min-width: 768px) {
+  .recipe-order-banner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-16);
+  }
+
+  .recipe-order-banner__cta {
+    width: auto;
+    flex-shrink: 0;
+  }
+}
