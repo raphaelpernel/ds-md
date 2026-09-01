@@ -940,6 +940,15 @@ Expected: FAIL — module `./safeNext` doesn't exist yet.
  * passing those checks).
  */
 export function safeNext(rawNext: string, fallback: string): string {
+  // A value not starting with "/" (including the empty string) can never
+  // resolve to a same-origin path — reject it up front. This does not
+  // weaken the backslash/protocol-relative defense below: "//evil.com" and
+  // "/\evil.com" both still start with "/" and fall through to the
+  // origin check, which is what actually catches them.
+  if (!rawNext.startsWith('/')) {
+    return fallback
+  }
+
   try {
     const url = new URL(rawNext, 'http://hub.invalid')
     if (url.origin !== 'http://hub.invalid') {
