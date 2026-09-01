@@ -10,7 +10,10 @@ import { signToken } from './token'
 import { MASTER_PASSWORD_ENV_VAR, findClientNamespace } from '@/config/namespaces'
 
 function safeNext(rawNext: string, fallback: string): string {
-  return rawNext.startsWith('/') ? rawNext : fallback
+  // Reject protocol-relative URLs ("//evil.com") in addition to anything not
+  // starting with "/" — startsWith('/') alone lets "//evil.com" through,
+  // which browsers resolve as an external https://evil.com redirect target.
+  return rawNext.startsWith('/') && !rawNext.startsWith('//') ? rawNext : fallback
 }
 
 export async function authenticateMaster(formData: FormData) {
