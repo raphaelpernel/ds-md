@@ -1,4 +1,4 @@
-// packages/hub/middleware.ts
+// packages/hub/proxy.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { CLIENT_NAMESPACES, findClientNamespace, NEUTRAL_BRAND } from '@/config/namespaces'
 import { MASTER_COOKIE_NAME, clientCookieName } from '@/lib/auth/cookies'
@@ -12,7 +12,7 @@ function withBrandHeaders(request: NextRequest, brand: string, locked: boolean) 
   return NextResponse.next({ request: { headers: requestHeaders } })
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const secret = getRequiredEnvVar('HUB_COOKIE_SECRET')
 
