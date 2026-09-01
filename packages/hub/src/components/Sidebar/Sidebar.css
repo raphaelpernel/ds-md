@@ -34,7 +34,7 @@
 .hub-sidebar__link {
   display: block;
   padding: var(--spacing-12) var(--spacing-12);
-  border-radius: var(--shape-button);
+  border-radius: var(--shape-input);
   color: var(--color-content-default);
   text-decoration: none;
   font-size: var(--font-size-body-md);

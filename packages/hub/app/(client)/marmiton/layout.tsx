@@ -1,16 +1,11 @@
 import { ClientNamespaceShell } from '@/components/ClientNamespaceShell/ClientNamespaceShell'
-import { CartProvider } from '@/features/marmiton-prototype/context/CartContext'
-import { Header } from '@/features/marmiton-prototype/components/layout/Header/Header'
-import { Footer } from '@/features/marmiton-prototype/components/layout/Footer/Footer'
 
+/**
+ * The `/marmiton` index itself is a hub-style prototype gallery (see
+ * `page.tsx`), not part of the real Marmiton site — so it does NOT get
+ * Marmiton's own Header/Footer/CartProvider chrome here. Those wrap only
+ * the actual migrated funnel pages, via `(funnel)/layout.tsx`.
+ */
 export default function MarmitonLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <ClientNamespaceShell>
-      <CartProvider>
-        <Header />
-        {children}
-        <Footer />
-      </CartProvider>
-    </ClientNamespaceShell>
-  )
+  return <ClientNamespaceShell>{children}</ClientNamespaceShell>
 }
