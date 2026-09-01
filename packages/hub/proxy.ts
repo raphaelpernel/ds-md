@@ -5,10 +5,11 @@ import { MASTER_COOKIE_NAME, clientCookieName } from '@/lib/auth/cookies'
 import { verifyToken } from '@/lib/auth/token'
 import { getRequiredEnvVar } from '@/lib/env'
 
-function withBrandHeaders(request: NextRequest, brand: string, locked: boolean) {
+function withBrandHeaders(request: NextRequest, brand: string, locked: boolean, isMaster: boolean) {
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set('x-hub-brand', brand)
   requestHeaders.set('x-hub-locked', locked ? '1' : '0')
+  requestHeaders.set('x-hub-is-master', isMaster ? '1' : '0')
   return NextResponse.next({ request: { headers: requestHeaders } })
 }
 
@@ -34,16 +35,16 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(gateUrl)
     }
 
-    return withBrandHeaders(request, clientNamespace.brand, true)
+    return withBrandHeaders(request, clientNamespace.brand, true, hasMaster)
   }
 
   if (pathname === '/gate' || pathname.startsWith('/gate/')) {
     const gateClientId = pathname.split('/')[2]
     const gateClientNamespace = gateClientId ? findClientNamespace(gateClientId) : undefined
     if (gateClientNamespace) {
-      return withBrandHeaders(request, gateClientNamespace.brand, true)
+      return withBrandHeaders(request, gateClientNamespace.brand, true, hasMaster)
     }
-    return withBrandHeaders(request, NEUTRAL_BRAND, false)
+    return withBrandHeaders(request, NEUTRAL_BRAND, false, hasMaster)
   }
 
   if (!hasMaster) {
@@ -52,7 +53,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(gateUrl)
   }
 
-  return withBrandHeaders(request, NEUTRAL_BRAND, false)
+  return withBrandHeaders(request, NEUTRAL_BRAND, false, hasMaster)
 }
 
 export const config = {
