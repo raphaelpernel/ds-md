@@ -4,9 +4,9 @@
 
 **Goal:** Turn `packages/home` into `packages/hub` — a single Next.js app with a master/per-client password gate, brand-locked namespaces, and a Design-Studio-style sidebar shell — with no real prototype content migrated yet (that's later plans).
 
-**Architecture:** `middleware.ts` checks signed httpOnly cookies (one master cookie that unlocks everything, one cookie per external client scoped to its own path) and injects `x-hub-brand`/`x-hub-locked` request headers; the single root `app/layout.tsx` reads those headers to set `data-brand` on `<html>` and to decide whether to render the brand switcher. A `(master)` route group holds the sidebar shell (Mealz group: Neutral + Guide, one group per client) and the Neutral/Guide stub pages; a `(client)/[client]` route group holds the locked, sidebar-less client view. Two `/gate` pages (root + per-client) host password forms wired to Server Actions that verify the password against an env var and set the signed cookie.
+**Architecture:** `proxy.ts` (Next.js 16's renamed `middleware.ts` convention) checks signed httpOnly cookies (one master cookie that unlocks everything, one cookie per external client scoped to its own path) and injects `x-hub-brand`/`x-hub-locked` request headers; the single root `app/layout.tsx` reads those headers to set `data-brand` on `<html>` and to decide whether to render the brand switcher. A `(master)` route group holds the sidebar shell (Mealz group: Neutral + Guide, one group per client) and the Neutral/Guide stub pages; a `(client)/[client]` route group holds the locked, sidebar-less client view. Two `/gate` pages (root + per-client) host password forms wired to Server Actions that verify the password against an env var and set the signed cookie.
 
-**Tech Stack:** Next.js 16 (App Router, Server Actions, Edge middleware), React 19, TypeScript, Vitest + Testing Library (new to this package), Web Crypto (`crypto.subtle`) for HMAC signing — no new runtime dependency needed for that.
+**Tech Stack:** Next.js 16 (App Router, Server Actions, Proxy), React 19, TypeScript, Vitest + Testing Library (new to this package), Web Crypto (`crypto.subtle`) for HMAC signing — no new runtime dependency needed for that.
 
 ## Global Constraints
 
@@ -29,7 +29,7 @@ packages/hub/                                          # renamed from packages/h
   tsconfig.json                                          # unchanged (already has @/* -> ./src/*)
   vitest.config.ts                                       # new
   vitest.setup.ts                                        # new
-  middleware.ts                                          # new — auth gate + brand header injection
+  proxy.ts                                               # new — auth gate + brand header injection (Next 16's proxy convention, formerly middleware.ts)
   .env.example                                           # new — documents required env vars
   docs/BRIEF.md                                          # rewritten for the new hub role
   app/
@@ -276,7 +276,7 @@ git commit -m "test(hub): add Vitest + Testing Library infrastructure"
 
 **Interfaces:**
 - Produces: `getRequiredEnvVar(name: string): string` (throws if unset/empty). `constantTimeEqual(a: string, b: string): boolean`.
-- Consumed by: Task 4 (`token.ts`), Task 8 (`actions.ts`), Task 6 (`middleware.ts`).
+- Consumed by: Task 4 (`token.ts`), Task 8 (`actions.ts`), Task 6 (`proxy.ts`).
 
 - [ ] **Step 1: Write the failing tests for `getRequiredEnvVar`**
 
@@ -405,7 +405,7 @@ git commit -m "feat(hub): add env var and constant-time compare primitives"
 **Interfaces:**
 - Consumes: `constantTimeEqual` from `./compare` (Task 3).
 - Produces: `MASTER_COOKIE_NAME: string`, `clientCookieName(clientId: string): string`, `COOKIE_MAX_AGE_SECONDS: number`, `signToken(scope: string, expiresAt: number, secret: string): Promise<string>`, `verifyToken(token: string, scope: string, secret: string, now?: number): Promise<boolean>`.
-- Consumed by: Task 6 (`middleware.ts`), Task 8 (`actions.ts`).
+- Consumed by: Task 6 (`proxy.ts`), Task 8 (`actions.ts`).
 
 - [ ] **Step 1: Write the failing tests for `cookies.ts`**
 
@@ -583,7 +583,7 @@ git commit -m "feat(hub): add signed session tokens (HMAC via Web Crypto)"
 **Interfaces:**
 - Consumes: `BRANDS` from `@mealz-product-team/design-system/styles/tokens/brands/brands` (existing, read-only).
 - Produces: `interface ClientNamespace { id: string; brand: string; label: string; passwordEnvVar: string }`, `CLIENT_NAMESPACES: ClientNamespace[]`, `findClientNamespace(id: string): ClientNamespace | undefined`, `NEUTRAL_BRAND: string`, `MASTER_PASSWORD_ENV_VAR: string`.
-- Consumed by: Task 6 (`middleware.ts`), Task 8 (`actions.ts`), Task 9 (gate pages), Task 10 (`Sidebar`), Task 11 (client layout/page).
+- Consumed by: Task 6 (`proxy.ts`), Task 8 (`actions.ts`), Task 9 (gate pages), Task 10 (`Sidebar`), Task 11 (client layout/page).
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -687,21 +687,23 @@ git commit -m "feat(hub): add client namespace registry sourced from design-syst
 
 ---
 
-### Task 6: `middleware.ts` — auth gate and brand header injection
+### Task 6: `proxy.ts` — auth gate and brand header injection
 
 **Files:**
-- Create: `packages/hub/middleware.ts`
+- Create: `packages/hub/proxy.ts`
 
 **Interfaces:**
 - Consumes: `MASTER_COOKIE_NAME`, `clientCookieName` (Task 4), `verifyToken` (Task 4), `CLIENT_NAMESPACES`, `findClientNamespace`, `NEUTRAL_BRAND` (Task 5), `getRequiredEnvVar` (Task 3).
 - Produces: for every non-static request, either a redirect to `/gate` or `/gate/<client>`, or a forwarded request carrying `x-hub-brand` and `x-hub-locked` headers — consumed by Task 7 (`app/layout.tsx`).
 
-No automated test for this file: it's Next.js Edge middleware built entirely from already-tested pure functions (Tasks 3-5). Verified manually against a running dev server, since `NextRequest`/`NextResponse` aren't practical to construct in Vitest without pulling in Next's test harness.
+**Naming note:** Next.js 16 renamed the `middleware.ts` file convention to `proxy.ts` (exported function `proxy` instead of `middleware`) — a leftover `middleware.ts` risks being silently ignored on a future Next 16.x point release with no build error, which would be a silent auth bypass for this whole hub. Use `proxy.ts` from the start. Everything else about the API is unchanged: same file location (package root), same `NextRequest`/`NextResponse` imports, same `NextResponse.next({ request: { headers } })` pattern for forwarding headers, same `config.matcher` shape. Proxy always runs on the Node.js runtime (not Edge) — irrelevant here since `signToken`/`verifyToken` (Task 4) use the Web Crypto API, which works identically on both.
 
-- [ ] **Step 1: Implement `middleware.ts`**
+No automated test for this file: it's Next.js Proxy built entirely from already-tested pure functions (Tasks 3-5). Verified manually against a running dev server, since `NextRequest`/`NextResponse` aren't practical to construct in Vitest without pulling in Next's test harness.
+
+- [ ] **Step 1: Implement `proxy.ts`**
 
 ```ts
-// packages/hub/middleware.ts
+// packages/hub/proxy.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { CLIENT_NAMESPACES, findClientNamespace, NEUTRAL_BRAND } from '@/config/namespaces'
 import { MASTER_COOKIE_NAME, clientCookieName } from '@/lib/auth/cookies'
@@ -715,7 +717,7 @@ function withBrandHeaders(request: NextRequest, brand: string, locked: boolean) 
   return NextResponse.next({ request: { headers: requestHeaders } })
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const secret = getRequiredEnvVar('HUB_COOKIE_SECRET')
 
@@ -740,13 +742,13 @@ export async function middleware(request: NextRequest) {
     return withBrandHeaders(request, clientNamespace.brand, true)
   }
 
-  if (pathname.startsWith('/gate')) {
+  if (pathname === '/gate' || pathname.startsWith('/gate/')) {
     const gateClientId = pathname.split('/')[2]
     const gateClientNamespace = gateClientId ? findClientNamespace(gateClientId) : undefined
     if (gateClientNamespace) {
       return withBrandHeaders(request, gateClientNamespace.brand, true)
     }
-    return NextResponse.next()
+    return withBrandHeaders(request, NEUTRAL_BRAND, false)
   }
 
   if (!hasMaster) {
@@ -787,8 +789,8 @@ Expected: each returns a `307` (or `308`) status with a `location` header pointi
 - [ ] **Step 3: Commit**
 
 ```bash
-git add packages/hub/middleware.ts
-git commit -m "feat(hub): add middleware gate (master + per-client cookies, brand headers)"
+git add packages/hub/proxy.ts
+git commit -m "feat(hub): add proxy auth gate (master + per-client cookies, brand headers)"
 ```
 
 ---
@@ -866,18 +868,105 @@ git commit -m "feat(hub): make root layout brand-aware via middleware headers"
 
 ---
 
-### Task 8: `src/lib/auth/actions.ts` — login Server Actions
+### Task 8: `src/lib/auth/safeNext.ts` and `src/lib/auth/actions.ts` — login Server Actions
 
 **Files:**
+- Create: `packages/hub/src/lib/auth/safeNext.ts`
+- Test: `packages/hub/src/lib/auth/safeNext.test.ts`
 - Create: `packages/hub/src/lib/auth/actions.ts`
 
 **Interfaces:**
 - Consumes: `getRequiredEnvVar` (Task 3), `constantTimeEqual` (Task 3), `MASTER_COOKIE_NAME`, `clientCookieName`, `COOKIE_MAX_AGE_SECONDS`, `signToken` (Task 4), `MASTER_PASSWORD_ENV_VAR`, `findClientNamespace` (Task 5).
-- Produces: `authenticateMaster(formData: FormData): Promise<void>`, `authenticateClient(clientId: string, formData: FormData): Promise<void>` — both Server Actions, consumed by Task 9's gate pages.
+- Produces: `safeNext(rawNext: string, fallback: string): string`, `authenticateMaster(formData: FormData): Promise<void>`, `authenticateClient(clientId: string, formData: FormData): Promise<void>` — the two Server Actions are consumed by Task 9's gate pages.
 
-No automated test — Server Actions need `cookies()`/`redirect()` from the Next.js request context, which isn't available under Vitest without additional harness setup. All the logic-bearing pieces it calls are already unit-tested (Tasks 3-5); this file is thin wiring, verified end-to-end in Task 15.
+**Correction (found in the final whole-branch review):** an earlier version of this task inlined `safeNext` in `actions.ts` as `rawNext.startsWith('/') && !rawNext.startsWith('//') ? rawNext : fallback`. That still lets a redirect target like `/\evil.com` or `/\/evil.com` through — the WHATWG URL parser treats a leading `\` the same as `/` in the authority position for `http(s)` URLs, so those resolve to an external `https://evil.com` origin despite passing both `startsWith` checks. Prefix-checking a string can never fully answer "does this resolve off-site" — only resolving it against a fixed base URL and checking the resulting origin can. `safeNext` is extracted to its own file specifically so this security-relevant logic is unit-tested (it has zero Next.js dependencies — the "Server Actions aren't practical to unit test" reasoning below applies to `authenticateMaster`/`authenticateClient`, not to this pure function).
 
-- [ ] **Step 1: Implement `actions.ts`**
+- [ ] **Step 1: Write the failing tests for `safeNext`**
+
+```ts
+// packages/hub/src/lib/auth/safeNext.test.ts
+import { describe, expect, it } from 'vitest'
+import { safeNext } from './safeNext'
+
+describe('safeNext', () => {
+  it('passes through a normal relative path', () => {
+    expect(safeNext('/marmiton', '/')).toBe('/marmiton')
+  })
+
+  it('preserves query string and hash', () => {
+    expect(safeNext('/marmiton?next=%2Fx#y', '/')).toBe('/marmiton?next=%2Fx#y')
+  })
+
+  it('falls back for a value not starting with /', () => {
+    expect(safeNext('evil.com', '/')).toBe('/')
+  })
+
+  it('falls back for a protocol-relative URL', () => {
+    expect(safeNext('//evil.com', '/')).toBe('/')
+  })
+
+  it('falls back for a backslash-authority URL', () => {
+    expect(safeNext('/\\evil.com', '/')).toBe('/')
+    expect(safeNext('/\\/evil.com', '/')).toBe('/')
+  })
+
+  it('falls back for a fully-qualified external URL', () => {
+    expect(safeNext('https://evil.com', '/')).toBe('/')
+  })
+
+  it('falls back for an empty string', () => {
+    expect(safeNext('', '/fallback')).toBe('/fallback')
+  })
+})
+```
+
+- [ ] **Step 2: Run test to verify it fails**
+
+Run: `pnpm --filter @mealz-product-team/hub test safeNext.test`
+Expected: FAIL — module `./safeNext` doesn't exist yet.
+
+- [ ] **Step 3: Implement `safeNext.ts`**
+
+```ts
+// packages/hub/src/lib/auth/safeNext.ts
+
+/**
+ * Validates a redirect target by resolving it against a fixed, invalid-TLD
+ * base URL and checking the resolved origin didn't change — the only
+ * reliable way to answer "does this resolve off-site", since prefix checks
+ * like `startsWith('/') && !startsWith('//')` miss browser URL-parsing
+ * quirks (e.g. a leading backslash is treated as `/` in the authority
+ * position for http(s) URLs, so "/\evil.com" resolves externally despite
+ * passing those checks).
+ */
+export function safeNext(rawNext: string, fallback: string): string {
+  // A value not starting with "/" (including the empty string) can never
+  // resolve to a same-origin path — reject it up front. This does not
+  // weaken the backslash/protocol-relative defense below: "//evil.com" and
+  // "/\evil.com" both still start with "/" and fall through to the
+  // origin check, which is what actually catches them.
+  if (!rawNext.startsWith('/')) {
+    return fallback
+  }
+
+  try {
+    const url = new URL(rawNext, 'http://hub.invalid')
+    if (url.origin !== 'http://hub.invalid') {
+      return fallback
+    }
+    return url.pathname + url.search + url.hash
+  } catch {
+    return fallback
+  }
+}
+```
+
+- [ ] **Step 4: Run test to verify it passes**
+
+Run: `pnpm --filter @mealz-product-team/hub test safeNext.test`
+Expected: PASS (7 tests)
+
+- [ ] **Step 5: Implement `actions.ts`**, importing `safeNext` instead of redefining it
 
 ```ts
 // packages/hub/src/lib/auth/actions.ts
@@ -889,11 +978,8 @@ import { getRequiredEnvVar } from '@/lib/env'
 import { constantTimeEqual } from './compare'
 import { MASTER_COOKIE_NAME, clientCookieName, COOKIE_MAX_AGE_SECONDS } from './cookies'
 import { signToken } from './token'
+import { safeNext } from './safeNext'
 import { MASTER_PASSWORD_ENV_VAR, findClientNamespace } from '@/config/namespaces'
-
-function safeNext(rawNext: string, fallback: string): string {
-  return rawNext.startsWith('/') ? rawNext : fallback
-}
 
 export async function authenticateMaster(formData: FormData) {
   const password = String(formData.get('password') ?? '')
@@ -951,15 +1037,15 @@ export async function authenticateClient(clientId: string, formData: FormData) {
 }
 ```
 
-- [ ] **Step 2: Type-check**
+- [ ] **Step 6: Type-check**
 
 Run: `pnpm --filter @mealz-product-team/hub exec tsc --noEmit`
-Expected: no errors referencing `src/lib/auth/actions.ts`.
+Expected: no errors referencing `src/lib/auth/actions.ts` or `src/lib/auth/safeNext.ts`.
 
-- [ ] **Step 3: Commit**
+- [ ] **Step 7: Commit**
 
 ```bash
-git add packages/hub/src/lib/auth/actions.ts
+git add packages/hub/src/lib/auth/safeNext.ts packages/hub/src/lib/auth/safeNext.test.ts packages/hub/src/lib/auth/actions.ts
 git commit -m "feat(hub): add master and per-client login Server Actions"
 ```
 
@@ -1545,9 +1631,18 @@ git commit -m "feat(hub): add master shell (sidebar) with Neutral and Guide stub
   min-height: 100vh;
   padding: var(--spacing-24);
 }
+
+.hub-namespace-page__title {
+  font-size: var(--font-size-heading-lg);
+  margin: 0 0 var(--spacing-16);
+}
+
+.hub-namespace-page__placeholder {
+  color: var(--color-content-weak);
+}
 ```
 
-(Re-uses `.hub-namespace-page__title`/`.hub-namespace-page__placeholder` from `master-shell.css` — those class names are generic enough to share; no need to redefine them here since both stylesheets end up bundled into the same app.)
+**Correction (found in the final whole-branch review):** an earlier version of this task claimed `.hub-namespace-page__title`/`.hub-namespace-page__placeholder` didn't need redefining here because "both stylesheets end up bundled into the same app." That's wrong — Next.js App Router bundles CSS **per route group**, not per app: `master-shell.css` (imported only by `(master)/layout.tsx`) ends up in a chunk that never loads on `/marmiton` or `/coursesu`, so `(client)/[client]/page.tsx`'s `<h1 className="hub-namespace-page__title">` rendered with no styling at all — on the one page external clients actually see. The two rules are duplicated here deliberately (not extracted to a shared file) because they're genuinely separate CSS bundles by Next's design; a shared file would need to be imported by the root layout to guarantee it's always loaded, which is unnecessary weight on every request just for two rules used by two route groups.
 
 - [ ] **Step 2: Create `app/(client)/[client]/layout.tsx`**
 
@@ -1668,7 +1763,7 @@ et le plan d'implémentation du squelette : [`docs/superpowers/plans/2026-09-01-
   Cookies httpOnly signés (HMAC via Web Crypto), jamais de secret en clair
   dans le code — voir `.env.example`.
 - **Brand verrouillée par client** : `/<client>/*` fixe `data-brand` côté
-  serveur (via des headers posés par `middleware.ts`, lus par
+  serveur (via des headers posés par `proxy.ts`, lus par
   `app/layout.tsx`) et n'affiche jamais `BrandThemeSwitcher`.
 - **Sidebar façon "Design Studio"** (visible uniquement en session master) :
   groupe **Mealz** (Neutral + Guide, extensible plus tard), un groupe par
@@ -1684,6 +1779,17 @@ Squelette seul pour l'instant (pas de vrai prototype migré) — les pages
 `/neutral` et `/<client>` affichent un état vide. La migration de
 `marmiton-prototype`, puis des protos neutres, fait l'objet de plans
 séparés (voir la section "Migration progressive" de la spec).
+
+## Limites connues (squelette, décisions assumées pour l'instant)
+
+- **Pas de protection anti brute-force sur les gates** : un mot de passe
+  partagé sans limite de tentatives HTTP est toute la barrière de sécurité
+  d'un espace client. Acceptable pour un squelette à mots de passe distribués
+  manuellement à une poignée de personnes, mais à revisiter avant d'exposer
+  un vrai client externe en continu.
+- **Pas de déconnexion, pas de redirection si déjà authentifié sur `/gate`** :
+  les cookies durent un an sans moyen de les effacer depuis l'UI ; visiter
+  `/gate` déjà authentifié réaffiche le formulaire plutôt que de rediriger.
 ```
 
 - [ ] **Step 3: Commit**
@@ -1710,7 +1816,7 @@ Run: `pnpm --filter @mealz-product-team/hub exec tsc --noEmit`
 Expected: no errors.
 
 Run: `pnpm --filter @mealz-product-team/hub build`
-Expected: build succeeds (this also validates `middleware.ts` compiles for the Edge runtime).
+Expected: build succeeds (this also validates `proxy.ts` compiles — Proxy always runs on the Node.js runtime in Next 16, not Edge).
 
 - [ ] **Step 3: Start the dev server with test credentials**
 

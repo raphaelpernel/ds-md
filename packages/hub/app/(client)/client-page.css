@@ -1,0 +1,13 @@
+.hub-client-shell {
+  min-height: 100vh;
+  padding: var(--spacing-24);
+}
+
+.hub-namespace-page__title {
+  font-size: var(--font-size-heading-lg);
+  margin: 0 0 var(--spacing-16);
+}
+
+.hub-namespace-page__placeholder {
+  color: var(--color-content-weak);
+}

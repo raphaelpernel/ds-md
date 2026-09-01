@@ -29,7 +29,7 @@ Le design system (`packages/design-system`) est indépendant de tout produit : c
 | `marmiton-prototype` | 3000 (défaut Next.js) | Premier prototype : parcours courses/panier Marmiton × Carrefour | — |
 | `assistant-shopping` | 3002 | Prototype UI de l'Assistant Shopping ChatGPT (commerce agentique, Carrefour Belgique) | `docs/docs/00-index.md` |
 | `form-mealz-planner` | 3001 | "Quick Features" côté déploiement Netlify — features rapides / tests UI ponctuels (nom de code conservé côté repo) | — |
-| `home` | 3004 | Hub de navigation entre les prototypes déployés (liens vers les sites Netlify indépendants) | `docs/BRIEF.md` |
+| `hub` | 3004 | Hub multi-client : prototypes, gate mot de passe par espace, brand verrouillée par client | `docs/BRIEF.md` |
 | `supermarket` | 3006 | Démo drive (catalogue + wizard planner) illustrant la réutilisation cross-package du design system (`RecipeCard`, `StoreHeader`, `BottomNav`) | `docs/BRIEF.md` |
 
 Chaque app consommatrice a son propre `docs/` (brief, contexte produit, décisions) — à lire avant d'y travailler, voir `CLAUDE.md` à la racine.
@@ -54,7 +54,7 @@ Pour lancer une autre app que `marmiton-prototype`, cibler le package directemen
 ```bash
 pnpm --filter @mealz-product-team/assistant-shopping dev    # port 3002
 pnpm --filter @mealz-product-team/form-mealz-planner dev    # port 3001
-pnpm --filter @mealz-product-team/home dev                  # port 3004
+pnpm --filter @mealz-product-team/hub dev                    # port 3004
 pnpm --filter @mealz-product-team/supermarket dev           # port 3006
 ```
 
@@ -99,7 +99,7 @@ DS.MD/
     ├── marmiton-prototype/            # @mealz-product-team/marmiton-prototype — prototype Marmiton × Carrefour
     ├── assistant-shopping/            # @mealz-product-team/assistant-shopping — Assistant Shopping ChatGPT
     ├── form-mealz-planner/            # @mealz-product-team/form-mealz-planner — "Quick Features"
-    ├── home/                          # @mealz-product-team/home — hub de navigation entre prototypes
+    ├── hub/                           # @mealz-product-team/hub — hub multi-client (gate + brand lock + prototypes)
     └── supermarket/                   # @mealz-product-team/supermarket — démo drive catalogue + planner
 ```
 
@@ -145,7 +145,7 @@ function MyComponent() {
 }
 ```
 
-Les autres apps Next.js du monorepo (`assistant-shopping`, `form-mealz-planner`, `home`, `supermarket`) utilisent à la place `BrandThemeSwitcher` (`devtools/BrandThemeSwitcher`), un sélecteur de thème client intégré au `layout.tsx` — voir la règle d'intégration dans `CLAUDE.md` racine.
+Les autres apps Next.js du monorepo (`assistant-shopping`, `form-mealz-planner`, `hub`, `supermarket`) utilisent à la place `BrandThemeSwitcher` (`devtools/BrandThemeSwitcher`), un sélecteur de thème client intégré au `layout.tsx` — voir la règle d'intégration dans `CLAUDE.md` racine.
 
 ### Brands disponibles
 
@@ -357,7 +357,7 @@ Chaque app suit le même trio `dev`/`build`/`start` (Next.js), avec régénérat
 | `marmiton-prototype` | 3000 | `pnpm --filter @mealz-product-team/marmiton-prototype dev` |
 | `form-mealz-planner` | 3001 | `pnpm --filter @mealz-product-team/form-mealz-planner dev` |
 | `assistant-shopping` | 3002 | `pnpm --filter @mealz-product-team/assistant-shopping dev` |
-| `home` | 3004 | `pnpm --filter @mealz-product-team/home dev` |
+| `hub` | 3004 | `pnpm --filter @mealz-product-team/hub dev` |
 | `supermarket` | 3006 | `pnpm --filter @mealz-product-team/supermarket dev` |
 
 `assistant-shopping` et `marmiton-prototype` exposent en plus un script `test` (Vitest).

@@ -30,9 +30,9 @@
       "autoPort": true
     },
     {
-      "name": "home-dev",
+      "name": "hub-dev",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--filter", "@mealz-product-team/home", "dev"],
+      "runtimeArgs": ["--filter", "@mealz-product-team/hub", "dev"],
       "port": 3004,
       "autoPort": true
     },
