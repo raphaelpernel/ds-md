@@ -31,7 +31,7 @@ If any of these files don't exist yet, **proceed silently**. Don't flag their ab
     ├── form-mealz-planner/
     │   ├── docs/CONTEXT.md
     │   └── docs/adr/
-    ├── home/
+    ├── hub/
     │   ├── docs/CONTEXT.md
     │   └── docs/adr/
     ├── marmiton-prototype/

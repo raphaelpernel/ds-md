@@ -10,7 +10,7 @@ Quand je commence à travailler dans un dossier `packages/<nom>` (ou équivalent
 
 # Composants design-system — consultation obligatoire avant usage (tous packages)
 
-Dès qu'un agent utilise, ajoute, ou modifie un composant importé depuis `@mealz-product-team/design-system` (`Button`, `Modal`, `ChipTag`, etc.) — **dans n'importe quel package consommateur** (`assistant-shopping`, `marmiton-prototype`, `marmiton-agent`, `home`, `form-mealz-planner`, ou tout futur package Next.js) — consulter **`packages/design-system/docs/DESIGN.md`** avant de choisir ou d'implémenter, même si le package courant a son propre `docs/`.
+Dès qu'un agent utilise, ajoute, ou modifie un composant importé depuis `@mealz-product-team/design-system` (`Button`, `Modal`, `ChipTag`, etc.) — **dans n'importe quel package consommateur** (`assistant-shopping`, `marmiton-prototype`, `hub`, `form-mealz-planner`, `supermarket`, ou tout futur package Next.js) — consulter **`packages/design-system/docs/DESIGN.md`** avant de choisir ou d'implémenter, même si le package courant a son propre `docs/`.
 
 Cette règle est **indépendante** de la règle de cadrage "Démarrage de travail dans un package" ci-dessus, qui ne couvre que le package où l'on travaille (`packages/<nom>/docs/`) — `design-system/docs/DESIGN.md` documente l'usage cross-package des composants et doit être vérifié en plus, pas à la place.
 
@@ -20,7 +20,7 @@ Cette règle est **indépendante** de la règle de cadrage "Démarrage de travai
 
 # Sélecteur de thème client — intégration automatique sur les nouveaux packages Next.js
 
-Quand un **nouveau package Next.js** est créé sous `packages/<nom>` (a un `next.config.ts` + `app/layout.tsx` qui définit `<html>/<body>`) et que `<nom>` **ne commence pas par `marmiton-`**, intégrer automatiquement le sélecteur de thème client (`BrandThemeSwitcher`) dans son `app/layout.tsx`, dès la création du layout — sans attendre que l'utilisateur le redemande. Ne pas appliquer cette règle aux packages `marmiton-*` (déjà brandés par nature) ni aux packages qui ne sont pas des apps Next.js (ex. `design-system`, `marmiton-agent`).
+Quand un **nouveau package Next.js** est créé sous `packages/<nom>` (a un `next.config.ts` + `app/layout.tsx` qui définit `<html>/<body>`) et que `<nom>` **ne commence pas par `marmiton-`**, intégrer automatiquement le sélecteur de thème client (`BrandThemeSwitcher`) dans son `app/layout.tsx`, dès la création du layout — sans attendre que l'utilisateur le redemande. Ne pas appliquer cette règle aux packages `marmiton-*` (déjà brandés par nature) ni aux packages qui ne sont pas des apps Next.js (ex. `design-system`).
 
 Référence d'implémentation : `packages/assistant-shopping/app/layout.tsx` et `packages/form-mealz-planner/app/layout.tsx`.
 

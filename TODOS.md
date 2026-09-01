@@ -75,6 +75,8 @@
 
 ## Vrai algorithme de substitution produit (marmiton-agent)
 
+> **Repointage (2026-09-01)** : `packages/marmiton-agent` a été retiré du monorepo (commit `6e113d6`, 2026-08-08) — le flag `SUBSTITUTE_ITEM` et son `CartContext` étendu n'ont pas été repris ailleurs, ils n'existent plus nulle part dans le repo. Le `CartContext` qui survit (`packages/marmiton-prototype/src/context/CartContext.tsx`, migré depuis dans `packages/hub/src/features/marmiton-prototype/context/CartContext.tsx`) n'a jamais eu cette action. Si ce chantier est repris, il repart de zéro sur cette base-là, pas d'un code existant à réactiver.
+
 **What:** Remplacer le stub visuel `SUBSTITUTE_ITEM` (un simple flag « remplacé » sur la ligne panier, décidé en `/plan-eng-review` du 2026-07-20) par une vraie logique de matching produit équivalent (même famille, prix comparable, disponibilité) dans `packages/marmiton-agent`.
 
 **Why:** Le POC n'a besoin que de démontrer l'écran panier avec substitution, pas de résoudre le matching réel — même report déjà fait sur le TODO CoursesU ci-dessus (« Adapter de données réelles CoursesU »). Construire l'algorithme maintenant reviendrait à deviner un contrat produit/distributeur inconnu.
@@ -91,6 +93,8 @@
 
 ## Adapter marmiton-agent aux vraies données Marmiton/Carrefour
 
+> **Repointage (2026-09-01)** : `packages/marmiton-agent` a été retiré du monorepo (commit `6e113d6`, 2026-08-08). Son dataset (homonymes, signaux communautaires pré-extraits, `steps`) n'existe plus. Le parcours agent qui a survécu — moteur de conversation scripté `agentScript.ts` + UI `AgentConversation`, né dans `packages/marmiton-prototype` et migré cette session dans `packages/hub/src/features/marmiton-prototype/{lib/agentScript.ts, components/agent/AgentConversation.tsx}` — est un système plus simple (slot-filling + correspondance panier-garde-manger + citations communautaires), sans désambiguïsation d'homonymes. Si ce chantier de données réelles est repris, la cible est ce dataset-là (`packages/hub/src/features/marmiton-prototype/data/mock/recipes.ts`), pas l'ancien.
+
 **What:** Remplacer le dataset mock dédié de `packages/marmiton-agent` (recettes homonymes, signaux communautaires pré-extraits, `steps`) par une vraie source de données Marmiton (catalogue recettes, avis, contenu communautaire) si le PO obtient un go en interne.
 
 **Why:** Miroir exact du TODO CoursesU « Adapter de données réelles CoursesU » ci-dessus — le contrat API Marmiton n'est pas connu, deviner maintenant serait prématuré et le dataset mock actuel (créé pour démontrer désambiguïsation homonymes + détection d'incohérence + extraction de signal) suffit pour l'objet de conviction du POC.
@@ -106,6 +110,8 @@
 ---
 
 ## Intégrer les réponses d'ingrédient mémorisées au matching de recherche (marmiton-agent)
+
+> **Repointage (2026-09-01)** : `packages/marmiton-agent` a été retiré du monorepo (commit `6e113d6`, 2026-08-08) — `SessionMemoryContext.tsx` et `nlu.ts` n'existent plus, cette fonctionnalité n'a pas été reprise. Le parcours agent qui a survécu (`agentScript.ts` + `AgentConversation`, migré dans `packages/hub/src/features/marmiton-prototype/`) n'a ni mémoire de session ni recherche `/recherche` — c'est un système scripté à tours, sans les deux briques dont cet item a besoin. Si ce chantier est repris, les deux briques (mémoire + recherche) sont à reconstruire, pas seulement à relier.
 
 **What:** Faire influencer les résultats de `/recherche` par les réponses d'ingrédient déjà données sur une fiche recette (ex. « pas de crème » mémorisé devrait pondérer ou filtrer les futures recommandations), au lieu de garder les deux mémoires (tags de contrainte de recherche et réponses d'ingrédient) complètement séparées comme c'est le cas aujourd'hui.
 
