@@ -63,15 +63,21 @@ Sous `/marmiton` :
   `RecipeAgentDrawer` (agentScript/recipeAskScript) fonctionnels en
   navigation client-side. Vérification manuelle complète en navigateur
   (pas seulement `tsc`/tests) — voir le rapport de la tâche 13 du plan.
-- La card "Agent" (`/marmiton/agent`) pointe vers une route qui n'existe
-  pas encore — 404 attendu jusqu'à la migration du parcours agent
-  conversationnel (plan suivant).
+- **Le parcours agent conversationnel est migré et vérifié bout-en-bout**
+  (plan [`2026-09-01-hub-marmiton-agent-flow.md`](../../../docs/superpowers/plans/2026-09-01-hub-marmiton-agent-flow.md),
+  3 tâches) : `/marmiton/agent` (hero + grille éditoriale + `AgentConversation`
+  scriptée avec carousel de recommandations, clarification par chips,
+  ajout au panier, navigation vers `/marmiton/recipe`) — même route group
+  `(funnel)` que le parcours d'achat, réutilise `agentScript.ts` et
+  `CartContext` déjà migrés par le plan précédent. Vérification manuelle
+  complète en navigateur — voir le rapport de la tâche 3 du plan.
 
-La page `/<client>` générique (`NamespaceCardGrid`) reste affichée en état
-vide pour les clients pas encore migrés (CoursesU). La suite de la
-migration de `marmiton-prototype` (parcours agent conversationnel), puis
-des protos neutres, fait l'objet de plans séparés (voir la section
-"Migration progressive" de la spec).
+Les deux parcours Marmiton (achat et agent) sont maintenant entièrement
+migrés — les deux cards de la galerie `/marmiton` résolvent. La page
+`/<client>` générique (`NamespaceCardGrid`) reste affichée en état vide
+pour les clients pas encore migrés (CoursesU). La migration des protos
+neutres fait l'objet de plans séparés (voir la section "Migration
+progressive" de la spec).
 
 ## Limites connues (squelette, décisions assumées pour l'instant)
 
