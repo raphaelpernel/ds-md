@@ -54,11 +54,11 @@ Chaque `layout.tsx` de namespace fixe `data-brand` en dur via le script anti-FOU
 
 ## Shell interne (session master) — inspiré de Design Studio
 
-Visible uniquement en session master, jamais montré à un client externe. Sidebar façon Design Studio (Sublime Security), avec deux adaptations à la structure originale ("By Contributor" → groupe par personne, "Reference" → doc produit) :
+Visible uniquement en session master, jamais montré à un client externe. Sidebar façon Design Studio (Sublime Security), adaptée : "By Contributor" devient un groupe **Mealz** (contenu interne, pas lié à un client externe nommé) plutôt qu'un groupe par personne, et chaque client externe nommé (Marmiton, CoursesU, ...) a son propre groupe au même niveau que Mealz — pas de catégorie "Client" qui engloberait tout, puisque les clients externes ne voient jamais cette sidebar de toute façon.
 
-- **Mealz** (groupe umbrella pour tout ce qui n'est pas un client externe nommé) :
+- **Mealz** :
   - **Neutral** — liste des protos neutres.
-  - **Guide** (renommé "References" dans la sidebar, avec de la place pour d'autres entrées plus tard type Design Principles/Blueprints — pas construites maintenant) — rendu stylé de `packages/design-system/docs/DESIGN.md` et de chaque `<Component>.design.md`, avec un lien "voir en interactif" vers la story Storybook correspondante. Storybook n'est pas remplacé : il reste le bac à sable interactif (props live, addon a11y) ; le Guide devient la vitrine de lecture, dans le même outil que les prototypes, sans changer de contexte.
+  - **Guide** — avec de la place pour d'autres entrées plus tard type Design Principles/Blueprints (pas construites maintenant) — rendu stylé de `packages/design-system/docs/DESIGN.md` et de chaque `<Component>.design.md`, avec un lien "voir en interactif" vers la story Storybook correspondante. Storybook n'est pas remplacé : il reste le bac à sable interactif (props live, addon a11y) ; le Guide devient la vitrine de lecture, dans le même outil que les prototypes, sans changer de contexte.
 - **Marmiton**, **CoursesU**, ... : un groupe par client externe nommé, listant ses protos (les siens + tout proto neutre qui lui est décliné).
 
 Chaque groupe de proto est affiché en grille de cards (titre, description courte, date de mise à jour) plutôt qu'une simple liste de liens — remplace le modèle actuel de `home` (liens externes vers domaines Netlify).
