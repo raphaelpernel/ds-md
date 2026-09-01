@@ -225,7 +225,10 @@
       "Read(//c/Users/rapha/AppData/Local/Temp/claude/F--Workspace-Mealz-CLAUDE-Projects-DS-MD/321ea094-3806-46d8-8930-f1b3a3cbea7c/scratchpad/**)",
       "mcp__plugin_figma_figma__use_figma",
       "Bash(curl -sL -o /c/Users/rapha/AppData/Local/Temp/claude/F--Workspace-Mealz-CLAUDE-Projects-DS-MD/321ea094-3806-46d8-8930-f1b3a3cbea7c/scratchpad/figma/user_attempt.png \"https://www.figma.com/api/mcp/asset/5fa584df-ba8f-441b-990e-294f7aebc1b7.png\")",
-      "Read(//c/Users/rapha/AppData/Local/Temp/claude/F--Workspace-Mealz-CLAUDE-Projects-DS-MD/321ea094-3806-46d8-8930-f1b3a3cbea7c/scratchpad/figma/**)"
+      "Read(//c/Users/rapha/AppData/Local/Temp/claude/F--Workspace-Mealz-CLAUDE-Projects-DS-MD/321ea094-3806-46d8-8930-f1b3a3cbea7c/scratchpad/figma/**)",
+      "Bash(curl -sL -o /c/Users/rapha/AppData/Local/Temp/claude/F--Workspace-Mealz-CLAUDE-Projects-DS-MD/321ea094-3806-46d8-8930-f1b3a3cbea7c/scratchpad/figma/cand1.png \"https://www.figma.com/api/mcp/asset/fbaf4f36-1b5d-4236-9c68-8c38d6e40647.png\")",
+      "Bash(curl -sL -o /c/Users/rapha/AppData/Local/Temp/claude/F--Workspace-Mealz-CLAUDE-Projects-DS-MD/321ea094-3806-46d8-8930-f1b3a3cbea7c/scratchpad/figma/cand2.png \"https://www.figma.com/api/mcp/asset/be30f70e-855c-4074-8d3a-c6acc9d3c265.png\")",
+      "Bash(curl -sL -o /c/Users/rapha/AppData/Local/Temp/claude/F--Workspace-Mealz-CLAUDE-Projects-DS-MD/321ea094-3806-46d8-8930-f1b3a3cbea7c/scratchpad/figma/cardsrow.png \"https://www.figma.com/api/mcp/asset/2c60e930-acd5-4bf2-a09a-948311ddbbd9.png\")"
     ]
   },
   "hooks": {
