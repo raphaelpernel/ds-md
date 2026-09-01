@@ -35,20 +35,42 @@ et le plan d'implémentation du squelette : [`docs/superpowers/plans/2026-09-01-
   `/marmiton/marmiton-prototype`** : le modèle `/<client>/<proto>` de la
   spec sert à désambiguïser plusieurs protos neutres déclinés sous un même
   client — un proto client-spécifique qui est la seule expérience de son
-  client n'a pas cette ambiguïté. Sa propre page d'accueil (cards
-  Recipe/Agent) fait déjà office d'index, donc `NamespaceCardGrid` (l'index
-  générique de `[client]/page.tsx`) ne s'applique plus à Marmiton — seul
-  CoursesU (pas encore migré) l'utilise encore aujourd'hui.
+  client n'a pas cette ambiguïté.
+- **`/marmiton` est une galerie de prototypes façon "Design Studio"
+  (Sublime Security), pas le site Marmiton réel** : `app/(client)/marmiton/
+  layout.tsx` ne monte ni `Header`, ni `Footer`, ni `CartProvider` — juste
+  `ClientNamespaceShell`. Les vraies pages du parcours (recette → panier →
+  ... → confirmation) vivent dans un route group séparé,
+  `(funnel)/layout.tsx`, qui lui monte le chrome Marmiton complet ; ce
+  découpage garantit que l'index galerie n'hérite jamais du chrome, même si
+  d'autres routes non-funnel sont ajoutées plus tard sous `/marmiton`. Les
+  cards de la galerie (`NamespaceCardGrid` avec `href`) ouvrent leur proto
+  dans un nouvel onglet (`target="_blank" rel="noreferrer"`) — l'idée d'un
+  canevas d'ouverture inline (vue chez Design Studio) est explicitement
+  différée, jugée complexe pour peu de valeur immédiate.
 
 ## Statut
 
-Le squelette (auth deux niveaux, sidebar, brand verrouillée) est en place,
-et la fondation de `marmiton-prototype` (routing, chrome `Header`/`Footer`,
-couche data) est migrée sous `/marmiton` — pas encore la logique métier des
-parcours recette/agent eux-mêmes. La page `/<client>` générique
-(`NamespaceCardGrid`) reste affichée en état vide pour les clients pas
-encore migrés (CoursesU). La suite de la migration de `marmiton-prototype`,
-puis des protos neutres, fait l'objet de plans séparés (voir la section
+Le squelette (auth deux niveaux, sidebar, brand verrouillée) est en place.
+Sous `/marmiton` :
+- La galerie d'index (`/marmiton`) est en place, avec les cards Recipe et
+  Agent.
+- **Le parcours d'achat complet est migré et vérifié bout-en-bout** (plan
+  [`2026-09-01-hub-marmiton-recipe-funnel.md`](../../../docs/superpowers/plans/2026-09-01-hub-marmiton-recipe-funnel.md),
+  13 tâches) : `/marmiton/recipe` → `/marmiton/cart` → `/marmiton/login` →
+  `/marmiton/store` → `/marmiton/slot` → `/marmiton/payment` →
+  `/marmiton/confirmation`, avec `CartContext`, `RecipeAskBar` +
+  `RecipeAgentDrawer` (agentScript/recipeAskScript) fonctionnels en
+  navigation client-side. Vérification manuelle complète en navigateur
+  (pas seulement `tsc`/tests) — voir le rapport de la tâche 13 du plan.
+- La card "Agent" (`/marmiton/agent`) pointe vers une route qui n'existe
+  pas encore — 404 attendu jusqu'à la migration du parcours agent
+  conversationnel (plan suivant).
+
+La page `/<client>` générique (`NamespaceCardGrid`) reste affichée en état
+vide pour les clients pas encore migrés (CoursesU). La suite de la
+migration de `marmiton-prototype` (parcours agent conversationnel), puis
+des protos neutres, fait l'objet de plans séparés (voir la section
 "Migration progressive" de la spec).
 
 ## Limites connues (squelette, décisions assumées pour l'instant)
@@ -61,3 +83,13 @@ puis des protos neutres, fait l'objet de plans séparés (voir la section
 - **Pas de déconnexion, pas de redirection si déjà authentifié sur `/gate`** :
   les cookies durent un an sans moyen de les effacer depuis l'UI ; visiter
   `/gate` déjà authentifié réaffiche le formulaire plutôt que de rediriger.
+- **Reset CSS non scopé dans certaines pages du funnel** (`cart`, `recipe`,
+  `slot`) : un `<style>` inline injecte `* { box-sizing: border-box; margin:
+  0; padding: 0; }` sans portée — hérité tel quel de `marmiton-prototype`,
+  où l'app entière pouvait se le permettre. Dans le hub, ces pages
+  s'affichent à l'intérieur de `MasterShell` pour une session master, donc
+  ce reset touche aussi la sidebar du hub. Pas d'effet visuel constaté à ce
+  jour (vérifié en session master lors de la vérification manuelle du plan
+  recette), mais à surveiller si une future page du shell développe un
+  style qui dépend de `margin`/`padding`/`box-sizing` par défaut du
+  navigateur.
