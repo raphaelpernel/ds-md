@@ -4,6 +4,7 @@ import { headers } from 'next/headers'
 import Script from 'next/script'
 import { BrandThemeSwitcher } from '@mealz-product-team/design-system/devtools/BrandThemeSwitcher/BrandThemeSwitcher'
 import { getBrandThemeScript } from '@mealz-product-team/design-system/devtools/brandThemeScript'
+import { BrandSync } from '@/components/BrandSync/BrandSync'
 import '@mealz-product-team/design-system/styles/index.css'
 
 export const metadata: Metadata = {
@@ -28,6 +29,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         )}
       </head>
       <body>
+        <BrandSync />
         {children}
         {!locked && <BrandThemeSwitcher />}
       </body>
