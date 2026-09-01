@@ -1,0 +1,115 @@
+.recipe-ask-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.recipe-ask-thread {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+  padding: var(--spacing-16);
+}
+
+.recipe-ask-message {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  max-width: 88%;
+}
+
+.recipe-ask-message--user {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.recipe-ask-message--agent {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+.recipe-ask-bubble {
+  font-size: 14px;
+  line-height: 1.5;
+  padding: var(--spacing-8) var(--spacing-16);
+  border-radius: var(--shape-sheet);
+  color: var(--color-content-default);
+}
+
+.recipe-ask-message--user .recipe-ask-bubble {
+  background: var(--color-interactive-bg);
+  color: #fff;
+}
+
+.recipe-ask-message--agent .recipe-ask-bubble {
+  background: var(--color-surface-secondary);
+}
+
+.recipe-ask-bubble--pending {
+  display: inline-flex;
+}
+
+.recipe-ask-answer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  align-items: flex-start;
+}
+
+.recipe-ask-highlight {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-8);
+  padding: var(--spacing-8);
+  border-radius: var(--radius-card);
+  font-size: var(--font-size-body-xs);
+  line-height: 1.4;
+}
+
+.recipe-ask-highlight--success {
+  background: var(--color-semantic-success-bg-light);
+  color: var(--color-semantic-success-content);
+}
+
+.recipe-ask-highlight--info {
+  background: var(--color-semantic-info-bg-light);
+  color: var(--color-semantic-info-content);
+}
+
+.recipe-ask-highlight--warning {
+  background: var(--color-semantic-warning-bg-light);
+  color: var(--color-semantic-warning-content);
+}
+
+.recipe-ask-highlight svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.recipe-ask-composer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  padding: var(--spacing-16);
+  border-top: 1px solid var(--color-border-default);
+}
+
+.recipe-ask-composer__suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-8);
+}
+
+.recipe-ask-composer__row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-8);
+}
+
+.recipe-ask-composer__row .input-field {
+  flex: 1;
+}
