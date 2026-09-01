@@ -11,9 +11,11 @@ export default async function ClientPage({ params }: { params: Promise<{ client:
   }
 
   return (
-    <section>
-      <h1 className="hub-namespace-page__title">{namespace.label}</h1>
-      <NamespaceCardGrid cards={[]} emptyMessage="Aucun prototype migré pour l'instant." />
-    </section>
+    <div className="hub-client-shell">
+      <section>
+        <h1 className="hub-namespace-page__title">{namespace.label}</h1>
+        <NamespaceCardGrid cards={[]} emptyMessage="Aucun prototype migré pour l'instant." />
+      </section>
+    </div>
   )
 }
