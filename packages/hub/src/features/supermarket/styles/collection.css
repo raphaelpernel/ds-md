@@ -1,0 +1,59 @@
+/* Supermarket — Collection Page
+   No hardcoded values. All tokens via CSS custom properties (design-system). */
+
+.supermarket-feature .collection-breadcrumb-bar {
+  background-color: var(--color-surface-primary);
+  border-bottom: 1px solid var(--color-border-default);
+  padding: var(--spacing-16) var(--spacing-24);
+}
+
+.supermarket-feature .collection-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-24);
+  padding-top: var(--spacing-32);
+  padding-bottom: var(--spacing-48);
+}
+
+.supermarket-feature .collection-page--mobile {
+  padding-bottom: calc(var(--spacing-48) + 64px + env(safe-area-inset-bottom, 0px));
+}
+
+.supermarket-feature .collection-page__title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-8);
+}
+
+.supermarket-feature .collection-page__title-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.supermarket-feature .collection-page__title {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-heading);
+  font-size: var(--font-size-heading-md);
+  line-height: var(--line-height-heading-md);
+  color: var(--color-content-default);
+}
+
+.supermarket-feature .collection-page__description {
+  margin: 0;
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body-sm);
+  color: var(--color-content-weak);
+}
+
+.supermarket-feature .collection-page__grid {
+  display: grid;
+  /* RecipeCard a une largeur fixe (240px, cf. RecipeCard.design.md) : les colonnes
+     ne doivent pas s'étirer en 1fr, sinon elles deviennent plus étroites que la
+     carte et celle-ci déborde sur ses voisines, effaçant visuellement le gap. */
+  grid-template-columns: repeat(auto-fill, 240px);
+  gap: var(--spacing-16);
+}

@@ -1,0 +1,4 @@
+.product-swap-view {
+  display: flex;
+  flex-direction: column;
+}

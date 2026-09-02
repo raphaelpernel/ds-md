@@ -1,0 +1,28 @@
+.assistant-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-8);
+  width: 100%;
+  text-align: center;
+  padding: var(--spacing-24) 0;
+}
+
+.assistant-intro__mascot {
+  height: 168px;
+  width: auto;
+}
+
+.assistant-intro__greeting {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-heading);
+  font-size: var(--font-size-body-lg);
+  color: var(--color-content-default);
+}
+
+.assistant-intro__text {
+  max-width: 480px;
+  font-size: var(--font-size-body-lg);
+  line-height: var(--line-height-body-lg);
+  color: var(--color-content-default);
+}

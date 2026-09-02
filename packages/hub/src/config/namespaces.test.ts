@@ -1,3 +1,4 @@
+import { BRANDS } from '@mealz-product-team/design-system/styles/tokens/brands/brands'
 import { describe, expect, it } from 'vitest'
 import { CLIENT_NAMESPACES, findClientNamespace, NEUTRAL_BRAND, MASTER_PASSWORD_ENV_VAR } from './namespaces'
 
@@ -22,6 +23,7 @@ describe('CLIENT_NAMESPACES', () => {
       brand: 'coursesu',
       passwordEnvVar: 'HUB_PASSWORD_COURSESU',
     })
+    expect(BRANDS.find((brand) => brand.value === coursesu?.brand)?.isRetailer).toBe(true)
   })
 })
 

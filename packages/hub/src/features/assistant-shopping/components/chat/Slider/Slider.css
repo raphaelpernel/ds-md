@@ -1,0 +1,102 @@
+.slider {
+  position: relative;
+}
+
+.slider__track {
+  display: flex;
+  gap: var(--spacing-12);
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.slider__track::-webkit-scrollbar {
+  display: none;
+}
+
+.slider__button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: var(--elevation-200);
+  background: var(--color-surface-primary);
+}
+
+.slider__button--left {
+  left: var(--spacing-8);
+}
+
+.slider__button--right {
+  right: var(--spacing-8);
+}
+
+/* Slider d'action pinné en bas d'une full view (alternatives de remplacement,
+   choix multiple de produits, navigation entre recettes) — partagé ici plutôt
+   que dans chaque vue, puisque toutes importent déjà `Slider`. */
+.product-detail-content__actions {
+  position: sticky;
+  bottom: 0;
+  padding: var(--spacing-16) 0;
+  background: var(--color-surface-secondary);
+  border-top: 1px solid var(--color-border-default);
+}
+
+.product-detail-content__actions .slider__track {
+  padding: 0 var(--spacing-16);
+}
+
+.product-mini-card {
+  scroll-snap-align: start;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-12);
+  padding: var(--spacing-12);
+  border: 1px solid var(--color-border-weak);
+  border-radius: var(--shape-card);
+  background: var(--color-surface-primary);
+  box-shadow: var(--elevation-100);
+  cursor: pointer;
+}
+
+.product-mini-card--active {
+  background: var(--color-surface-secondary);
+  border-color: var(--color-content-default);
+}
+
+.product-mini-card__emoji {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.product-mini-card__info {
+  min-width: 0;
+}
+
+.product-mini-card__name {
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-label);
+  color: var(--color-content-default);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 140px;
+}
+
+.product-mini-card__price {
+  font-size: var(--font-size-label-sm);
+  color: var(--color-content-weak);
+  white-space: nowrap;
+}
+
+.product-mini-card__selected {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  font-size: var(--font-size-label-sm);
+  font-weight: var(--font-weight-label);
+  color: var(--color-content-weak);
+  white-space: nowrap;
+  flex-shrink: 0;
+}

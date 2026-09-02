@@ -1,0 +1,104 @@
+/* Supermarket — catalogue d'idées repas
+   No hardcoded values. All tokens via CSS custom properties (design-system). */
+
+/* ── Hero — full-bleed, hors grille de layout (cf. Figma Catalog Header) ── */
+.supermarket-feature .catalog-hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  height: 200px;
+  overflow: hidden;
+}
+
+.supermarket-feature .catalog-hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.supermarket-feature .catalog-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+.supermarket-feature .catalog-hero__content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  padding-top: var(--spacing-40);
+  padding-bottom: var(--spacing-40);
+}
+
+.supermarket-feature .catalog-hero__title {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-heading);
+  font-size: var(--font-size-heading-xl);
+  line-height: var(--line-height-heading-xl);
+  color: var(--color-content-inversed);
+  text-shadow: 0 1px 4px rgba(3, 24, 32, 0.12);
+}
+
+.supermarket-feature .catalog-hero__subtitle {
+  margin: 0;
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-body);
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+  color: var(--color-content-weak-inversed);
+}
+
+.supermarket-feature .catalog-page__nav {
+  padding-top: var(--spacing-24);
+}
+
+.supermarket-feature .catalog-page__planner-banner {
+  padding-top: var(--spacing-24);
+}
+
+.supermarket-feature .catalog-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-40);
+  padding-top: var(--spacing-24);
+  padding-bottom: var(--spacing-48);
+}
+
+.supermarket-feature .catalog-page--mobile {
+  /* Réserve l'espace de la BottomNav fixe (icône+label+safe-area) pour ne pas
+     masquer la dernière collection. */
+  padding-bottom: calc(var(--spacing-48) + 64px + env(safe-area-inset-bottom, 0px));
+}
+
+.supermarket-feature .catalog-page__collection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+}
+
+.supermarket-feature .catalog-page__collection-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-16);
+}
+
+.supermarket-feature .catalog-page__collection-title {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-heading);
+  font-size: var(--font-size-heading-sm);
+  line-height: var(--line-height-heading-sm);
+  color: var(--color-content-default);
+}
+
+.supermarket-feature .catalog-page__grid {
+  display: flex;
+  gap: var(--spacing-16);
+  overflow-x: auto;
+  padding-bottom: var(--spacing-4);
+}

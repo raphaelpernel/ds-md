@@ -1,6 +1,7 @@
 // packages/hub/app/(client)/marmiton/page.tsx
 import { headers } from 'next/headers'
 import { NamespaceCardGrid } from '@/components/NamespaceCardGrid/NamespaceCardGrid'
+import { getPrototypeCards } from '@/config/prototypes'
 import './page.css'
 
 export default async function MarmitonHomePage() {
@@ -11,20 +12,7 @@ export default async function MarmitonHomePage() {
     <section>
       <h1 className="hub-namespace-page__title">Marmiton</h1>
       <NamespaceCardGrid
-        cards={[
-          {
-            title: 'Recipe',
-            description: "Parcours d'achat depuis une recette Marmiton (recette → panier → magasin → créneau → paiement).",
-            updatedAt: '01/09/2026',
-            href: '/marmiton/recipe',
-          },
-          {
-            title: 'Agent',
-            description: 'Parcours agent conversationnel Marmiton.',
-            updatedAt: '01/09/2026',
-            href: '/marmiton/agent',
-          },
-        ]}
+        cards={getPrototypeCards('marmiton')}
         emptyMessage="Aucun prototype migré pour l'instant."
       />
     </section>

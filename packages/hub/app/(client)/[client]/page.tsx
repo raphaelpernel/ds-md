@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { headers } from 'next/headers'
 import { findClientNamespace } from '@/config/namespaces'
 import { NamespaceCardGrid } from '@/components/NamespaceCardGrid/NamespaceCardGrid'
+import { getPrototypeCards } from '@/config/prototypes'
 
 export default async function ClientPage({ params }: { params: Promise<{ client: string }> }) {
   const { client } = await params
@@ -17,7 +18,7 @@ export default async function ClientPage({ params }: { params: Promise<{ client:
   const content = (
     <section>
       <h1 className="hub-namespace-page__title">{namespace.label}</h1>
-      <NamespaceCardGrid cards={[]} emptyMessage="Aucun prototype migré pour l'instant." />
+      <NamespaceCardGrid cards={getPrototypeCards(namespace.id)} emptyMessage="Aucun prototype migré pour l'instant." />
     </section>
   )
 

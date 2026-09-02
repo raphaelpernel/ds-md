@@ -1,0 +1,24 @@
+.full-view {
+  position: relative;
+  height: 100%;
+  overflow-y: auto;
+  background: var(--color-surface-secondary);
+}
+
+.full-view__back {
+  position: sticky;
+  top: var(--spacing-16);
+  left: var(--spacing-16);
+  margin: var(--spacing-16);
+  z-index: 1;
+}
+
+.full-view__back--over-media {
+  position: absolute;
+  margin: 0;
+}
+
+.full-view__content {
+  display: flex;
+  flex-direction: column;
+}
