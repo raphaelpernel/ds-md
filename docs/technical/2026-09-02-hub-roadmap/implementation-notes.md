@@ -28,3 +28,13 @@ Cette passe concerne uniquement `packages/hub` et la documentation de traçabili
 ## État Git
 
 Le diff est entièrement indexé avant livraison ; aucun fichier généré (`.next`, `next-env.d.ts`) n'est inclus.
+
+## Incident post-livraison — résolution Markdown
+
+Le Build Error local sur `MarkdownDocument.tsx` provenait d'un `node_modules`
+du workspace qui ne contenait pas les dépendances pourtant déjà déclarées dans
+`packages/hub/package.json` et résolues dans `pnpm-lock.yaml` :
+`react-markdown@10.1.0` et `remark-gfm@4.0.1`. Une réinstallation déterministe
+avec `pnpm install --frozen-lockfile` restaure les liens pnpm et permet à
+Turbopack de résoudre les imports. Aucune déclaration supplémentaire ni
+contournement du rendu Markdown n'est nécessaire.
