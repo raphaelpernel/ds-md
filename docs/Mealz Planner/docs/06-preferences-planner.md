@@ -1,5 +1,12 @@
 # Mealz Planner — CTA "Préférences"
 
+> **Avertissement de supersession — flow Hub du 2026-09-03 :** ce document
+> conserve son historique, mais le profil alimentaire permanent du Hub est
+> désormais défini par `packages/hub/docs/product/2026-09-03-preferences-alimentaires/spec.md`.
+> Dans ce nouveau flow, les ingrédients évités dépriorisent sans masquer, les
+> équipements permanents n'ont aucun effet, le catalogue reste consultable et
+> aucun compteur de préférences n'est affiché.
+
 ## Relation avec les Préférences "Idées repas en 1 clic"
 
 **Donnée partagée, pas distincte.** Les Préférences du Mealz Planner sont exactement les mêmes que celles du parcours "Idées repas en 1 clic" — même ressource utilisateur. Si l'utilisateur a renseigné 3 convives dans les Préférences d'"Idées repas en 1 clic", ce sera 3 convives dans les Préférences du Planner, et inversement.

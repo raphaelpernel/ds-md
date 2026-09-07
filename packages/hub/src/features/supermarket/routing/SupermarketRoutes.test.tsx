@@ -7,6 +7,7 @@ describe('Supermarket routes', () => {
       home: '/neutral/supermarket',
       collection: '/neutral/supermarket/collections/:slug',
       planner: '/neutral/supermarket/planner',
+      profile: '/neutral/supermarket/profile',
     })
   })
 })

@@ -2,9 +2,10 @@ export interface SupermarketRoutes {
   home: string
   collection: string
   planner: string
+  profile: string
 }
 
 export function supermarketRoutes(basePath: string): SupermarketRoutes {
   const base = `/${basePath.replace(/^\/+|\/+$/g, '')}`
-  return { home: base, collection: `${base}/collections/:slug`, planner: `${base}/planner` }
+  return { home: base, collection: `${base}/collections/:slug`, planner: `${base}/planner`, profile: `${base}/profile` }
 }

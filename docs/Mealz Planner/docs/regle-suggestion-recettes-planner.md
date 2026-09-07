@@ -1,5 +1,13 @@
 # Règle de suggestion de recettes — section "Suggestions" du Mealz Planner
 
+> **Avertissement de supersession — flow Hub du 2026-09-03 :** cette règle
+> décrit l'historique du Planner et ne doit pas être appliquée au profil
+> alimentaire permanent Neutral-first. La politique Hub centralisée dans
+> `packages/hub/src/features/food-preferences/policy/personalizeRecipes.ts`
+> exclut uniquement les incompatibilités explicitement identifiées sur la
+> surface Planner, dépriorise les ingrédients évités et ne tient pas compte des
+> équipements permanents.
+
 > Périmètre : spécifique à la section "Suggestions" du Planner (vue "Mon menu"). Ne pas appliquer par défaut à d'autres recommandations de recettes dans le SDK (catalogue, home, etc.) sans confirmation.
 
 Règle appliquée par l'IA Mealz pour proposer une recette à la fois au shopper dans la section "Suggestions" du Planner (CTA "Ajouter au menu" / "Passer").

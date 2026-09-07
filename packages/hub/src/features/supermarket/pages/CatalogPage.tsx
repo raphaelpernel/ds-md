@@ -12,13 +12,16 @@ import {
   useMediaQuery,
 } from '@mealz-product-team/design-system'
 import { usePlanner } from '@/features/mealz-planner/context/PlannerContext'
-import { COLLECTIONS, PROMO_COLLECTION_ID } from '@/features/supermarket/data/recipes'
+import { useFoodPreferences } from '@/features/food-preferences/context/FoodPreferencesContext'
+import { CATALOG_RECIPE_PREFERENCE_FACTS, COLLECTIONS, PROMO_COLLECTION_ID } from '@/features/supermarket/data/recipes'
+import { personalizeRecipes } from '@/features/food-preferences/policy/personalizeRecipes'
 import { supermarketRoutes } from '@/features/supermarket/routing/SupermarketRoutes'
 import '@/features/supermarket/styles/page.css'
 
 export default function CatalogPage({ basePath = '/neutral/supermarket' }: { basePath?: string }) {
   const router = useRouter()
   const { state, setPeople } = usePlanner()
+  const { profile, openDrawer } = useFoodPreferences()
   const routes = supermarketRoutes(basePath)
   const isMobile = useMediaQuery('(max-width: 767px)')
   const [addedIds, setAddedIds] = useState<Set<string>>(new Set())
@@ -49,6 +52,7 @@ export default function CatalogPage({ basePath = '/neutral/supermarket' }: { bas
         cartCount={cartCount}
         cartTotal={cartTotal}
         userName="Joe"
+        accountHref={routes.profile}
       />
 
       <header className="catalog-hero">
@@ -64,7 +68,7 @@ export default function CatalogPage({ basePath = '/neutral/supermarket' }: { bas
       </header>
 
       <div className="catalog-page__nav layout-container">
-        <CatalogNavigation promoHref={routes.collection.replace(':slug', PROMO_COLLECTION_ID)} filterCount={3} preferencesCount={3} />
+        <CatalogNavigation promoHref={routes.collection.replace(':slug', PROMO_COLLECTION_ID)} filterCount={3} onPreferencesClick={() => openDrawer(document.activeElement as HTMLElement)} />
       </div>
 
       <div className="catalog-page__planner-banner layout-container">
@@ -87,7 +91,7 @@ export default function CatalogPage({ basePath = '/neutral/supermarket' }: { bas
               </Link>
             </div>
             <div className="catalog-page__grid">
-              {collection.recipes.map((recipe) => (
+              {personalizeRecipes(collection.recipes.map((item) => ({ item, facts: CATALOG_RECIPE_PREFERENCE_FACTS[item.id]! })), profile, 'catalog').map((recipe) => (
                 <RecipeCard
                   key={recipe.id}
                   title={recipe.title}

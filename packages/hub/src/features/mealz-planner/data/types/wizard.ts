@@ -8,12 +8,15 @@ export interface DietOption {
   label: string
 }
 
+import type { RecipePreferenceFacts } from '@/features/food-preferences/policy/personalizeRecipes'
+
 export interface MockRecipe {
   id: string
   name: string
   minutes: number
   dietTags: string[]
   requiredEquipment: string[]
+  preferenceFacts: RecipePreferenceFacts
 }
 
 export interface WizardState {

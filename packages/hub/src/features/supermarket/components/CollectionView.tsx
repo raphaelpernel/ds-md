@@ -13,13 +13,16 @@ import {
   useMediaQuery,
 } from '@mealz-product-team/design-system'
 import type { RecipeCollection } from '@/features/supermarket/data/recipes'
-import { PROMO_COLLECTION_ID } from '@/features/supermarket/data/recipes'
+import { CATALOG_RECIPE_PREFERENCE_FACTS, PROMO_COLLECTION_ID } from '@/features/supermarket/data/recipes'
+import { useFoodPreferences } from '@/features/food-preferences/context/FoodPreferencesContext'
+import { personalizeRecipes } from '@/features/food-preferences/policy/personalizeRecipes'
 import { supermarketRoutes } from '@/features/supermarket/routing/SupermarketRoutes'
 import '@/features/supermarket/styles/collection.css'
 
 export function CollectionView({ collection, basePath = '/neutral/supermarket' }: { collection: RecipeCollection; basePath?: string }) {
   const router = useRouter()
   const isMobile = useMediaQuery('(max-width: 767px)')
+  const { profile, openDrawer } = useFoodPreferences()
   const [addedIds, setAddedIds] = useState<Set<string>>(new Set())
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set())
 
@@ -50,6 +53,7 @@ export function CollectionView({ collection, basePath = '/neutral/supermarket' }
         cartCount={cartCount}
         cartTotal={cartTotal}
         userName="Joe"
+        accountHref={routes.profile}
       />
 
       <div className="collection-breadcrumb-bar">
@@ -80,11 +84,11 @@ export function CollectionView({ collection, basePath = '/neutral/supermarket' }
         <CatalogNavigation
           promoHref={isPromo ? undefined : routes.collection.replace(':slug', PROMO_COLLECTION_ID)}
           filterCount={3}
-          preferencesCount={3}
+          onPreferencesClick={() => openDrawer(document.activeElement as HTMLElement)}
         />
 
         <div className="collection-page__grid">
-          {collection.recipes.map((recipe) => (
+          {personalizeRecipes(collection.recipes.map((item) => ({ item, facts: CATALOG_RECIPE_PREFERENCE_FACTS[item.id]! })), profile, 'catalog').map((recipe) => (
             <RecipeCard
               key={recipe.id}
               title={recipe.title}

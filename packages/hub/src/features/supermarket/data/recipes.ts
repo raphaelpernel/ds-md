@@ -1,3 +1,5 @@
+import type { RecipePreferenceFacts } from '@/features/food-preferences/policy/personalizeRecipes'
+
 export interface Recipe {
   id: string
   title: string
@@ -5,6 +7,21 @@ export interface Recipe {
   guests: number
   price: number
   promo?: boolean
+}
+
+export const CATALOG_RECIPE_PREFERENCE_FACTS: Record<string, RecipePreferenceFacts> = {
+  'burger-poulet-halloumi': { incompatibleDietIds: ['vegan', 'vegetarien'], incompatibleRestrictionIds: ['lait'], ingredientIds: [], cuisineId: 'francaise', preparationMinutes: 15 },
+  'sandwich-poulet-croustillant': { incompatibleDietIds: ['vegan', 'vegetarien'], incompatibleRestrictionIds: ['gluten'], ingredientIds: [], cuisineId: 'francaise', preparationMinutes: 15 },
+  'tacos-poisson-epices': { incompatibleDietIds: ['vegan', 'vegetarien'], incompatibleRestrictionIds: [], ingredientIds: ['poivrons'], cuisineId: 'mexicaine', preparationMinutes: 20 },
+  'patatas-bravas-minute': { incompatibleDietIds: [], incompatibleRestrictionIds: [], ingredientIds: [], cuisineId: 'espagnole', preparationMinutes: 20 },
+  'poulet-mijote-creole': { incompatibleDietIds: ['vegan', 'vegetarien'], incompatibleRestrictionIds: [], ingredientIds: [], cuisineId: 'francaise', preparationMinutes: 30 },
+  'saumon-roti-fenouil': { incompatibleDietIds: ['vegan', 'vegetarien'], incompatibleRestrictionIds: [], ingredientIds: [], cuisineId: 'francaise', preparationMinutes: 30 },
+  'poulet-alfredo-primavera': { incompatibleDietIds: ['vegan', 'vegetarien'], incompatibleRestrictionIds: ['lait'], ingredientIds: [], cuisineId: 'italienne', preparationMinutes: 30 },
+  'moqueca-crevettes-bahia': { incompatibleDietIds: ['vegan', 'vegetarien'], incompatibleRestrictionIds: ['fruits-a-coque'], ingredientIds: [], cuisineId: 'indienne', preparationMinutes: 30 },
+  'puree-aubergines-epicee': { incompatibleDietIds: [], incompatibleRestrictionIds: [], ingredientIds: [], cuisineId: 'indienne', preparationMinutes: 30 },
+  'salade-couscous-aubergine': { incompatibleDietIds: ['vegan'], incompatibleRestrictionIds: ['gluten'], ingredientIds: [], cuisineId: 'francaise', preparationMinutes: 20 },
+  'trempette-avocat-pdt': { incompatibleDietIds: [], incompatibleRestrictionIds: [], ingredientIds: [], cuisineId: 'mexicaine', preparationMinutes: 15 },
+  'gateau-aux-pommes': { incompatibleDietIds: ['vegan'], incompatibleRestrictionIds: ['gluten', 'oeufs'], ingredientIds: [], cuisineId: 'francaise', preparationMinutes: 20 },
 }
 
 // Pas de champ `mealIdea` ici : ce badge RecipeCard est réservé au contexte

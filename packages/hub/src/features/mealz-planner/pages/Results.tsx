@@ -3,6 +3,8 @@
 import { useRouter } from 'next/navigation'
 import { Button, ChipTag, Heading } from '@mealz-product-team/design-system'
 import { usePlanner } from '@/features/mealz-planner/context/PlannerContext'
+import { useOptionalFoodPreferences } from '@/features/food-preferences/context/FoodPreferencesContext'
+import { createDefaultFoodPreferenceProfile } from '@/features/food-preferences/model/defaults'
 import { pickRecipes } from '@/features/mealz-planner/data/mock/recipes'
 import '@mealz-product-team/design-system/styles/index.css'
 import { plannerPath } from '@/features/mealz-planner/plannerRoutes'
@@ -10,7 +12,8 @@ import { plannerPath } from '@/features/mealz-planner/plannerRoutes'
 export default function PlannerResultsPage() {
   const router = useRouter()
   const { state, reset, basePath } = usePlanner()
-  const recipes = pickRecipes(state)
+  const preferences = useOptionalFoodPreferences()
+  const recipes = pickRecipes(state, preferences?.profile ?? createDefaultFoodPreferenceProfile())
 
   const handleRestart = () => {
     reset()

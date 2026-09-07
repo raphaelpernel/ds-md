@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useMemo, useReducer, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useMemo, useReducer, useRef, type ReactNode } from 'react'
 import { NO_RESTRICTION_ID } from '@/features/mealz-planner/data/mock/diets'
 import type { WizardState } from '@/features/mealz-planner/data/types/wizard'
 
@@ -35,6 +35,7 @@ interface PlannerContextValue {
   state: WizardState
   basePath: string
   setPeople: (value: number) => void
+  applyDefaultPeople: (value: number) => void
   setMeals: (value: number) => void
   toggleEquipment: (id: string) => void
   toggleDiet: (id: string) => void
@@ -45,14 +46,30 @@ const PlannerContext = createContext<PlannerContextValue | undefined>(undefined)
 
 export function PlannerProvider({ children, basePath }: { children: ReactNode; basePath: string }) {
   const [state, dispatch] = useReducer(plannerReducer, initialPlannerState)
+  const peopleWasModified = useRef(false)
+  const setPeople = useCallback((value: number) => {
+    peopleWasModified.current = true
+    dispatch({ type: 'SET_PEOPLE', value })
+  }, [])
+  const applyDefaultPeople = useCallback((value: number) => {
+    if (!peopleWasModified.current) dispatch({ type: 'SET_PEOPLE', value })
+  }, [])
+  const setMeals = useCallback((value: number) => dispatch({ type: 'SET_MEALS', value }), [])
+  const toggleEquipment = useCallback((id: string) => dispatch({ type: 'TOGGLE_EQUIPMENT', id }), [])
+  const toggleDiet = useCallback((id: string) => dispatch({ type: 'TOGGLE_DIET', id }), [])
+  const reset = useCallback(() => {
+    peopleWasModified.current = false
+    dispatch({ type: 'RESET' })
+  }, [])
   const value = useMemo(() => ({
     state, basePath,
-    setPeople: (value: number) => dispatch({ type: 'SET_PEOPLE', value }),
-    setMeals: (value: number) => dispatch({ type: 'SET_MEALS', value }),
-    toggleEquipment: (id: string) => dispatch({ type: 'TOGGLE_EQUIPMENT', id }),
-    toggleDiet: (id: string) => dispatch({ type: 'TOGGLE_DIET', id }),
-    reset: () => dispatch({ type: 'RESET' }),
-  }), [state, basePath])
+    setPeople,
+    applyDefaultPeople,
+    setMeals,
+    toggleEquipment,
+    toggleDiet,
+    reset,
+  }), [state, basePath, setPeople, applyDefaultPeople, setMeals, toggleEquipment, toggleDiet, reset])
   return <PlannerContext.Provider value={value}>{children}</PlannerContext.Provider>
 }
 
