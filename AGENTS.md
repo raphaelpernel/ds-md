@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Monorepo pnpm **Mealz** : design system multi-brand (`packages/design-system`) et applications consommatrices, dont le Hub (`packages/hub`). Stack, scripts, ports et packages : [README.md](README.md). Ce fichier est tool-agnostique ; Claude Code lit aussi `CLAUDE.md`.
+Monorepo pnpm **Mealz** en reconstruction multi-brand isolée. La spec directrice approuvée vit dans `docs/product/2026-09-08-ds-md-reconstruction/`. Stack, scripts, ports et packages historiques : [README.md](README.md). Ce fichier est tool-agnostique ; Claude Code lit aussi `CLAUDE.md`.
 
 ## 1. Préambule obligatoire
 
@@ -8,36 +8,26 @@ Avant toute action sur des fichiers, Git ou le terminal :
 
 1. Confirmer que le workspace actif est le repository `DS.MD`.
 2. Lire ce fichier en entier puis la documentation locale du package : `packages/<nom>/docs/BRIEF.md` ou `docs/CONTEXT.md`, et les ADR présentes.
-3. Identifier le package principal : `packages/design-system/` ou `packages/hub/`.
+3. Identifier la surface principale : tokens, `ui-kit`, `mealz-ui`, Supermarket ou portail.
 4. Vérifier la branche, le worktree et l'état Git réels ; ne jamais les déduire d'un message d'agent.
 5. Préserver tous les changements préexistants non liés. Ne pas modifier un autre repository ou package sans instruction explicite.
 
 La vue inter-packages et les conventions de domaine vivent dans `docs/agents/domain.md`. Si une nouvelle feature ou un nouveau flow n'a ni brief, ni intention, ni contraintes, ni UX explicites, arrêter l'implémentation et demander ce cadrage.
 
-## 2. Périmètre des packages
+## 2. Périmètre des surfaces
 
-- `packages/design-system/` : tokens, composants partagés, documentation de composant et Storybook.
-- `packages/hub/` : prototypes, démos, concepts, flows et expériences produit/UI.
-- Une tâche qui touche les deux packages doit l'indiquer dans le brief, la spec et le plan, avec justification et vérification des deux côtés.
+- `packages/tokens/` : source canonique des fondations, alias et sorties générées.
+- `packages/ui-kit/` : primitives génériques accessibles, sans connaissance du domaine Mealz.
+- `packages/mealz-ui/` : composants et interactions métier réutilisables.
+- `apps/supermarket/` : routes, shells, scénarios, overlays de données et orchestration.
+- `apps/portal/` : liens vers documentations, Figma, Supermarket, icônes, Lab et archives.
+- Un Lab éventuel reste séparé et non canonique.
 
-Par défaut, modifier uniquement le package principal et considérer l'autre comme lecture seule.
+`packages/design-system/` et `packages/hub/` sont des références historiques en lecture seule par défaut. Ne pas recopier automatiquement leur structure, leurs APIs, leur sélecteur de thème, leurs polices ou leur workflow Storybook. Toute réutilisation doit être justifiée dans la spec et le plan de la tranche.
 
-### Design system
+Le sens des dépendances est : tokens → `ui-kit` → `mealz-ui`, puis applications. Une bibliothèque n'importe jamais une application et le `ui-kit` n'importe jamais `mealz-ui`.
 
-Avant d'utiliser, ajouter ou modifier un composant de `@mealz-product-team/design-system`, lire `packages/design-system/docs/DESIGN.md` et le fichier `<Component>.design.md` associé. Respecter les tokens, variantes, états et patterns existants. Pour tout composant Storybook ajouté :
-
-```bash
-pnpm --filter @mealz-product-team/design-system verify-design-docs
-```
-
-Un pattern exploré dans Hub ne monte pas automatiquement dans le design system. Une promotion exige : besoin réutilisable au-delà de la démo, API et états stabilisés, conformité aux tokens et documentation, plus une décision explicite dans une ADR ou une décision produit/design.
-
-### Nouveau package Next.js
-
-Pour un nouveau package Next.js hors `marmiton-*` :
-
-- monter `BrandThemeSwitcher` dans `app/layout.tsx` via les sous-chemins du design system, jamais son barrel racine dans un Server Component ; ajouter `suppressHydrationWarning` sur `<html>` ; référence : `packages/assistant-shopping/app/layout.tsx` ;
-- copier les polices Satoshi depuis `packages/marmiton-prototype/public/fonts/` vers `public/fonts/`.
+Une tâche transverse nomme toutes les surfaces affectées dans la spec et le plan. Modifier uniquement la surface principale sauf instruction explicite.
 
 ## 3. Artefacts et GitHub
 
@@ -55,36 +45,32 @@ Ne pas committer, pousser, fusionner ou réécrire l'historique sans instruction
 
 ## 4. Équipe et responsabilités
 
-Pipeline principal :
+Pipeline de reconstruction :
 
 ```text
-Zeus → Héphaïstos → Athéna → Minos
-          ↑              |
-          └── Dédale ────┘
+Zeus → Atlas → Minos
+  ↑       ↑
+  └─ Dédale / Apollon
 ```
 
 - **Zeus — Product** : problème utilisateur, découverte, scope, décisions, critères d'acceptation et spec.
-- **Dédale — Design Engineer** : prototypes et validation des hypothèses UX ; jamais responsable d'établir les faits Git ou les chemins du repository.
-- **Apollon — Senior Product Designer** : revue critique UX/UI indépendante ; ne déclenche pas l'implémentation et ne remplace ni Zeus, ni Dédale, ni Minos.
-- **Héphaïstos — Lead Dev** : architecture et plan technique à partir d'une spec validée.
-- **Athéna — Sr. Dev** : implémentation du plan en TDD, preuves d'exécution et préparation QA.
+- **Atlas — Staff Engineer** : inspection, architecture, planification, implémentation en TDD, documentation technique et preuves QA.
+- **Dédale — Design Engineer** : prototypes et validation d'hypothèses UX ; jamais responsable d'établir les faits Git ou les chemins du repository.
+- **Apollon — Senior Product Designer** : revue UX/UI indépendante ; ne déclenche pas l'implémentation et ne remplace ni Zeus, ni Atlas, ni Minos.
 - **Minos — QA** : vérification indépendante, constats prouvés et verdict final.
-- **Raphaël** : décideur humain pour les changements importants, ambigus, coûteux ou difficiles à inverser.
+- **Raphaël** : validation des tokens et décision pour tout changement important, ambigu, coûteux ou difficile à inverser.
 
-Règles d'autorité : produit à Zeus, architecture à Héphaïstos, implémentation à Athéna, verdict QA à Minos. Un agent ne modifie pas silencieusement le scope d'un autre, n'invente pas un fichier absent et ne passe pas à l'étape suivante avec un artefact obligatoire incomplet.
+Règles d'autorité : produit à Zeus, architecture et implémentation à Atlas, intention UX/UI à Raphaël avec Dédale ou Apollon, verdict QA à Minos. Atlas ne modifie pas silencieusement le scope et ne s'auto-approuve pas.
 
 ## 5. Skills obligatoires par rôle
 
-Charger et appliquer la skill pertinente avant l'action correspondante :
-
-- Zeus : `brainstorming` pour nouvelle idée/feature/flow ; `decision-mapping` pour arbitrages ; `to-spec` pour formalisation ; `grill-me` avant handoff technique.
+- Zeus : `brainstorming`, `decision-mapping`, `to-spec` et `grill-me` selon l'étape produit.
+- Atlas : lire `docs/agents/atlas-workflow.md` avant sa première intervention, puis charger les skills imposées par sa matrice de déclenchement.
 - Dédale : `prototype` pour toute hypothèse UX ; consigner les conclusions dans `prototype-findings.md`.
-- Apollon : `ui-ux-pro-max` pour revue UI ; `grill-me` ou `grill-with-docs` pour critique approfondie ; `decision-mapping` pour comparer des directions ; `qa`/`code-review` pour vérifier une interface implémentée.
-- Héphaïstos : `codebase-design` avant architecture transverse ; `writing-plans` avant handoff.
-- Athéna : `executing-plans`, `test-driven-development`, et `subagent-driven-development` seulement si l'isolation apporte un gain réel.
+- Apollon : `ui-ux-pro-max` pour revue UI et `grill-me` ou `grill-with-docs` pour critique approfondie.
 - Minos : `requesting-code-review`, `verification-before-completion` et `qa` avant verdict.
 
-Une skill disponible mais non appliquée ne constitue pas une exécution valide du workflow.
+Une skill disponible mais non appliquée ne constitue pas une exécution valide. Atlas n'utilise ni `brainstorming` ni `to-spec` pour redéfinir le produit, et n'utilise pas une skill de QA pour s'auto-approuver.
 
 ## 6. Gates et handoffs
 
@@ -92,21 +78,21 @@ Une skill disponible mais non appliquée ne constitue pas une exécution valide 
 
 Le brief précise hypothèse, utilisateur, contexte, flow, signal de réussite et limites. Dédale livre un prototype isolé et `packages/<package>/docs/design/<feature>/prototype-findings.md`, puis notifie Zeus.
 
-### Zeus → Héphaïstos
+### Zeus → Atlas
 
-Handoff autorisé seulement après validation humaine et présence cohérente de `brief.md`, `decisions.md` et `spec.md` dans le dossier produit de la feature. Le message résume problème, utilisateurs, scope, non-objectifs, critères d'acceptation, décisions, risques et questions techniques.
+Handoff autorisé seulement après validation humaine et présence cohérente de `brief.md`, `decisions.md` et `spec.md`. Le message résume problème, utilisateurs, scope, non-objectifs, critères d'acceptation, décisions, risques et questions techniques.
 
-### Héphaïstos → Athéna
+### Atlas — architecture → implémentation
 
-Handoff autorisé seulement avec la spec produit, `architecture.md` et `plan.md`. Chaque tâche du plan précise objectif, fichiers/zones, étapes, vérification, risques et dépendances.
+Le même agent possède les deux étapes, mais la gate documentaire reste obligatoire : aucune implémentation structurelle sans spec validée, `architecture.md` et `plan.md`. Chaque tâche du plan précise objectif, zones, étapes, vérification, risques et dépendances. Toute spec de tokens contient l'inventaire exhaustif approuvé par Raphaël avant création ou modification d'un token.
 
-### Athéna → Minos
+### Atlas → Minos
 
-Athéna fournit branche ou PR, diff exact, tâches terminées, tests et sorties réelles, critères vérifiés, écarts au plan et `implementation-notes.md`. Elle annonce « prêt pour vérification QA », jamais seulement « terminé ».
+Atlas fournit branche ou PR, diff exact, tâches terminées, tests et sorties réelles, critères vérifiés, écarts au plan et `implementation-notes.md`. Il annonce « prêt pour vérification QA », jamais seulement « terminé ».
 
 ### Minos → équipe
 
-Chaque constat contient sévérité, référence, preuve/reproduction et correction vérifiable. Minos renvoie à Athéna pour une correction d'implémentation, à Héphaïstos pour architecture ou plan incomplet, à Zeus pour ambiguïté produit/UX/scope, et à Zeus et Raphaël lorsque le verdict est `approved`.
+Chaque constat contient sévérité, référence, preuve/reproduction et correction vérifiable. Minos renvoie à Atlas pour une correction d'implémentation, d'architecture ou de plan, à Zeus pour ambiguïté produit/UX/scope, et à Zeus et Raphaël lorsque le verdict est `approved`.
 
 `approved` exige des preuves fraîches : tests pertinents, TypeScript/lint/build selon le plan, diff-check, contrôle du scope et absence de changement étranger. Une validation annoncée mais non matérialisée dans Git doit fournir un patch ou un commit reproductible.
 
@@ -114,7 +100,7 @@ Chaque constat contient sévérité, référence, preuve/reproduction et correct
 
 Utiliser exclusivement `message_agent` pour communiquer avec un autre agent. Règle permanente : « n’utilise jamais Computer Use pour envoyer un message à un autre agent. » Ne jamais utiliser Chrome, Bot Chat piloté graphiquement ou un autre contournement. Si `message_agent` échoue ou n'est pas exposé, signaler le blocage à Raphaël ; ne pas prétendre que le message a été livré.
 
-Handles : `@zeus`, `@dedale`, `@apollon`, `@hephaistos`, `@athena`, `@minos`.
+Handles de reconstruction : `@zeus`, `@atlas`, `@dedale`, `@apollon`, `@minos`.
 
 Chaque handoff contient : `Émetteur → Destinataire`, `État`, `Sujet`, `Artefacts`, `Résumé`, `Action attendue`, `Blocages ou risques`.
 
